@@ -1,43 +1,23 @@
-// lib/api.ts
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
+import axios from "axios";
 
-export class UnauthorizedError extends Error {
-  constructor(message = "Sessiya muddati tugagan yoki ruxsat berilmagan") {
-    super(message);
-    this.name = "UnauthorizedError";
-  }
-}
+export const api = axios.create({
+  baseURL: "",
+  headers: {
+    "Content-Type": "application/json",
+  },
+  withCredentials: true,
+});
 
-export async function apiFetch<T>(
-  endpoint: string,
-  options: RequestInit = {},
-): Promise<T> {
-  const url = endpoint.startsWith("http") ? endpoint : `${API_URL}${endpoint}`;
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    // Backenddan kelgan JSON xabar (masalan: {"message": "Noto'g'ri parol"})
+    const message =
+      error.response?.data?.message ||
+      error.message ||
+      "Server bilan aloqa uzildi.";
 
-  const res = await fetch(url, {
-    ...options,
-    credentials: "include",
-    headers: {
-      "Content-Type": "application/json",
-      ...options.headers,
-    },
-  });
-
-  if (!res.ok) {
-    if (res.status === 401) {
-      throw new UnauthorizedError();
-    }
-
-    const errorData = await res.json().catch(() => null);
-    const errorMessage =
-      errorData?.message || `So'rovda xatolik yuz berdi: ${res.status}`;
-
-    throw new Error(errorMessage);
-  }
-
-  if (res.status === 204) {
-    return {} as T;
-  }
-
-  return res.json();
-}
+    // Har doim toza xato matni bilan rad etamiz
+    return Promise.reject(new Error(message));
+  },
+);

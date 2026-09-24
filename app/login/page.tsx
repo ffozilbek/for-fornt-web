@@ -1,155 +1,132 @@
 "use client";
 
-import { Controller, useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
-import { useRouter } from "next/navigation";
-
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Field,
-  FieldLabel,
   FieldError,
   FieldGroup,
+  FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-} from "@/components/ui/card";
-import { authService } from "@/service/auth.service";
-import { useEffect, useState } from "react";
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from "@/components/ui/input-group";
 
-// 1. Zod validatsiya sxemasi
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Eye, EyeOff } from "lucide-react";
+import { useState } from "react";
+import { useForm, type SubmitHandler } from "react-hook-form";
+import * as z from "zod";
+import { authService } from "@/service/auth.service";
+import { useRouter } from "next/navigation";
+
 const loginSchema = z.object({
-  username: z.string().min(1, "Foydalanuvchi nomini kiriting."),
+  username: z
+    .string()
+    .trim()
+    .min(1, "Foydalanuvchi nomini kiriting")
+    .regex(/^\S+$/, "Foydalanuvchi nomida probel bo'lmasligi kerak"),
   password: z
     .string()
-    .min(1, "Parolni kiriting")
-    .min(8, "Parol kamida 8 ta belgidan iborat bo'lishi kerak")
-    .regex(/[A-Z]/, "Kamida 1 ta katta harf bo'lishi kerak")
-    .regex(/[a-z]/, "Kamida 1 ta kichik harf bo'lishi kerak")
-    .regex(/[0-9]/, "Kamida 1 ta raqam bo'lishi kerak")
-    .regex(/[^A-Za-z0-9]/, "Kamida 1 ta maxsus belgi bo'lishi kerak"),
+    .min(8, "Parol kamida 8 ta belgidan iborat bo'lishi kerak"),
+  // .regex(/^\S+$/, "Parolda probel bo'lmasligi kerak")
+  // .regex(/[A-Z]/, "Kamida 1 ta katta harf bo'lishi kerak")
+  // .regex(/[a-z]/, "Kamida 1 ta kichik harf bo'lishi kerak")
+  // .regex(/[0-9]/, "Kamida 1 ta raqam bo'lishi kerak")
+  // .regex(/[^A-Za-z0-9]/, "Kamida 1 ta maxsus belgi bo'lishi kerak"),
 });
 
-type LoginFormValues = z.infer<typeof loginSchema>;
+type FormFields = z.infer<typeof loginSchema>;
 
 export default function LoginPage() {
   const router = useRouter();
-  const [checkingAuth, setCheckingAuth] = useState(true);
-
-  useEffect(() => {
-    async function checkExistingSession() {
-      try {
-        await authService.getCurrentUser();
-        router.replace("/");
-      } catch {
-        setCheckingAuth(false);
-      }
-    }
-    checkExistingSession();
-  }, [router]);
-
-  const form = useForm<LoginFormValues>({
+  const [visible, setVisible] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    setError,
+    formState: { errors, isSubmitting },
+  } = useForm<FormFields>({
     resolver: zodResolver(loginSchema),
-    defaultValues: {
-      username: "",
-      password: "",
-    },
+    defaultValues: { username: "", password: "" },
   });
 
-  // 2. Submit logikasi
-  async function onSubmit(data: LoginFormValues) {
+  const onSubmit: SubmitHandler<FormFields> = async (data) => {
     try {
       await authService.login(data.username, data.password);
       router.replace("/");
       router.refresh();
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
-      form.setError("root", {
-        message: err.message || "Server bilan aloqa uzildi.",
+      setError("root", {
+        message: err.message || "Foydalanuvchi nomi yoki parol noto'g'ri.",
       });
     }
-  }
+  };
 
-  const { isSubmitting } = form.formState;
-  const rootError = form.formState.errors.root;
+  const togglePasswordVisibility = () => {
+    setVisible(!visible);
+  };
 
   return (
-    <div className="h-screen flex items-center justify-center">
-      <Card className="max-w-120 w-full py-8 px-3">
-        <CardHeader className="space-y-1 text-center">
-          <CardTitle className="text-xl font-bold tracking-tight">
+    <div className="w-full h-screen flex items-center justify-center">
+      <Card className="max-w-125 w-full py-8">
+        <CardHeader>
+          <CardTitle className="text-2xl text-center">
             Anti-DDoS Himoya tizimi
           </CardTitle>
-          <CardDescription className="text-xs">
-            Boshqaruv paneliga kirish uchun hisob maʼlumotlarini kiriting
-          </CardDescription>
         </CardHeader>
-
         <CardContent>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            {/* Umumiy server xatoligi (root error) */}
-            {rootError && (
-              <div className="rounded-md border border-destructive/50 bg-destructive/10 p-2.5 text-center text-xs text-destructive">
-                {rootError.message}
-              </div>
-            )}
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <FieldGroup>
+              {errors.root && (
+                <div className="rounded-md border border-destructive/50 bg-destructive/10 p-2.5 text-center text-xs text-destructive">
+                  {errors.root.message}
+                </div>
+              )}
+              <Field>
+                <FieldLabel>Username</FieldLabel>
+                <Input
+                  {...register("username")}
+                  type="text"
+                  placeholder="John Smith"
+                  autoComplete="off"
+                  aria-invalid={!!errors.username}
+                />
+                <FieldError errors={[errors.username]} />
+              </Field>
+              <Field>
+                <FieldLabel>Password</FieldLabel>
+                <InputGroup>
+                  <InputGroupInput
+                    {...register("password")}
+                    type={visible ? "text" : "password"}
+                    placeholder="********"
+                    autoComplete="off"
+                    aria-invalid={!!errors.password}
+                  />
 
-            <FieldGroup className="space-y-3">
-              {/* Username Field */}
-              <Controller
-                name="username"
-                control={form.control}
-                render={({ field, fieldState }) => (
-                  <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor={field.name}>
-                      Foydalanuvchi nomi
-                    </FieldLabel>
-                    <Input
-                      {...field}
-                      id={field.name}
-                      autoComplete="username"
-                      placeholder="admin"
-                      aria-invalid={fieldState.invalid}
-                    />
-                    {fieldState.invalid && (
-                      <FieldError errors={[fieldState.error]} />
-                    )}
-                  </Field>
-                )}
-              />
+                  <InputGroupAddon align="inline-end">
+                    <Button
+                      onClick={togglePasswordVisibility}
+                      variant="ghost"
+                      type="button"
+                      className="hover:bg-white"
+                    >
+                      {visible ? <Eye /> : <EyeOff />}
+                    </Button>
+                  </InputGroupAddon>
+                </InputGroup>
+                <FieldError errors={[errors.password]} />
+              </Field>
 
-              {/* Password Field */}
-              <Controller
-                name="password"
-                control={form.control}
-                render={({ field, fieldState }) => (
-                  <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor={field.name}>Parol</FieldLabel>
-                    <Input
-                      {...field}
-                      id={field.name}
-                      type="password"
-                      autoComplete="current-password"
-                      placeholder="••••••••"
-                      aria-invalid={fieldState.invalid}
-                    />
-                    {fieldState.invalid && (
-                      <FieldError errors={[fieldState.error]} />
-                    )}
-                  </Field>
-                )}
-              />
+              <Button type="submit" className="h-10" disabled={isSubmitting}>
+                {isSubmitting ? "Loading..." : "Submit"}
+              </Button>
             </FieldGroup>
-
-            <Button type="submit" disabled={isSubmitting} className="w-full">
-              {isSubmitting ? "Tekshirilmoqda..." : "Kirish"}
-            </Button>
           </form>
         </CardContent>
       </Card>

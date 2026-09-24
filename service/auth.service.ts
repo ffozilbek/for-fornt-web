@@ -1,23 +1,28 @@
-import { apiFetch } from "@/lib/api";
+import { api } from "@/lib/api";
 import { AuthResponse, User } from "@/lib/types";
 
 export const authService = {
+  // LOGIN
   login: async (username: string, password: string): Promise<AuthResponse> => {
-    return apiFetch<AuthResponse>("/api/auth/login", {
-      method: "POST",
-      body: JSON.stringify({ username, password }),
+    const { data } = await api.post<AuthResponse>("/api/auth/login", {
+      username,
+      password,
     });
+
+    return data;
   },
 
+  // LOGOUT
   logout: async (): Promise<{ status: string }> => {
-    return apiFetch<{ status: string }>("/api/auth/logout", {
-      method: "POST",
-    });
+    const { data } = await api.post<{ status: string }>("/api/auth/logout");
+    return data;
   },
 
+  // CHECK CURRENT SESSION
   getCurrentUser: async (): Promise<{ status: string; user: User }> => {
-    return apiFetch<{ status: string; user: User }>("/api/auth/me", {
-      method: "GET",
-    });
+    const { data } = await api.get<{ status: string; user: User }>(
+      "/api/auth/me",
+    );
+    return data;
   },
 };

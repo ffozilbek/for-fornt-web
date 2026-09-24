@@ -1,4 +1,5 @@
 export interface User {
+  id?: number;
   username: string;
   role: "superadmin" | "admin" | "user";
 }
@@ -17,5 +18,6 @@ export interface SystemResources {
   disk_percent: number;
   disk_used_gb: number;
   disk_total_gb: number;
+  uptime?: string | number;
   uptime_seconds?: number;
 }
