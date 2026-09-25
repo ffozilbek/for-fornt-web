@@ -1,3 +1,11 @@
+"use client";
+
+import ModeToggle from "@/components/theme/ModeToggler";
+
 export default function HomePage() {
-  return <div>Salom</div>;
+  return (
+    <div>
+      <ModeToggle />
+    </div>
+  );
 }
