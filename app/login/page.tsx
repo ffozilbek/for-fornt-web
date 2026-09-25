@@ -1,7 +1,13 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import {
   Field,
   FieldError,
@@ -73,11 +79,12 @@ export default function LoginPage() {
 
   return (
     <div className="w-full h-screen flex items-center justify-center">
-      <Card className="max-w-125 w-full py-8">
+      <Card className="max-w-120 w-full py-8">
         <CardHeader>
-          <CardTitle className="text-2xl text-center">
-            Anti-DDoS Himoya tizimi
-          </CardTitle>
+          <CardTitle className="text-2xl text-center">Login</CardTitle>
+          <CardDescription className="text-center">
+            Anti DDOS himoya tizimi
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)}>
