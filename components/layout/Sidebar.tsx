@@ -177,7 +177,10 @@ export function AppSidebar() {
                     <div className="grid flex-1 text-left text-sm leading-tight">
                       <span className="truncate font-medium">root</span>
                       <div className="flex items-center gap-1">
-                        <span className="size-1.5 rounded-full bg-green-400" />
+                        <span className="relative flex size-2">
+                          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75"></span>
+                          <span className="relative inline-flex size-2 rounded-full bg-green-400"></span>
+                        </span>
                         <span className="truncate text-xs">online</span>
                       </div>
                     </div>
