@@ -100,7 +100,7 @@ export default function LoginPage() {
                   {...register("username")}
                   type="text"
                   placeholder="John Smith"
-                  autoComplete="on"
+                  autoComplete="username"
                   aria-invalid={!!errors.username}
                 />
                 <FieldError errors={[errors.username]} />
@@ -112,7 +112,7 @@ export default function LoginPage() {
                     {...register("password")}
                     type={visible ? "text" : "password"}
                     placeholder="********"
-                    autoComplete="on"
+                    autoComplete="current-password"
                     aria-invalid={!!errors.password}
                   />
 

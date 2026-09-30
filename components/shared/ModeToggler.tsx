@@ -12,9 +12,11 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useTranslation } from "react-i18next";
 
 export default function ModeToggler() {
   const { theme, setTheme } = useTheme();
+  const { t } = useTranslation();
 
   return (
     <DropdownMenu>
@@ -29,9 +31,15 @@ export default function ModeToggler() {
       />
       <DropdownMenuContent align="end">
         <DropdownMenuRadioGroup value={theme} onValueChange={setTheme}>
-          <DropdownMenuRadioItem value={"light"}>Light</DropdownMenuRadioItem>
-          <DropdownMenuRadioItem value={"dark"}>Dark</DropdownMenuRadioItem>
-          <DropdownMenuRadioItem value={"system"}>System</DropdownMenuRadioItem>
+          <DropdownMenuRadioItem value={"light"}>
+            {t("misc.light")}
+          </DropdownMenuRadioItem>
+          <DropdownMenuRadioItem value={"dark"}>
+            {t("misc.dark")}
+          </DropdownMenuRadioItem>
+          <DropdownMenuRadioItem value={"system"}>
+            {t("misc.system")}
+          </DropdownMenuRadioItem>
         </DropdownMenuRadioGroup>
       </DropdownMenuContent>
     </DropdownMenu>

@@ -37,56 +37,81 @@ import {
 import { Badge } from "@/components/ui/badge";
 
 import Link from "next/link";
-import { Button } from "../ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-
-const navItems = [
-  { title: "Dashbord", url: "/dashboard", icon: LayoutDashboard },
-  { title: "Zona boshqarish", url: "/zones", icon: Layers3, isActive: true },
-  {
-    title: "Himoya shabloni",
-    icon: Shield,
-    items: [
-      { title: "Shablonlar", url: "/protection/templates" },
-      { title: "Yangi shablon", url: "/protection/new" },
-    ],
-  },
-  {
-    title: "Logs",
-    icon: ClipboardList,
-    badge: 3,
-    items: [
-      { title: "So'nggi loglar", url: "/logs/recent" },
-      { title: "Arxiv", url: "/logs/archive" },
-    ],
-  },
-  {
-    title: "Statistika",
-    icon: BarChart3,
-    items: [
-      { title: "Trafik", url: "/stats/traffic" },
-      { title: "Hujumlar", url: "/stats/attacks" },
-    ],
-  },
-  {
-    title: "Ulanishlar",
-    icon: Zap,
-    items: [
-      { title: "Faol ulanishlar", url: "/connections/active" },
-      { title: "Tarix", url: "/connections/history" },
-    ],
-  },
-  { title: "Pcap boshqaruvi", url: "/pcap", icon: FileText },
-  { title: "Foydalanuvchilar", url: "/users", icon: Users },
-];
+import { Avatar, AvatarFallback } from "../ui/avatar";
+import { useTranslation } from "react-i18next";
+import { usePathname } from "next/navigation";
 
 export function AppSidebar() {
+  const { t } = useTranslation();
+  const pathname = usePathname();
+
+  const navItems = [
+    {
+      title: t("navigation.dashboard"),
+      url: "/",
+      icon: LayoutDashboard,
+      isActive: true,
+    },
+    { title: t("navigation.zoneManagement"), url: "/zones", icon: Layers3 },
+    {
+      title: t("misc.mitigationTemplate"),
+      icon: Shield,
+      items: [
+        {
+          title: t("misc.l3L4L5Protection"),
+          url: "/migration-template/l-protection",
+        },
+        {
+          title: t("misc.hTTPSProtection"),
+          url: "/migration-template/https-protection",
+        },
+      ],
+    },
+    {
+      title: t("navigation.logs"),
+      icon: ClipboardList,
+      badge: 3,
+      items: [
+        { title: t("navigation.incidentLogs"), url: "/logs/incident-logs" },
+        { title: t("navigation.securityLogs"), url: "/logs/security-logs" },
+        { title: t("navigation.auditLogs"), url: "/logs/audit-logs" },
+      ],
+    },
+    {
+      title: t("navigation.statistics"),
+      icon: BarChart3,
+      items: [
+        {
+          title: t("navigation.generalStatistics"),
+          url: "/stats/general-statistics",
+        },
+        {
+          title: t("navigation.protectionStatistics"),
+          url: "/stats/protection-statistics",
+        },
+      ],
+    },
+    {
+      title: t("misc.connections"),
+      icon: Zap,
+      items: [
+        {
+          title: t("misc.allTCPConnections"),
+          url: "/connections/all-tcp-connections",
+        },
+        { title: t("misc.flowLogJA4"), url: "/connections/flow-log-ja-4" },
+      ],
+    },
+    { title: t("misc.pcapManagement"), url: "/pcap", icon: FileText },
+    { title: t("misc.userManagement"), url: "/user-management", icon: Users },
+  ];
+
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader>
@@ -117,7 +142,10 @@ export function AppSidebar() {
                     render={
                       <SidebarMenuButton
                         tooltip={item.title}
-                        className="cursor-pointer"
+                        isActive={item.items.some(
+                          (sub) => pathname === sub.url,
+                        )}
+                        className="cursor-pointer data-[active=true]:bg-sidebar-primary/15 data-[active=true]:text-sidebar-primary"
                       />
                     }
                   >
@@ -134,7 +162,10 @@ export function AppSidebar() {
                     <SidebarMenuSub>
                       {item.items.map((sub) => (
                         <SidebarMenuSubItem key={sub.title}>
-                          <SidebarMenuSubButton render={<a href={sub.url} />}>
+                          <SidebarMenuSubButton
+                            render={<Link href={sub.url} />}
+                            isActive={pathname === sub.url}
+                          >
                             <span>{sub.title}</span>
                           </SidebarMenuSubButton>
                         </SidebarMenuSubItem>
@@ -146,9 +177,9 @@ export function AppSidebar() {
             ) : (
               <SidebarMenuItem key={item.title}>
                 <SidebarMenuButton
-                  render={<a href={item.url} />}
+                  render={<Link href={item.url} />}
                   tooltip={item.title}
-                  isActive={item.isActive}
+                  isActive={pathname === item.url}
                   className="data-[active=true]:bg-sidebar-primary/15 data-[active=true]:text-sidebar-primary data-[active=true]:ring-1 data-[active=true]:ring-sidebar-primary/40"
                 >
                   <item.icon className="size-4" />

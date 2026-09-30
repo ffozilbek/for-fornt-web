@@ -5,8 +5,9 @@ const nextConfig: NextConfig = {
     return [
       {
         source: "/api/:path*",
-        destination: "http://localhost:5000/api/:path*", // Flask serveringiz manzili
+        destination: "http://localhost:5000/api/:path*",
       },
+      { source: "/zones", destination: "http://localhost:5000/zones" },
     ];
   },
 };

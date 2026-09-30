@@ -8,10 +8,10 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Languages } from "lucide-react";
-import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 export default function LanguageToggler() {
-  const [lang, setLang] = useState("uz");
+  const { i18n } = useTranslation();
 
   return (
     <DropdownMenu>
@@ -19,12 +19,15 @@ export default function LanguageToggler() {
         render={
           <Button variant="outline" size="icon">
             <Languages />
-            <span className="sr-only">Toggle theme</span>
+            <span className="sr-only">Toggle language</span>
           </Button>
         }
       />
-      <DropdownMenuContent className="" align="end">
-        <DropdownMenuRadioGroup value={lang} onValueChange={setLang}>
+      <DropdownMenuContent align="end">
+        <DropdownMenuRadioGroup
+          value={i18n.resolvedLanguage}
+          onValueChange={(l) => i18n.changeLanguage(l)}
+        >
           <DropdownMenuRadioItem value="uz">uz</DropdownMenuRadioItem>
           <DropdownMenuRadioItem value="ru">ru</DropdownMenuRadioItem>
           <DropdownMenuRadioItem value="en">en</DropdownMenuRadioItem>

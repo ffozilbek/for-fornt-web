@@ -127,4 +127,8 @@
   html {
     @apply font-sans;
   }
+
+  .my-container {
+    @apply max-w-full w-full mx-auto px-5;
+  }
 }

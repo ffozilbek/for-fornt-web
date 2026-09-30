@@ -12,8 +12,9 @@ i18next.use(initReactI18next).init({
   },
   lng: "uz",
   fallbackLng: "uz",
-  keySeparator: false, // jumla-kalitlar uchun shart
-  nsSeparator: false, // jumla-kalitlar uchun shart
+  // keySeparator / nsSeparator ENDI O'CHIRILMAYDI — standart holatida
+  // qoldiriladi, chunki kalitlar endi "navigation.dashboard" ko'rinishida
+  // nuqta bilan ichma-ich (nested).
   interpolation: { prefix: "{", suffix: "}", escapeValue: false },
 });
 
