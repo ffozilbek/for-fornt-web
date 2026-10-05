@@ -1,69 +1,116 @@
 // 1. Tizim resurslari modeli (/api/system-resources)
-export interface SystemResources {
-  cpu: {
-    avg_pct: number;
-    nb_lcores: number;
-    lcores: Array<{
-      lcore_id: number;
-      is_active: boolean;
-      utilization_pct: number;
-    }>;
-  };
-  hugepages: {
-    total_mb: number;
-    used_mb: number;
-    free_mb: number;
-    usage_pct: number;
-  };
-  disk?: {
-    total_gb: number;
-    used_gb: number;
-    free_gb: number;
-    usage_pct: number;
-  };
-}
+import { z } from "zod";
+
+const memorySchema = z.object({
+  total_mb: z.number(),
+  used_mb: z.number(),
+  free_mb: z.number(),
+  usage_pct: z.number(),
+});
+
+export const systemResourcesSchema = z.object({
+  status: z.literal("success"),
+  data: z.object({
+    timestamp: z.number(),
+    cpu: z.object({
+      avg_pct: z.number(),
+      nb_lcores: z.number(),
+      lcores: z.array(
+        z.object({
+          lcore_id: z.number(),
+          is_active: z.boolean(),
+          utilization_pct: z.number(),
+        }),
+      ),
+    }),
+    ram: memorySchema,
+    hugepages: memorySchema,
+    disk: memorySchema,
+    mempools: z.array(
+      z.object({
+        name: z.string(),
+        size: z.number(),
+        in_use: z.number(),
+        usage_pct: z.number(),
+      }),
+    ),
+  }),
+});
+
+// Tip sxemadan olinadi, ikkalasi bir-biridan ajralib ketmaydi
+export type SystemResources = z.infer<typeof systemResourcesSchema>["data"];
 
 // 2. Hujumlar statistikasi va Top 10 reytinglar (/api/dashboard/attack-summary)
-export interface AttackSummaryResponse {
-  status: "success" | "error";
-  totals: {
-    incidents: number;
-    attackers: number;
-    dropped_packets: number;
-    dropped_bytes: number;
-    top_attack_type: {
-      type: string;
-      incidents: number;
-      percentage: number;
-    };
-  };
-  top_attackers: Array<{
-    ip: string;
-    country_code: string;
-    country: string;
-    incidents: number;
-    packets: number;
-    bytes: number;
-    last_seen: string;
-  }>;
-  top_countries: Array<{
-    country_code: string;
-    country: string;
-    attackers: number;
-    incidents: number;
-    packets: number;
-  }>;
-  attack_types: Array<{
-    type: string;
-    incidents: number;
-    packets: number;
-  }>;
-  top_zones: Array<{
-    zone: string;
-    incidents: number;
-    packets: number;
-  }>;
-}
+export const attackSummarySchema = z.object({
+  status: z.literal("success"),
+  totals: z.object({
+    incidents: z.number(),
+    attackers: z.number(),
+    dropped_packets: z.number(),
+    dropped_bytes: z.number(),
+  }),
+  dropped: z.object({
+    totals: z.object({ packets: z.number(), bytes: z.number() }),
+    protocols: z.array(
+      z.object({ name: z.string(), packets: z.number(), bytes: z.number() }),
+    ),
+    series: z.array(
+      z.object({
+        t: z.string(),
+        total: z.number(),
+        tcp: z.number(),
+        udp: z.number(),
+        icmp: z.number(),
+        other: z.number(),
+      }),
+    ),
+  }),
+  top_indicator: z.object({
+    name: z.string(),
+    raw: z.string(),
+    packets: z.number(),
+    bytes: z.number(),
+    share: z.number(),
+    items: z.array(
+      z.object({
+        name: z.string(),
+        raw: z.string(),
+        packets: z.number(),
+        bytes: z.number(),
+      }),
+    ),
+  }),
+  top_attackers: z.array(
+    z.object({
+      ip: z.string(),
+      country: z.string(),
+      country_code: z.string(),
+      incidents: z.number(),
+      packets: z.number(),
+      bytes: z.number(),
+      last_seen: z.string(),
+    }),
+  ),
+  top_countries: z.array(
+    z.object({
+      country: z.string(),
+      country_code: z.string(),
+      attackers: z.number(),
+      incidents: z.number(),
+      packets: z.number(),
+    }),
+  ),
+  attack_types: z.array(
+    z.object({ type: z.string(), incidents: z.number(), packets: z.number() }),
+  ),
+  top_zones: z.array(
+    z.object({ zone: z.string(), incidents: z.number(), packets: z.number() }),
+  ),
+});
+
+export type AttackSummary = z.infer<typeof attackSummarySchema>;
+
+export type AttackFilters = { hours: number; zone: string };
 
 // 3. Filtrlash ulushi donut diagrammasi (/api/dashboard/filter-ratio)
 export interface FilterRatioResponse {

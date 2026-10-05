@@ -1,5 +1,5 @@
 import "i18next";
-import uz from "@/messages/uz.json";
+import uz from "@/i18n/uz.json";
 
 // i18next uchun rasmiy tip-kengaytirish: shu fayl loyihada bo'lishi
 // kifoya (import qilish shart emas), VS Code avtomatik o'qiydi.

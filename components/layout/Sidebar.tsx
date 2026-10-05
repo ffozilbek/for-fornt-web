@@ -65,11 +65,11 @@ export function AppSidebar() {
       items: [
         {
           title: t("misc.l3L4L5Protection"),
-          url: "/migration-template/l-protection",
+          url: "/mitigation-template/l-protection",
         },
         {
           title: t("misc.hTTPSProtection"),
-          url: "/migration-template/https-protection",
+          url: "/mitigation-template/https-protection",
         },
       ],
     },
@@ -105,7 +105,7 @@ export function AppSidebar() {
           title: t("misc.allTCPConnections"),
           url: "/connections/all-tcp-connections",
         },
-        { title: t("misc.flowLogJA4"), url: "/connections/flow-log-ja-4" },
+        { title: t("misc.flowLogJA4"), url: "/connections/flow-log-ja4" },
       ],
     },
     { title: t("misc.pcapManagement"), url: "/pcap", icon: FileText },
@@ -232,7 +232,7 @@ export function AppSidebar() {
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" side="top" className="w-56">
                 <DropdownMenuItem className="flex items-center justify-between">
-                  <span>Parolni o`zgartirish</span>
+                  <span>{t("auth.changePassword")}</span>
                   <span>
                     <KeySquare />
                   </span>
@@ -241,7 +241,7 @@ export function AppSidebar() {
                   variant="destructive"
                   className="flex items-center justify-between"
                 >
-                  <span>Chiqish</span>
+                  <span>{t("misc.logOut")}</span>
                   <span>
                     <LogOut />
                   </span>

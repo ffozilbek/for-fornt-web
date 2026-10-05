@@ -1,5 +1,5 @@
 import { api } from "@/lib/api";
-import { AuthResponse, User } from "@/types/types";
+import { AuthResponse, User } from "@/types/auth";
 
 export const authService = {
   // LOGIN
