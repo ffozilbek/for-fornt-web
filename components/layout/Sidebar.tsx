@@ -46,9 +46,12 @@ import {
 import { Avatar, AvatarFallback } from "../ui/avatar";
 import { useTranslation } from "react-i18next";
 import { usePathname } from "next/navigation";
+import { useLogout, useMe } from "@/hooks/useAuth";
 
 export function AppSidebar() {
   const { t } = useTranslation();
+  const { data: user } = useMe();
+  const logout = useLogout();
   const pathname = usePathname();
 
   const navItems = [
@@ -203,16 +206,22 @@ export function AppSidebar() {
                   >
                     <Avatar className="h-8 w-8 overflow-hidden">
                       {/* <AvatarImage src={user.avatar} alt={user.name} /> */}
-                      <AvatarFallback>U</AvatarFallback>
+                      <AvatarFallback>
+                        {user?.username.charAt(0).toUpperCase() ?? "U"}
+                      </AvatarFallback>
                     </Avatar>
                     <div className="grid flex-1 text-left text-sm leading-tight">
-                      <span className="truncate font-medium">root</span>
+                      <span className="truncate font-medium">
+                        {user?.username ?? "User"}
+                      </span>
                       <div className="flex items-center gap-1">
                         <span className="relative flex size-2">
                           <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75"></span>
                           <span className="relative inline-flex size-2 rounded-full bg-green-400"></span>
                         </span>
-                        <span className="truncate text-xs">online</span>
+                        <span className="truncate text-xs">
+                          {t("misc.online")}
+                        </span>
                       </div>
                     </div>
                     <ChevronsUpDown className="ml-auto size-4" />
@@ -240,6 +249,8 @@ export function AppSidebar() {
                 <DropdownMenuItem
                   variant="destructive"
                   className="flex items-center justify-between"
+                  disabled={logout.isPending}
+                  onClick={() => logout.mutate()}
                 >
                   <span>{t("misc.logOut")}</span>
                   <span>

@@ -1,19 +1,11 @@
-"use client";
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { useState, type ReactNode } from "react";
+import CustomSkeleton from "@/components/shared/CustomSkeleton";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useAttackSummary } from "@/hooks/useDashboard";
 import { formatBytes, formatNumber } from "@/lib/format";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/select";
+import { ReactNode } from "react";
 import { FileUser, RotateCcwClock, ShieldCog, ShieldX } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
@@ -47,55 +39,21 @@ function StatCard({
   );
 }
 
-export default function AttackStatsSection() {
-  const { t } = useTranslation();
-
-  const PERIODS = [
-    { value: 1, label: t("misc.last1Hour") },
-    { value: 6, label: t("misc.last6Hours") },
-    { value: 24, label: t("misc.last24Hours") },
-    { value: 168, label: t("misc.last7Days") },
-  ];
-
-  const [hours, setHours] = useState(PERIODS[0].value);
+export default function AttackStatCards({ hours }: { hours: number }) {
   const { data, isPending, isError, error, isPlaceholderData } =
     useAttackSummary({ hours, zone: "all" });
+
+  const { t } = useTranslation();
 
   const cardTime =
     hours > 24 ? t("misc.last7Days") : `${hours} ${t("misc.hOURS")}`;
 
   return (
-    <section className="space-y-3">
-      <div className="flex items-center justify-between">
-        <h2 className="text-sm font-medium text-muted-foreground">
-          {t("navigation.attackStatistics")}
-        </h2>
-        <Select
-          items={PERIODS}
-          value={hours}
-          onValueChange={(v) => {
-            if (v !== null) setHours(v);
-          }}
-        >
-          <SelectTrigger className="w-48">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              {PERIODS.map((p) => (
-                <SelectItem key={p.value} value={p.value}>
-                  {p.label}
-                </SelectItem>
-              ))}
-            </SelectGroup>
-          </SelectContent>
-        </Select>
-      </div>
-
+    <>
       {isPending ? (
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
           {Array.from({ length: 4 }).map((_, i) => (
-            <Skeleton key={i} className="h-28" />
+            <CustomSkeleton key={i} />
           ))}
         </div>
       ) : isError ? (
@@ -148,6 +106,6 @@ export default function AttackStatsSection() {
           />
         </div>
       )}
-    </section>
+    </>
   );
 }

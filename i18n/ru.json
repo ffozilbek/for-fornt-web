@@ -783,6 +783,7 @@
     "noHTTPSFloodsRecordedInThisWindow": "В этом окне HTTPS flood не зафиксирован.",
     "showingFromToOfTotalEvents": "Показано {from}-{to} из {total} событий",
     "pleasePickBothStartAndEndDateTime": "Выберите дату/время начала и конца",
-    "endMustBeGreaterThanOrEqualToStart": "Конец должен быть не раньше начала"
+    "endMustBeGreaterThanOrEqualToStart": "Конец должен быть не раньше начала",
+    "noConnectionWithServer": "Нет соединения с сервером. Пожалуйста, попробуйте еще раз позже."
   }
 }

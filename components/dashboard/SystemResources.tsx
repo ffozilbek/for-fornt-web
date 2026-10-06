@@ -1,4 +1,3 @@
-// components/dashboard/SystemResourcesCard.tsx
 "use client";
 import { useSystemResources } from "@/hooks/useDashboard";
 import {
@@ -13,6 +12,7 @@ import { Progress } from "@/components/ui/progress";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Cpu, HardDrive, MemoryStick } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import CustomSkeleton from "../shared/CustomSkeleton";
 
 export default function SystemResources() {
   const { data, isPending, isError, error } = useSystemResources();
@@ -22,20 +22,7 @@ export default function SystemResources() {
     return (
       <div className="grid grid-cols-3 gap-5">
         {Array.from({ length: 3 }).map((_, i) => {
-          return (
-            <Card key={i}>
-              <CardHeader>
-                <Skeleton className="h-4 w-2/3" />
-              </CardHeader>
-              <CardContent>
-                <Skeleton className="h-6 w-2/3" />
-              </CardContent>
-              <CardFooter className="flex justify-between">
-                <Skeleton className="h-4 w-1/5" />
-                <Skeleton className="h-4 w-1/5" />
-              </CardFooter>
-            </Card>
-          );
+          return <CustomSkeleton key={i} />;
         })}
       </div>
     );

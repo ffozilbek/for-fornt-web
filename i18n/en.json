@@ -783,6 +783,7 @@
     "noHTTPSFloodsRecordedInThisWindow": "No HTTPS floods recorded in this window.",
     "showingFromToOfTotalEvents": "Showing {from}-{to} of {total} events",
     "pleasePickBothStartAndEndDateTime": "Please pick both start and end date/time",
-    "endMustBeGreaterThanOrEqualToStart": "End must be greater than or equal to start"
+    "endMustBeGreaterThanOrEqualToStart": "End must be greater than or equal to start",
+    "noConnectionWithServer": "No connection to the server. Please try again later."
   }
 }

@@ -783,6 +783,7 @@
     "noHTTPSFloodsRecordedInThisWindow": "Bu oraliqda HTTPS flood qayd etilmagan.",
     "showingFromToOfTotalEvents": "Ko'rsatilmoqda: {from}-{to} / {total} ta hodisa",
     "pleasePickBothStartAndEndDateTime": "Boshlanish va tugash sana/vaqtini tanlang",
-    "endMustBeGreaterThanOrEqualToStart": "Tugash vaqti boshlanish vaqtidan kichik bo'lmasligi kerak"
+    "endMustBeGreaterThanOrEqualToStart": "Tugash vaqti boshlanish vaqtidan kichik bo'lmasligi kerak",
+    "noConnectionWithServer": "Server bilan aloqa yo'q. Keyinroq urinib ko'ring."
   }
 }

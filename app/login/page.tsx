@@ -26,8 +26,9 @@ import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import * as z from "zod";
-import { authService } from "@/service/auth.service";
+import { useLogin } from "@/hooks/useAuth";
 import { useRouter } from "next/navigation";
+import { useTranslation } from "react-i18next";
 
 const loginSchema = z.object({
   username: z
@@ -35,9 +36,7 @@ const loginSchema = z.object({
     .trim()
     .min(1, "Foydalanuvchi nomini kiriting")
     .regex(/^\S+$/, "Foydalanuvchi nomida probel bo'lmasligi kerak"),
-  password: z
-    .string()
-    .min(8, "Parol kamida 8 ta belgidan iborat bo'lishi kerak"),
+  password: z.string().min(1, "Parolni kiriting"),
   // .regex(/^\S+$/, "Parolda probel bo'lmasligi kerak")
   // .regex(/[A-Z]/, "Kamida 1 ta katta harf bo'lishi kerak")
   // .regex(/[a-z]/, "Kamida 1 ta kichik harf bo'lishi kerak")
@@ -54,23 +53,29 @@ export default function LoginPage() {
     register,
     handleSubmit,
     setError,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<FormFields>({
     resolver: zodResolver(loginSchema),
     defaultValues: { username: "", password: "" },
   });
 
-  const onSubmit: SubmitHandler<FormFields> = async (data) => {
-    try {
-      await authService.login(data.username, data.password);
-      router.replace("/");
-      router.refresh();
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
-      setError("root", {
-        message: err.message || "Foydalanuvchi nomi yoki parol noto'g'ri.",
-      });
-    }
+  const { t } = useTranslation();
+
+  const login = useLogin();
+
+  const onSubmit: SubmitHandler<FormFields> = (data) => {
+    login.mutate(data, {
+      onSuccess: () => {
+        router.replace("/");
+        router.refresh();
+      },
+      onError: (err) =>
+        setError("root", {
+          message: err.message.startsWith("http.")
+            ? t("misc.noConnectionWithServer")
+            : err.message,
+        }),
+    });
   };
 
   const togglePasswordVisibility = () => {
@@ -130,8 +135,8 @@ export default function LoginPage() {
                 <FieldError errors={[errors.password]} />
               </Field>
 
-              <Button type="submit" className="h-10" disabled={isSubmitting}>
-                {isSubmitting ? "Loading..." : "Submit"}
+              <Button type="submit" className="h-10" disabled={login.isPending}>
+                {login.isPending ? "Loading..." : "Submit"}
               </Button>
             </FieldGroup>
           </form>
