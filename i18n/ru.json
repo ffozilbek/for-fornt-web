@@ -194,7 +194,7 @@
     "blockedPackets": "Заблокированные пакеты",
     "mostActiveProtectionIndicator": "Самый активный индикатор защиты",
     "protectionIndicators": "Индикаторы защиты",
-    "packets": "пакетов",
+    "packets": "Пакетов",
     "uniqueAttackerIPs": "Уникальные IP атакующих",
     "topAttackerIPs": "Топ IP атакующих",
     "attackSourcesByCountry": "Источники атак — по странам",
@@ -784,6 +784,7 @@
     "showingFromToOfTotalEvents": "Показано {from}-{to} из {total} событий",
     "pleasePickBothStartAndEndDateTime": "Выберите дату/время начала и конца",
     "endMustBeGreaterThanOrEqualToStart": "Конец должен быть не раньше начала",
-    "noConnectionWithServer": "Нет соединения с сервером. Пожалуйста, попробуйте еще раз позже."
+    "noConnectionWithServer": "Нет соединения с сервером. Пожалуйста, попробуйте еще раз позже.",
+    "flag": "Флаг"
   }
 }

@@ -67,7 +67,6 @@ export default function LoginPage() {
     login.mutate(data, {
       onSuccess: () => {
         router.replace("/");
-        router.refresh();
       },
       onError: (err) =>
         setError("root", {

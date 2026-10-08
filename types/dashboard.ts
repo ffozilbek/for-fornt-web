@@ -132,3 +132,60 @@ export interface ServiceItem {
   protocol: string;
   protocolNumber?: number;
 }
+
+export const SUMMARY_KEYS = [
+  "incidents",
+  "attackers",
+  "blocked",
+  "indicators",
+] as const;
+export type SummaryKey = (typeof SUMMARY_KEYS)[number];
+
+export const summaryDetailSchema = z.object({
+  status: z.literal("success"),
+  found: z.boolean(),
+  header: z.object({
+    key: z.string(),
+    kind: z.string(),
+    title: z.string(),
+    subtitle: z.string(),
+  }),
+  totals: z.object({
+    incidents: z.number(),
+    attackers: z.number(),
+    dropped_packets: z.number(),
+    dropped_bytes: z.number(),
+    peak_pps: z.number(),
+    peak_bps: z.number(),
+    first_seen: z.string().nullable(), // davrda hujum bo'lmasa null bo'lishi mumkin
+    last_seen: z.string().nullable(),
+  }),
+  breakdowns: z.array(
+    z.object({
+      label: z.string(),
+      items: z.array(
+        z.looseObject({
+          name: z.string(),
+          incidents: z.number(),
+          packets: z.number(),
+        }),
+      ),
+    }),
+  ),
+  incidents: z.array(
+    z.object({
+      ip: z.string(),
+      zone: z.string(),
+      service: z.string(),
+      type: z.string(),
+      start: z.string(),
+      finish: z.string(),
+      duration: z.number(),
+      packets: z.number(),
+      bytes: z.number(),
+      avg_pps: z.number(),
+    }),
+  ),
+});
+
+export type SummaryDetail = z.infer<typeof summaryDetailSchema>;

@@ -22,7 +22,7 @@ api.interceptors.response.use(
     const status = error.response?.status;
     const isLogin = error.config?.url?.includes("/api/auth/login");
     if (status === 401 && !isLogin && typeof window !== "undefined") {
-      window.location.href = "/login";
+      window.location.replace("/login");
     }
     const msg = error.response?.data?.message ?? error.response?.data?.error;
     return Promise.reject(

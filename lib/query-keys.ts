@@ -1,4 +1,4 @@
-import { AttackFilters } from "@/types/dashboard";
+import { AttackFilters, SummaryKey } from "@/types/dashboard";
 
 export const queryKeys = {
   auth: { me: ["auth", "me"] as const },
@@ -8,5 +8,7 @@ export const queryKeys = {
     attackSummary: (f: AttackFilters) =>
       ["dashboard", "attack-summary", f] as const,
     filterRatio: ["dashboard", "filter-ratio"] as const,
+    summaryDetail: (key: SummaryKey, f: AttackFilters) =>
+      ["dashboard", "summary-detail", key, f] as const,
   },
 };

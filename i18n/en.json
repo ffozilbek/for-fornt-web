@@ -194,7 +194,7 @@
     "blockedPackets": "Blocked packets",
     "mostActiveProtectionIndicator": "Most active protection indicator",
     "protectionIndicators": "Protection indicators",
-    "packets": "packets",
+    "packets": "Packets",
     "uniqueAttackerIPs": "Unique attacker IPs",
     "topAttackerIPs": "Top attacker IPs",
     "attackSourcesByCountry": "Attack sources — by country",
@@ -784,6 +784,7 @@
     "showingFromToOfTotalEvents": "Showing {from}-{to} of {total} events",
     "pleasePickBothStartAndEndDateTime": "Please pick both start and end date/time",
     "endMustBeGreaterThanOrEqualToStart": "End must be greater than or equal to start",
-    "noConnectionWithServer": "No connection to the server. Please try again later."
+    "noConnectionWithServer": "No connection to the server. Please try again later.",
+    "flag": "Flag"
   }
 }

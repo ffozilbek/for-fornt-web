@@ -1,5 +1,6 @@
 "use client";
 
+import { ApiError } from "@/lib/api";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { useState } from "react";
@@ -17,6 +18,10 @@ export default function QueryProvider({
           queries: {
             staleTime: 1000, // 1 soniyagacha ma'lumotni yangi deb hisoblaydi
             refetchOnWindowFocus: false, // Oyna fokuslanganda ortiqcha so'rov yubormaslik
+            retry: (failureCount, error) =>
+              error instanceof ApiError && error.status && error.status < 500
+                ? false
+                : failureCount < 2,
           },
         },
       }),

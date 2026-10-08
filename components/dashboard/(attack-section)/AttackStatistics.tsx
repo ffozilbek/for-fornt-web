@@ -11,6 +11,7 @@ import {
 } from "../../ui/select";
 import { useTranslation } from "react-i18next";
 import AttackStatCards from "./(attack-section-cards)/AttackStatCards";
+import TopTenAttackerIPs from "./(attack-section-cards)/TopTenAttackerIPs";
 
 export default function AttackStatsSection() {
   const { t } = useTranslation();
@@ -53,6 +54,12 @@ export default function AttackStatsSection() {
       </div>
 
       <AttackStatCards hours={hours} />
+      <div className="grid grid-cols-2 gap-5">
+        <TopTenAttackerIPs hours={hours} />
+        <TopTenAttackerIPs hours={hours} />
+        <TopTenAttackerIPs hours={hours} />
+        <TopTenAttackerIPs hours={hours} />
+      </div>
     </section>
   );
 }
