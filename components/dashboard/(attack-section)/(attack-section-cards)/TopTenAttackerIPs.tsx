@@ -3,7 +3,6 @@ import { useAttackSummary } from "@/hooks/useDashboard";
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableFooter,
   TableHead,
@@ -11,7 +10,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useTranslation } from "react-i18next";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { FileUser } from "lucide-react";
 import CustomSkeleton from "@/components/shared/CustomSkeleton";
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -24,6 +23,7 @@ import {
 } from "@/components/ui/chart";
 import { Label, Pie, PieChart } from "recharts";
 import { countryName } from "@/lib/country";
+import { formatNumber } from "@/lib/format";
 
 export default function TopTenAttackerIPs({ hours }: { hours: number }) {
   const { data, isPending, isError, error } = useAttackSummary({
@@ -32,14 +32,6 @@ export default function TopTenAttackerIPs({ hours }: { hours: number }) {
   });
   const { t, i18n } = useTranslation();
   const lang = i18n.resolvedLanguage ?? i18n.language;
-
-  function formatNumber(num: number) {
-    return new Intl.NumberFormat("en-US", {
-      notation: "compact",
-      compactDisplay: "short",
-      maximumFractionDigits: 2,
-    }).format(num);
-  }
 
   if (isPending) {
     return <CustomSkeleton />;
@@ -75,17 +67,16 @@ export default function TopTenAttackerIPs({ hours }: { hours: number }) {
     totalPackets += item.packets;
   });
 
-  console.log(data.top_attackers);
-
   return (
     <Card>
-      <CardHeader className="flex items-center uppercase text-muted-foreground">
-        <FileUser size={18} />
-        <h1>{t("misc.top10AttackerIPs")}</h1>
+      <CardHeader>
+        <CardTitle className="flex items-center text-muted-foreground gap-2">
+          <FileUser size={18} />
+          <span>{t("misc.top10AttackerIPs")}</span>
+        </CardTitle>
       </CardHeader>
       <CardContent className="flex items-center">
         <Table>
-          <TableCaption></TableCaption>
           <TableHeader>
             <TableRow>
               <TableHead className="w-25">№</TableHead>

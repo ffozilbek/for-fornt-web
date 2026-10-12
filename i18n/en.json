@@ -42,7 +42,7 @@
     "configuredZones": "Configured zones:",
     "incidents2": "incidents",
     "zone": "Zone:",
-    "zone2": "Zone:",
+    "zone2": "Zone",
     "selectZone": "Select zone",
     "allZones2": "All zones",
     "allZones3": "All zones",
@@ -324,8 +324,8 @@
     "Per IP-UDP Session Limit Exceeded": "Per-IP UDP Session Limit Exceeded",
     "malwareJA4TPacket": "Malware_JA4T Packet",
     "ACK Packet": "ACK Packet",
-    "fINRSTPacket": "FIN/RST Packet",
-    "sYNACKPacket": "SYN-ACK Packet",
+    "FIN/RST Packet": "FIN/RST Packet",
+    "SYN-ACK Packet": "SYN-ACK Packet",
     "Malformed DNS-UDP Packet": "Malformed DNS-UDP Packet",
     "Malformed DNS-TCP Packet": "Malformed DNS-TCP Packet",
     "Malformed QUIC Packet": "Malformed QUIC Packet",
@@ -785,6 +785,35 @@
     "pleasePickBothStartAndEndDateTime": "Please pick both start and end date/time",
     "endMustBeGreaterThanOrEqualToStart": "End must be greater than or equal to start",
     "noConnectionWithServer": "No connection to the server. Please try again later.",
-    "flag": "Flag"
+    "flag": "Flag",
+    "recordedIncidents": "Recorded Incidents",
+    "peakBps": "Peak Traffic (bps)",
+    "peakPps": "Peak Packet Rate (pps)",
+    "attackers": "Number of Attackers"
+  },
+  "headers": {
+    "incidents": {
+      "title": "Recorded incidents",
+      "subtitle": "All attack records in the selected range"
+    },
+    "attackers": {
+      "title": "Unique attacker IPs",
+      "subtitle": "All attacker sources observed in the range"
+    },
+    "blocked": {
+      "title": "Blocked packets",
+      "subtitle": "What was blocked, by attack type and zone"
+    },
+    "indicators": {
+      "title": "Protection indicators",
+      "subtitle": "How many packets each protection rule dropped"
+    }
+  },
+  "breakdowns": {
+    "attackTypes": "Attack types",
+    "targetZones": "Targeted zones",
+    "attackerIps": "Attacker IPs",
+    "protocols": "Protocols",
+    "indicators": "Protection indicators"
   }
 }

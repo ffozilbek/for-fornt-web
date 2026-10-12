@@ -42,7 +42,7 @@
     "configuredZones": "Qo'shilgan zonalar soni:",
     "incidents2": "insident",
     "zone": "Zona:",
-    "zone2": "Zona:",
+    "zone2": "Zona",
     "selectZone": "Zona tanlash",
     "allZones2": "Hamma zonalar",
     "allZones3": "Hamma zonalar",
@@ -194,7 +194,7 @@
     "blockedPackets": "Bloklangan paketlar",
     "mostActiveProtectionIndicator": "Eng ko'p ishlagan himoya indikatori",
     "protectionIndicators": "Himoya indikatorlari",
-    "packets": "Paket",
+    "packets": "Paketlar",
     "uniqueAttackerIPs": "Noyob hujumchi IP",
     "topAttackerIPs": "Top hujumchi IP'lar",
     "attackSourcesByCountry": "Hujum manbalari — davlatlar kesimida",
@@ -324,8 +324,8 @@
     "Per-IP UDP Session Limit Exceeded": "IP bo'yicha UDP sessiya limiti oshib ketdi",
     "malwareJA4TPacket": "Zararli_JA4T Paket",
     "ACK Packet": "ACK Paket",
-    "fINRSTPacket": "FIN/RST Paket",
-    "sYNACKPacket": "SYN-ACK Paket",
+    "FIN/RST Packet": "FIN/RST Paket",
+    "SYN-ACK Packet": "SYN-ACK Paket",
     "Malformed DNS-UDP Packet": "Buzilgan DNS-UDP paket",
     "Malformed DNS-TCP Packet": "Buzilgan DNS-TCP paket",
     "Malformed QUIC Packet": "Buzilgan QUIC paket",
@@ -785,6 +785,35 @@
     "pleasePickBothStartAndEndDateTime": "Boshlanish va tugash sana/vaqtini tanlang",
     "endMustBeGreaterThanOrEqualToStart": "Tugash vaqti boshlanish vaqtidan kichik bo'lmasligi kerak",
     "noConnectionWithServer": "Server bilan aloqa yo'q. Keyinroq urinib ko'ring.",
-    "flag": "Bayroq"
+    "flag": "Bayroq",
+    "recordedIncidents": "Qayd etilgan hodisalar",
+    "peakBps": "Maksimal trafik (bps)",
+    "peakPps": "Maksimal paketlar soni (pps)",
+    "attackers": "Hujumchilar soni"
+  },
+  "headers": {
+    "incidents": {
+      "title": "Qayd etilgan insidentlar",
+      "subtitle": "Tanlangan oraliqdagi barcha hujum yozuvlari"
+    },
+    "attackers": {
+      "title": "Noyob hujumchi IP'lar",
+      "subtitle": "Oraliqda kuzatilgan barcha hujumchi manbalar"
+    },
+    "blocked": {
+      "title": "Bloklangan paketlar",
+      "subtitle": "Nima bloklangani — hujum turi va zona kesimida"
+    },
+    "indicators": {
+      "title": "Himoya indikatorlari",
+      "subtitle": "Qaysi himoya qoidasi qancha paket tashlagan"
+    }
+  },
+  "breakdowns": {
+    "attackTypes": "Hujum turlari",
+    "targetZones": "Nishondagi zonalar",
+    "attackerIps": "Hujumchi IP'lar",
+    "protocols": "Protokollar",
+    "indicators": "Himoya indikatorlari"
   }
 }

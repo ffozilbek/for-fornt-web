@@ -42,7 +42,7 @@
     "configuredZones": "Добавлено зон:",
     "incidents2": "инц.",
     "zone": "Зона:",
-    "zone2": "Зона:",
+    "zone2": "Зона",
     "selectZone": "Выбор зоны",
     "allZones2": "Все зоны",
     "allZones3": "Все зоны",
@@ -324,8 +324,8 @@
     "Per IP-UDP Session Limit Exceeded": "Превышен лимит UDP-сессий на IP",
     "malwareJA4TPacket": "Вредоносный_JA4T пакет",
     "ACK Packet": "ACK-пакет",
-    "fINRSTPacket": "FIN/RST-пакет",
-    "sYNACKPacket": "SYN-ACK-пакет",
+    "FIN/RST Packet": "FIN/RST-пакет",
+    "SYN-ACK Packet": "SYN-ACK-пакет",
     "Malformed DNS-UDP Packet": "Некорректный DNS-UDP пакет",
     "Malformed DNS-TCP Packet": "Некорректный DNS-TCP пакет",
     "Malformed QUIC Packet": "Некорректный QUIC-пакет",
@@ -785,6 +785,35 @@
     "pleasePickBothStartAndEndDateTime": "Выберите дату/время начала и конца",
     "endMustBeGreaterThanOrEqualToStart": "Конец должен быть не раньше начала",
     "noConnectionWithServer": "Нет соединения с сервером. Пожалуйста, попробуйте еще раз позже.",
-    "flag": "Флаг"
+    "flag": "Флаг",
+    "recordedIncidents": "Зафиксированные инциденты",
+    "peakBps": "Пиковый трафик (bps)",
+    "peakPps": "Пиковое количество пакетов (pps)",
+    "attackers": "Количество атакующих"
+  },
+  "headers": {
+    "incidents": {
+      "title": "Зарегистрированные инциденты",
+      "subtitle": "Все записи об атаках за выбранный период"
+    },
+    "attackers": {
+      "title": "Уникальные IP-адреса атакующих",
+      "subtitle": "Все источники атак, наблюдаемые за период"
+    },
+    "blocked": {
+      "title": "Заблокированные пакеты",
+      "subtitle": "Что было заблокировано, по типам атак и зонам"
+    },
+    "indicators": {
+      "title": "Индикаторы защиты",
+      "subtitle": "Сколько пакетов отбросило каждое правило защиты"
+    }
+  },
+  "breakdowns": {
+    "attackTypes": "Типы атак",
+    "targetZones": "Атакуемые зоны",
+    "attackerIps": "IP-адреса атакующих",
+    "protocols": "Протоколы",
+    "indicators": "Индикаторы защиты"
   }
 }

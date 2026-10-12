@@ -14,3 +14,15 @@ export function formatBytes(bytes: number) {
   }
   return `${v.toFixed(i === 0 ? 0 : 2)} ${units[i]}`;
 }
+
+// const durationFormatter = new Intl.DurationFormat("en", { style: "short" });
+
+// export function formatDuration(seconds: number) {
+//   const minutes = Math.floor(seconds / 60);
+//   const remainingSeconds = seconds % 60;
+
+//   return durationFormatter.format({
+//     minutes,
+//     seconds: remainingSeconds,
+//   });
+// }

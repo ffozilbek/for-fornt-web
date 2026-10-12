@@ -2,42 +2,12 @@
 
 import CustomSkeleton from "@/components/shared/CustomSkeleton";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useAttackSummary } from "@/hooks/useDashboard";
 import { formatBytes, formatNumber } from "@/lib/format";
-import { ReactNode } from "react";
 import { FileUser, RotateCcwClock, ShieldCog, ShieldX } from "lucide-react";
 import { useTranslation } from "react-i18next";
-
-function StatCard({
-  hour,
-  icon,
-  value,
-  label,
-  hint,
-}: {
-  hour: string;
-  icon: ReactNode;
-  value: ReactNode;
-  label: string;
-  hint?: ReactNode;
-}) {
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="text-sm text-muted-foreground flex items-center justify-between">
-          {icon}
-          <span>{hour}</span>
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-1">
-        <div className="text-2xl font-bold">{value}</div>
-        <div className="text-sm text-muted-foreground">{label}</div>
-        {hint && <div className="text-xs text-muted-foreground">{hint}</div>}
-      </CardContent>
-    </Card>
-  );
-}
+import Link from "next/link";
+import StatCard from "@/components/shared/StatCard";
 
 export default function AttackStatCards({ hours }: { hours: number }) {
   const { data, isPending, isError, error, isPlaceholderData } =
@@ -61,8 +31,6 @@ export default function AttackStatCards({ hours }: { hours: number }) {
       </Alert>
     );
 
-  console.log(data);
-
   const cardTime =
     hours > 24 ? t("misc.last7Days") : `${hours} ${t("misc.hOURS")}`;
 
@@ -72,44 +40,52 @@ export default function AttackStatCards({ hours }: { hours: number }) {
         isPlaceholderData ? "opacity-60" : ""
       }`}
     >
-      <StatCard
-        hour={cardTime}
-        icon={<RotateCcwClock size={18} />}
-        value={formatNumber(data.totals.incidents)}
-        label={t("navigation.recordedIncidents")}
-      />
-      <StatCard
-        hour={cardTime}
-        icon={<FileUser size={18} />}
-        value={
-          <span className="text-red-400">
-            {formatNumber(data.totals.attackers)}
-          </span>
-        }
-        label={t("misc.uniqueAttackerIPs")}
-      />
-      <StatCard
-        hour={cardTime}
-        icon={<ShieldX size={18} />}
-        value={
-          <span className="text-red-400">
-            {formatNumber(data.dropped.totals.packets)}
-          </span>
-        }
-        label={t("misc.blockedPackets")}
-        hint={formatBytes(data.dropped.totals.bytes)}
-      />
-      <StatCard
-        hour={cardTime}
-        icon={<ShieldCog size={18} />}
-        value={
-          <span className="text-lg">
-            {t(`misc.${data.top_indicator.name}` as any)}
-          </span>
-        }
-        label={t("misc.mostActiveProtectionIndicator")}
-        hint={`${formatNumber(data.top_indicator.packets)} ${t("misc.packets")} · ${data.top_indicator.share}%`}
-      />
+      <Link href={`/summary/incidents?hours=${hours}`} className="block">
+        <StatCard
+          hour={cardTime}
+          icon={<RotateCcwClock size={18} />}
+          value={formatNumber(data.totals.incidents)}
+          label={t("navigation.recordedIncidents")}
+        />
+      </Link>
+      <Link href={`/summary/attackers?hours=${hours}`} className="block">
+        <StatCard
+          hour={cardTime}
+          icon={<FileUser size={18} />}
+          value={
+            <span className="text-red-400">
+              {formatNumber(data.totals.attackers)}
+            </span>
+          }
+          label={t("misc.uniqueAttackerIPs")}
+        />
+      </Link>
+      <Link href={`/summary/blocked?hours=${hours}`} className="block">
+        <StatCard
+          hour={cardTime}
+          icon={<ShieldX size={18} />}
+          value={
+            <span className="text-red-400">
+              {formatNumber(data.dropped.totals.packets)}
+            </span>
+          }
+          label={t("misc.blockedPackets")}
+          hint={formatBytes(data.dropped.totals.bytes)}
+        />
+      </Link>
+      <Link href={`/summary/indicators?hours=${hours}`} className="block">
+        <StatCard
+          hour={cardTime}
+          icon={<ShieldCog size={18} />}
+          value={
+            <span className="text-lg">
+              {t(`misc.${data.top_indicator.name}` as any)}
+            </span>
+          }
+          label={t("misc.mostActiveProtectionIndicator")}
+          hint={`${formatNumber(data.top_indicator.packets)} ${t("misc.packets")} · ${data.top_indicator.share}%`}
+        />
+      </Link>
     </div>
   );
 }
