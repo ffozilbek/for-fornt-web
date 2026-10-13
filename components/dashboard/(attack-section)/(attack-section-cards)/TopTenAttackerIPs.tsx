@@ -24,6 +24,7 @@ import {
 import { Label, Pie, PieChart } from "recharts";
 import { countryName } from "@/lib/country";
 import { formatNumber } from "@/lib/format";
+import EmptySheet from "@/components/shared/EmptySheet";
 
 export default function TopTenAttackerIPs({ hours }: { hours: number }) {
   const { data, isPending, isError, error } = useAttackSummary({
@@ -43,7 +44,7 @@ export default function TopTenAttackerIPs({ hours }: { hours: number }) {
       </Alert>
     );
 
-  const topAttackers = data.top_attackers.slice(0, 10);
+  const topAttackers = data.top_attackers.slice(0, 9);
   let totalPackets = 0;
 
   const chartConfig = Object.fromEntries(
@@ -75,113 +76,119 @@ export default function TopTenAttackerIPs({ hours }: { hours: number }) {
           <span>{t("misc.top10AttackerIPs")}</span>
         </CardTitle>
       </CardHeader>
-      <CardContent className="flex items-center">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="w-25">№</TableHead>
-              <TableHead>{t("misc.country")}</TableHead>
-              <TableHead>{t("misc.flag")}</TableHead>
-              <TableHead className="text-right">{t("misc.srcIP")}</TableHead>
-              <TableHead className="text-right">{t("misc.packets")}</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {data?.top_attackers.map((attacker, i) => (
-              <TableRow key={attacker.ip}>
-                <TableCell className="font-medium">{i + 1}</TableCell>
-                <TableCell>
-                  {countryName(attacker.country_code, lang, attacker.country)}
-                </TableCell>
-                <TableCell>
-                  <Image
-                    src={`/flags/${attacker.country_code}.svg`}
-                    alt={attacker.country_code}
-                    width={20}
-                    height={20}
-                    unoptimized
-                  />
-                </TableCell>
-                <TableCell className="text-right">{attacker.ip}</TableCell>
+      {topAttackers.length == 0 ? (
+        <EmptySheet />
+      ) : (
+        <CardContent className="flex items-center">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>№</TableHead>
+                <TableHead>{t("misc.country")}</TableHead>
+                <TableHead>{t("misc.flag")}</TableHead>
+                <TableHead className="text-right">{t("misc.srcIP")}</TableHead>
+                <TableHead className="text-right">
+                  {t("misc.packets")}
+                </TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {data?.top_attackers.map((attacker, i) => (
+                <TableRow key={attacker.ip}>
+                  <TableCell className="font-medium">{i + 1}</TableCell>
+                  <TableCell>
+                    {countryName(attacker.country_code, lang, attacker.country)}
+                  </TableCell>
+                  <TableCell>
+                    <Image
+                      src={`/flags/${attacker.country_code}.svg`}
+                      alt={attacker.country_code}
+                      width={20}
+                      height={20}
+                      unoptimized
+                    />
+                  </TableCell>
+                  <TableCell className="text-right">{attacker.ip}</TableCell>
+                  <TableCell className="text-right">
+                    {formatNumber(attacker.packets)}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+            <TableFooter>
+              <TableRow>
+                <TableCell colSpan={4}>{t("misc.tOTAL")}</TableCell>
                 <TableCell className="text-right">
-                  {formatNumber(attacker.packets)}
+                  {formatNumber(totalPackets)}
                 </TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-          <TableFooter>
-            <TableRow>
-              <TableCell colSpan={4}>{t("misc.tOTAL")}</TableCell>
-              <TableCell className="text-right">
-                {formatNumber(totalPackets)}
-              </TableCell>
-            </TableRow>
-          </TableFooter>
-        </Table>
-        {chartData.length > 0 && (
-          <ChartContainer
-            config={chartConfig}
-            className="w-full mx-auto aspect-square max-h-80 flex-1/2"
-          >
-            <PieChart>
-              <ChartTooltip
-                cursor={false}
-                content={
-                  <ChartTooltipContent
-                    hideLabel
-                    formatter={(value, name) => (
-                      <div className="flex w-full items-center justify-between gap-4">
-                        <span>{chartConfig[String(name)]?.label}</span>
-                        <span className="font-mono font-medium">
-                          {formatNumber(Number(value))}
-                        </span>
-                      </div>
-                    )}
-                  />
-                }
-              />
-              <Pie
-                data={chartData}
-                dataKey="packets"
-                nameKey="id"
-                innerRadius={60}
-                strokeWidth={5}
-                isAnimationActive={false}
-              >
-                <Label
-                  content={({ viewBox }) => {
-                    if (viewBox && "cx" in viewBox && "cy" in viewBox) {
-                      return (
-                        <text
-                          x={viewBox.cx}
-                          y={viewBox.cy}
-                          textAnchor="middle"
-                          dominantBaseline="middle"
-                        >
-                          <tspan
+            </TableFooter>
+          </Table>
+          {chartData.length > 0 && (
+            <ChartContainer
+              config={chartConfig}
+              className="w-full mx-auto aspect-square max-h-80 flex-1/2"
+            >
+              <PieChart>
+                <ChartTooltip
+                  cursor={false}
+                  content={
+                    <ChartTooltipContent
+                      hideLabel
+                      formatter={(value, name) => (
+                        <div className="flex w-full items-center justify-between gap-4">
+                          <span>{chartConfig[String(name)]?.label}</span>
+                          <span className="font-mono font-medium">
+                            {formatNumber(Number(value))}
+                          </span>
+                        </div>
+                      )}
+                    />
+                  }
+                />
+                <Pie
+                  data={chartData}
+                  dataKey="packets"
+                  nameKey="id"
+                  innerRadius={60}
+                  strokeWidth={5}
+                  isAnimationActive={false}
+                >
+                  <Label
+                    content={({ viewBox }) => {
+                      if (viewBox && "cx" in viewBox && "cy" in viewBox) {
+                        return (
+                          <text
                             x={viewBox.cx}
                             y={viewBox.cy}
-                            className="fill-foreground text-3xl font-bold"
+                            textAnchor="middle"
+                            dominantBaseline="middle"
                           >
-                            {formatNumber(totalPackets)}
-                          </tspan>
-                          <tspan
-                            x={viewBox.cx}
-                            y={(viewBox.cy || 0) + 24}
-                            className="fill-muted-foreground"
-                          >
-                            {t("misc.packets")}
-                          </tspan>
-                        </text>
-                      );
-                    }
-                  }}
-                />
-              </Pie>
-            </PieChart>
-          </ChartContainer>
-        )}
-      </CardContent>
+                            <tspan
+                              x={viewBox.cx}
+                              y={viewBox.cy}
+                              className="fill-foreground text-2xl font-bold"
+                            >
+                              {formatNumber(totalPackets)}
+                            </tspan>
+                            <tspan
+                              x={viewBox.cx}
+                              y={(viewBox.cy || 0) + 24}
+                              className="fill-muted-foreground"
+                            >
+                              {t("misc.packets")}
+                            </tspan>
+                          </text>
+                        );
+                      }
+                    }}
+                  />
+                </Pie>
+              </PieChart>
+            </ChartContainer>
+          )}
+        </CardContent>
+      )}
     </Card>
   );
 }

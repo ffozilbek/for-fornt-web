@@ -24,6 +24,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import EmptySheet from "@/components/shared/EmptySheet";
 
 export default function SummaryDetailView({
   summaryKey,
@@ -128,30 +129,34 @@ export default function SummaryDetailView({
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>№</TableHead>
-                      <TableHead>{t("misc.attackTypes")}</TableHead>
-                      <TableHead>{t("navigation.incidents")}</TableHead>
-                      <TableHead className="text-right">
-                        {t("misc.packets")}
-                      </TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {data.breakdowns[0].items.map((attack, i) => (
-                      <TableRow key={i}>
-                        <TableCell className="font-medium">{i + 1}</TableCell>
-                        <TableCell>{attack.name}</TableCell>
-                        <TableCell>{attack.incidents}</TableCell>
-                        <TableCell className="text-right">
-                          {formatNumber(attack.packets)}
-                        </TableCell>
+                {data.breakdowns[0].items.length == 0 ? (
+                  <EmptySheet />
+                ) : (
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>№</TableHead>
+                        <TableHead>{t("misc.attackTypes")}</TableHead>
+                        <TableHead>{t("navigation.incidents")}</TableHead>
+                        <TableHead className="text-right">
+                          {t("misc.packets")}
+                        </TableHead>
                       </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
+                    </TableHeader>
+                    <TableBody>
+                      {data.breakdowns[0].items.map((attack, i) => (
+                        <TableRow key={i}>
+                          <TableCell className="font-medium">{i + 1}</TableCell>
+                          <TableCell>{attack.name}</TableCell>
+                          <TableCell>{attack.incidents}</TableCell>
+                          <TableCell className="text-right">
+                            {formatNumber(attack.packets)}
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                )}
               </CardContent>
             </Card>
 
@@ -163,30 +168,34 @@ export default function SummaryDetailView({
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>№</TableHead>
-                      <TableHead>{t("navigation.zone2")}</TableHead>
-                      <TableHead>{t("navigation.incidents")}</TableHead>
-                      <TableHead className="text-right">
-                        {t("misc.packets")}
-                      </TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {data.breakdowns[1].items.map((zone, i) => (
-                      <TableRow key={i}>
-                        <TableCell className="font-medium">{i + 1}</TableCell>
-                        <TableCell>{zone.name}</TableCell>
-                        <TableCell>{zone.incidents}</TableCell>
-                        <TableCell className="text-right">
-                          {formatNumber(zone.packets)}
-                        </TableCell>
+                {data.breakdowns[1].items.length == 0 ? (
+                  <EmptySheet />
+                ) : (
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>№</TableHead>
+                        <TableHead>{t("navigation.zone2")}</TableHead>
+                        <TableHead>{t("navigation.incidents")}</TableHead>
+                        <TableHead className="text-right">
+                          {t("misc.packets")}
+                        </TableHead>
                       </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
+                    </TableHeader>
+                    <TableBody>
+                      {data.breakdowns[1].items.map((zone, i) => (
+                        <TableRow key={i}>
+                          <TableCell className="font-medium">{i + 1}</TableCell>
+                          <TableCell>{zone.name}</TableCell>
+                          <TableCell>{zone.incidents}</TableCell>
+                          <TableCell className="text-right">
+                            {formatNumber(zone.packets)}
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                )}
               </CardContent>
             </Card>
           </div>
