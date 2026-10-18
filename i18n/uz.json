@@ -342,7 +342,7 @@
     "jA4OnePerLine": "JA4 (har biri yangi qatorda):",
     "enterOnlyJA4OnePerLineOrCommaSeparated": "Faqat JA4 yozing. Har biri yangi qatorda yoki vergul bilan.",
     "malwareJA4Packet": "Zararli_JA4 Paket",
-    "malformedTLSPacket": "Buzilgan TLS paket",
+    "Malformed TLS Packet": "Buzilgan TLS paket",
     "notAllowedTLSVersion": "Ruxsat etilmagan TLS versiyasi",
     "notAllowedSNIName": "Ruxsat etilmagan SNI nomi",
     "reasonViolatedThreshold": "Sabab (buzilgan chegara)",
@@ -789,7 +789,11 @@
     "recordedIncidents": "Qayd etilgan hodisalar",
     "peakBps": "Maksimal trafik (bps)",
     "peakPps": "Maksimal paketlar soni (pps)",
-    "attackers": "Hujumchilar soni"
+    "attackers": "Hujumchilar soni",
+    "bytes": "Baytlar",
+    "useProtocols": "Protokollar kesimida",
+    "blockedPacketsbyTime": "Bloklangan paketlar - vaqt bo'yicha",
+    "shareOfIndicators": "Indikatorlar ulushi"
   },
   "headers": {
     "incidents": {

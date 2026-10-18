@@ -23,7 +23,7 @@ import {
 } from "@/components/ui/chart";
 import { Label, Pie, PieChart } from "recharts";
 import { countryName } from "@/lib/country";
-import { formatNumber } from "@/lib/format";
+import { formatBytes, formatNumber } from "@/lib/format";
 import EmptySheet from "@/components/shared/EmptySheet";
 
 export default function TopTenAttackerIPs({ hours }: { hours: number }) {
@@ -61,6 +61,7 @@ export default function TopTenAttackerIPs({ hours }: { hours: number }) {
     id: `c${i}`,
     code: c.country_code,
     packets: c.packets,
+    bytes: c.bytes,
     fill: `var(--color-c${i})`,
   }));
 
@@ -79,7 +80,7 @@ export default function TopTenAttackerIPs({ hours }: { hours: number }) {
       {topAttackers.length == 0 ? (
         <EmptySheet />
       ) : (
-        <CardContent className="flex items-center">
+        <CardContent className="flex items-center gap-5">
           <Table>
             <TableHeader>
               <TableRow>
@@ -125,67 +126,71 @@ export default function TopTenAttackerIPs({ hours }: { hours: number }) {
             </TableFooter>
           </Table>
           {chartData.length > 0 && (
-            <ChartContainer
-              config={chartConfig}
-              className="w-full mx-auto aspect-square max-h-80 flex-1/2"
-            >
-              <PieChart>
-                <ChartTooltip
-                  cursor={false}
-                  content={
-                    <ChartTooltipContent
-                      hideLabel
-                      formatter={(value, name) => (
-                        <div className="flex w-full items-center justify-between gap-4">
-                          <span>{chartConfig[String(name)]?.label}</span>
-                          <span className="font-mono font-medium">
-                            {formatNumber(Number(value))}
-                          </span>
-                        </div>
-                      )}
-                    />
-                  }
-                />
-                <Pie
-                  data={chartData}
-                  dataKey="packets"
-                  nameKey="id"
-                  innerRadius={60}
-                  strokeWidth={5}
-                  isAnimationActive={false}
-                >
-                  <Label
-                    content={({ viewBox }) => {
-                      if (viewBox && "cx" in viewBox && "cy" in viewBox) {
-                        return (
-                          <text
-                            x={viewBox.cx}
-                            y={viewBox.cy}
-                            textAnchor="middle"
-                            dominantBaseline="middle"
-                          >
-                            <tspan
-                              x={viewBox.cx}
-                              y={viewBox.cy}
-                              className="fill-foreground text-2xl font-bold"
-                            >
-                              {formatNumber(totalPackets)}
-                            </tspan>
-                            <tspan
-                              x={viewBox.cx}
-                              y={(viewBox.cy || 0) + 24}
-                              className="fill-muted-foreground"
-                            >
-                              {t("misc.packets")}
-                            </tspan>
-                          </text>
-                        );
-                      }
-                    }}
+            <div className="relative h-60 w-60 shrink-0">
+              <ChartContainer
+                config={chartConfig}
+                className="relative w-full mx-auto aspect-square max-h-90 z-10"
+              >
+                <PieChart>
+                  <ChartTooltip
+                    cursor={false}
+                    content={
+                      <ChartTooltipContent
+                        hideLabel
+                        formatter={(value, name, item) => {
+                          const row = item.payload as {
+                            id: string;
+                            bytes: number;
+                          };
+                          const cfg = chartConfig[row.id];
+
+                          return (
+                            <div className="flex flex-1 items-center justify-between gap-4">
+                              <div className="flex items-center gap-2">
+                                <span
+                                  className="h-2.5 w-2.5 shrink-0 rounded-xs"
+                                  style={{ backgroundColor: cfg?.color }}
+                                />
+                                <span className="text-muted-foreground">
+                                  {cfg?.label}
+                                </span>
+                              </div>
+                              <div className="grid text-right font-mono font-medium">
+                                <span>
+                                  {formatNumber(Number(value))}{" "}
+                                  {t("misc.packets")}
+                                </span>
+                                <span className="text-muted-foreground">
+                                  {formatBytes(row.bytes)}
+                                </span>
+                              </div>
+                            </div>
+                          );
+                        }}
+                      />
+                    }
                   />
-                </Pie>
-              </PieChart>
-            </ChartContainer>
+                  <Pie
+                    data={chartData}
+                    dataKey="packets"
+                    nameKey="id"
+                    innerRadius="70%"
+                    outerRadius="100%"
+                    strokeWidth={5}
+                    isAnimationActive={false}
+                  />
+                </PieChart>
+              </ChartContainer>
+
+              <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center z-0">
+                <span className="text-2xl font-bold">
+                  {formatNumber(totalPackets)}
+                </span>
+                <span className="text-sm text-muted-foreground">
+                  {t("misc.packets")}
+                </span>
+              </div>
+            </div>
           )}
         </CardContent>
       )}

@@ -789,7 +789,11 @@
     "recordedIncidents": "Зафиксированные инциденты",
     "peakBps": "Пиковый трафик (bps)",
     "peakPps": "Пиковое количество пакетов (pps)",
-    "attackers": "Количество атакующих"
+    "attackers": "Количество атакующих",
+    "bytes": "Байты",
+    "useProtocols": "Согласно протоколу",
+    "blockedPacketsbyTime": "Заблокированные пакеты — по времени",
+    "shareOfIndicators": "Доля показателей"
   },
   "headers": {
     "incidents": {

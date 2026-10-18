@@ -25,6 +25,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import EmptySheet from "@/components/shared/EmptySheet";
+import BlockedPacketsDetail from "@/components/shared/BlockedPacketsDetail";
+import IndicatorDetail from "@/components/shared/IndicatorDetail";
 
 export default function SummaryDetailView({
   summaryKey,
@@ -49,8 +51,6 @@ export default function SummaryDetailView({
         <AlertDescription>{error.message}</AlertDescription>
       </Alert>
     );
-
-  console.log(data);
 
   return (
     <>
@@ -212,6 +212,14 @@ export default function SummaryDetailView({
             <DataTable data={data} />
           </CardContent>
         </Card>
+      )}
+
+      {data.breakdowns[0].label === "Protokollar" && (
+        <BlockedPacketsDetail data={data} />
+      )}
+
+      {data.breakdowns[0].label === "Himoya indikatorlari" && (
+        <IndicatorDetail data={data} />
       )}
     </>
   );

@@ -789,7 +789,11 @@
     "recordedIncidents": "Recorded Incidents",
     "peakBps": "Peak Traffic (bps)",
     "peakPps": "Peak Packet Rate (pps)",
-    "attackers": "Number of Attackers"
+    "attackers": "Number of Attackers",
+    "bytes": "Bytes",
+    "useProtocols": "By protocol",
+    "blockedPacketsbyTime": "Blocked packets - by time",
+    "shareOfIndicators": "Share of indicators"
   },
   "headers": {
     "incidents": {

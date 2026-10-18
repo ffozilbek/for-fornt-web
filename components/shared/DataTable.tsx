@@ -41,8 +41,6 @@ export function DataTable({ data }: { data: SummaryDetail }) {
   const start = (page - 1) * pageSize;
   const pageRows = incidents.slice(start, start + pageSize);
 
-  console.log(incidents.length);
-
   return (
     <>
       {incidents.length == 0 ? (

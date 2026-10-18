@@ -157,7 +157,7 @@ export const summaryDetailSchema = z.object({
     dropped_bytes: z.number(),
     peak_pps: z.number(),
     peak_bps: z.number(),
-    first_seen: z.string().nullable(), // davrda hujum bo'lmasa null bo'lishi mumkin
+    first_seen: z.string().nullable(),
     last_seen: z.string().nullable(),
   }),
   breakdowns: z.array(
@@ -168,6 +168,7 @@ export const summaryDetailSchema = z.object({
           name: z.string(),
           incidents: z.number(),
           packets: z.number(),
+          bytes: z.number().optional(),
         }),
       ),
     }),
@@ -186,6 +187,32 @@ export const summaryDetailSchema = z.object({
       avg_pps: z.number(),
     }),
   ),
+  charts: z
+    .object({
+      protocols: z
+        .array(
+          z.object({
+            name: z.string(),
+            packets: z.number(),
+            bytes: z.number(),
+          }),
+        )
+        .optional(),
+      series: z
+        .array(
+          z.object({
+            t: z.string(),
+            total: z.number().optional(),
+            tcp: z.number().optional(),
+            udp: z.number().optional(),
+            icmp: z.number().optional(),
+            other: z.number().optional(),
+          }),
+        )
+        .optional(),
+      indicators: z.array(z.any()).optional(),
+    })
+    .optional(),
 });
 
 export type SummaryDetail = z.infer<typeof summaryDetailSchema>;
