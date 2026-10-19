@@ -222,7 +222,8 @@ export const DETAIL_KINDS = [
   "summary",
   "attacker",
   "country",
-  // "...", "..."  ← qolgan ikkitasi
+  "attack-type",
+  "zone",
 ] as const;
 export type DetailKind = (typeof DETAIL_KINDS)[number];
 

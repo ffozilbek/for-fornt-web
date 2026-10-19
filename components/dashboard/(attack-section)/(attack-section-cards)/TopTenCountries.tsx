@@ -49,7 +49,7 @@ export default function TopTenCounrty({ hours }: { hours: number }) {
   const topCountries = data.top_countries.slice(0, 9);
   let totalPackets = 0;
 
-  console.log(topCountries);
+  // console.log(topCountries);
 
   const chartConfig = Object.fromEntries(
     topCountries.map((c, i) => [
@@ -102,7 +102,7 @@ export default function TopTenCounrty({ hours }: { hours: number }) {
             </TableHeader>
             <TableBody>
               {topCountries.map((country, i) => {
-                const href = `/attacker/${country.country_code}`;
+                const href = `/country/${country.country_code}?hours=${hours}`;
                 return (
                   <TableRow
                     className="cursor-pointer"

@@ -60,24 +60,30 @@ export default function SummaryDetailView({
       <Card>
         <CardHeader>
           <CardTitle className="text-xl text-secondary-foreground flex items-center gap-3">
-            <Image
-              src={`/flags/${data.header.country_code}.svg`}
-              alt={data.header.country_code || ""}
-              width={40}
-              height={40}
-              unoptimized
-            />
-            <span>
-              {t(`headers.${data.header.key}.title`, {
-                defaultValue: data.header.title,
-              })}
-            </span>
+            {data.header.country_code && (
+              <Image
+                src={`/flags/${data.header.country_code}.svg`}
+                alt={data.header.country_code || ""}
+                width={40}
+                height={40}
+                unoptimized
+              />
+            )}
+            {data.header.key && (
+              <span>
+                {t(`headers.${data.header.key}.title`, {
+                  defaultValue: data.header.title,
+                })}
+              </span>
+            )}
           </CardTitle>
-          <CardDescription>
-            {t(`headers.${data.header.key}.subtitle`, {
-              defaultValue: data.header.subtitle,
-            })}
-          </CardDescription>
+          {data.header.subtitle && (
+            <CardDescription>
+              {t(`headers.${data.header.key}.subtitle`, {
+                defaultValue: data.header.subtitle,
+              })}
+            </CardDescription>
+          )}
         </CardHeader>
         <CardContent className="flex items-center justify-between">
           <div>

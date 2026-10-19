@@ -1,7 +1,7 @@
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { queryKeys } from "@/lib/query-keys";
 import { dashboardService } from "@/service/dashboard.service";
-import { AttackFilters, DetailTarget, SummaryKey } from "@/types/dashboard";
+import { AttackFilters, DetailTarget } from "@/types/dashboard";
 
 export const useSystemResources = () =>
   useQuery({

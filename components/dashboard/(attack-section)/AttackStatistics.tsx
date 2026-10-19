@@ -13,6 +13,8 @@ import { useTranslation } from "react-i18next";
 import AttackStatCards from "./(attack-section-cards)/AttackStatCards";
 import TopTenAttackerIPs from "./(attack-section-cards)/TopTenAttackerIPs";
 import TopTenCounrties from "./(attack-section-cards)/TopTenCountries";
+import TopTenAttackTypes from "./(attack-section-cards)/TopTenAttackTypes";
+import TopTenTargetZones from "./(attack-section-cards)/TopTenTargetZones";
 
 export default function AttackStatsSection() {
   const { t } = useTranslation();
@@ -58,6 +60,8 @@ export default function AttackStatsSection() {
       <div className="grid grid-cols-2 gap-5">
         <TopTenAttackerIPs hours={hours} />
         <TopTenCounrties hours={hours} />
+        <TopTenAttackTypes hours={hours} />
+        <TopTenTargetZones hours={hours} />
       </div>
     </section>
   );

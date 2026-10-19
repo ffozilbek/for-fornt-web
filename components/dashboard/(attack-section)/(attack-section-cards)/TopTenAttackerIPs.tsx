@@ -99,7 +99,7 @@ export default function TopTenAttackerIPs({ hours }: { hours: number }) {
             </TableHeader>
             <TableBody>
               {topAttackers.map((attacker, i) => {
-                const href = `/attacker/${attacker.ip}`;
+                const href = `/attacker/${attacker.ip}?hours=${hours}`;
                 return (
                   <TableRow
                     className="cursor-pointer"
