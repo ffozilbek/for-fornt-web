@@ -21,10 +21,11 @@ import {
   ChartTooltipContent,
   type ChartConfig,
 } from "@/components/ui/chart";
-import { Label, Pie, PieChart } from "recharts";
+import { Pie, PieChart } from "recharts";
 import { countryName } from "@/lib/country";
 import { formatBytes, formatNumber } from "@/lib/format";
 import EmptySheet from "@/components/shared/EmptySheet";
+import { useRouter } from "next/navigation";
 
 export default function TopTenAttackerIPs({ hours }: { hours: number }) {
   const { data, isPending, isError, error } = useAttackSummary({
@@ -32,6 +33,7 @@ export default function TopTenAttackerIPs({ hours }: { hours: number }) {
     zone: "all",
   });
   const { t, i18n } = useTranslation();
+  const route = useRouter();
   const lang = i18n.resolvedLanguage ?? i18n.language;
 
   if (isPending) {
@@ -72,8 +74,10 @@ export default function TopTenAttackerIPs({ hours }: { hours: number }) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="flex items-center text-muted-foreground gap-2">
-          <FileUser size={18} />
+        <CardTitle className="flex items-center gap-2">
+          <div className="bg-sidebar-accent-foreground text-sidebar-accent h-8 w-8 rounded-md flex items-center justify-center relative">
+            <FileUser size={20} />
+          </div>
           <span>{t("misc.top10AttackerIPs")}</span>
         </CardTitle>
       </CardHeader>
@@ -94,27 +98,42 @@ export default function TopTenAttackerIPs({ hours }: { hours: number }) {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {data?.top_attackers.map((attacker, i) => (
-                <TableRow key={attacker.ip}>
-                  <TableCell className="font-medium">{i + 1}</TableCell>
-                  <TableCell>
-                    {countryName(attacker.country_code, lang, attacker.country)}
-                  </TableCell>
-                  <TableCell>
-                    <Image
-                      src={`/flags/${attacker.country_code}.svg`}
-                      alt={attacker.country_code}
-                      width={20}
-                      height={20}
-                      unoptimized
-                    />
-                  </TableCell>
-                  <TableCell className="text-right">{attacker.ip}</TableCell>
-                  <TableCell className="text-right">
-                    {formatNumber(attacker.packets)}
-                  </TableCell>
-                </TableRow>
-              ))}
+              {topAttackers.map((attacker, i) => {
+                const href = `/attacker/${attacker.ip}`;
+                return (
+                  <TableRow
+                    className="cursor-pointer"
+                    tabIndex={0}
+                    onClick={() => route.push(href)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") route.push(href);
+                    }}
+                    key={attacker.ip}
+                  >
+                    <TableCell className="font-medium">{i + 1}</TableCell>
+                    <TableCell>
+                      {countryName(
+                        attacker.country_code,
+                        lang,
+                        attacker.country,
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      <Image
+                        src={`/flags/${attacker.country_code}.svg`}
+                        alt={attacker.country_code}
+                        width={20}
+                        height={20}
+                        unoptimized
+                      />
+                    </TableCell>
+                    <TableCell className="text-right">{attacker.ip}</TableCell>
+                    <TableCell className="text-right">
+                      {formatNumber(attacker.packets)}
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
             </TableBody>
             <TableFooter>
               <TableRow>

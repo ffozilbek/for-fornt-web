@@ -148,6 +148,7 @@ export const summaryDetailSchema = z.object({
     key: z.string(),
     kind: z.string(),
     title: z.string(),
+    country_code: z.string().optional(),
     subtitle: z.string(),
   }),
   totals: z.object({
@@ -216,3 +217,15 @@ export const summaryDetailSchema = z.object({
 });
 
 export type SummaryDetail = z.infer<typeof summaryDetailSchema>;
+
+export const DETAIL_KINDS = [
+  "summary",
+  "attacker",
+  "country",
+  // "...", "..."  ← qolgan ikkitasi
+] as const;
+export type DetailKind = (typeof DETAIL_KINDS)[number];
+
+export type DetailTarget =
+  | { kind: "summary"; key: SummaryKey }
+  | { kind: Exclude<DetailKind, "summary">; key: string };

@@ -11,9 +11,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { useSummaryDetail } from "@/hooks/useDashboard";
 import { formatBytes, formatNumber } from "@/lib/format";
-import { SummaryKey } from "@/types/dashboard";
+import { DetailTarget } from "@/types/dashboard";
 import { FileUser, Gauge, RotateCcwClock, StickyNote } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import {
@@ -27,15 +26,17 @@ import {
 import EmptySheet from "@/components/shared/EmptySheet";
 import BlockedPacketsDetail from "@/components/shared/BlockedPacketsDetail";
 import IndicatorDetail from "@/components/shared/IndicatorDetail";
+import { useDetail } from "@/hooks/useDashboard";
+import Image from "next/image";
 
 export default function SummaryDetailView({
-  summaryKey,
+  target,
   hours,
 }: {
-  summaryKey: SummaryKey;
+  target: DetailTarget;
   hours: number;
 }) {
-  const { data, isPending, isError, error } = useSummaryDetail(summaryKey, {
+  const { data, isPending, isError, error } = useDetail(target, {
     hours,
     zone: "all",
   });
@@ -52,15 +53,25 @@ export default function SummaryDetailView({
       </Alert>
     );
 
+  console.log(data);
+
   return (
     <>
       <Card>
         <CardHeader>
-          <CardTitle>
-            {" "}
-            {t(`headers.${data.header.key}.title`, {
-              defaultValue: data.header.title,
-            })}
+          <CardTitle className="text-xl text-secondary-foreground flex items-center gap-3">
+            <Image
+              src={`/flags/${data.header.country_code}.svg`}
+              alt={data.header.country_code || ""}
+              width={40}
+              height={40}
+              unoptimized
+            />
+            <span>
+              {t(`headers.${data.header.key}.title`, {
+                defaultValue: data.header.title,
+              })}
+            </span>
           </CardTitle>
           <CardDescription>
             {t(`headers.${data.header.key}.subtitle`, {

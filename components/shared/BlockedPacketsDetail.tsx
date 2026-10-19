@@ -14,7 +14,6 @@ import {
   Area,
   AreaChart,
   CartesianGrid,
-  Label,
   Pie,
   PieChart,
   XAxis,

@@ -12,6 +12,7 @@ import {
 import { useTranslation } from "react-i18next";
 import AttackStatCards from "./(attack-section-cards)/AttackStatCards";
 import TopTenAttackerIPs from "./(attack-section-cards)/TopTenAttackerIPs";
+import TopTenCounrties from "./(attack-section-cards)/TopTenCountries";
 
 export default function AttackStatsSection() {
   const { t } = useTranslation();
@@ -26,7 +27,7 @@ export default function AttackStatsSection() {
   const [hours, setHours] = useState(PERIODS[0].value);
 
   return (
-    <section className="space-y-3">
+    <section className="space-y-5">
       <div className="flex items-center justify-between">
         <h2 className="text-sm font-medium text-muted-foreground">
           {t("navigation.attackStatistics")}
@@ -56,9 +57,7 @@ export default function AttackStatsSection() {
       <AttackStatCards hours={hours} />
       <div className="grid grid-cols-2 gap-5">
         <TopTenAttackerIPs hours={hours} />
-        <TopTenAttackerIPs hours={hours} />
-        <TopTenAttackerIPs hours={hours} />
-        <TopTenAttackerIPs hours={hours} />
+        <TopTenCounrties hours={hours} />
       </div>
     </section>
   );

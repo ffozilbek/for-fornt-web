@@ -43,7 +43,7 @@ export default function AttackStatCards({ hours }: { hours: number }) {
       <Link href={`/summary/incidents?hours=${hours}`} className="block">
         <StatCard
           hour={cardTime}
-          icon={<RotateCcwClock size={18} />}
+          icon={<RotateCcwClock size={20} />}
           value={formatNumber(data.totals.incidents)}
           label={t("navigation.recordedIncidents")}
         />
@@ -51,7 +51,7 @@ export default function AttackStatCards({ hours }: { hours: number }) {
       <Link href={`/summary/attackers?hours=${hours}`} className="block">
         <StatCard
           hour={cardTime}
-          icon={<FileUser size={18} />}
+          icon={<FileUser size={20} />}
           value={
             <span className="text-red-400">
               {formatNumber(data.totals.attackers)}
@@ -63,7 +63,7 @@ export default function AttackStatCards({ hours }: { hours: number }) {
       <Link href={`/summary/blocked?hours=${hours}`} className="block">
         <StatCard
           hour={cardTime}
-          icon={<ShieldX size={18} />}
+          icon={<ShieldX size={20} />}
           value={
             <span className="text-red-400">
               {formatNumber(data.dropped.totals.packets)}
@@ -76,7 +76,7 @@ export default function AttackStatCards({ hours }: { hours: number }) {
       <Link href={`/summary/indicators?hours=${hours}`} className="block">
         <StatCard
           hour={cardTime}
-          icon={<ShieldCog size={18} />}
+          icon={<ShieldCog size={20} />}
           value={
             <span className="text-lg">
               {t(`misc.${data.top_indicator.name}` as any)}

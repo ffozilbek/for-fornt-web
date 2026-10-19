@@ -3,7 +3,7 @@ import {
   attackSummarySchema,
   systemResourcesSchema,
   summaryDetailSchema,
-  SummaryKey,
+  DetailTarget,
 } from "@/types/dashboard";
 import { api } from "@/lib/api";
 
@@ -20,9 +20,12 @@ export const dashboardService = {
     return attackSummarySchema.parse(data);
   },
 
-  getSummaryDetail: async (key: SummaryKey, { hours, zone }: AttackFilters) => {
+  getDetail: async (
+    { kind, key }: DetailTarget,
+    { hours, zone }: AttackFilters,
+  ) => {
     const { data } = await api.get("/api/dashboard/detail", {
-      params: { kind: "summary", key, hours, zone_name: zone },
+      params: { kind, key, hours, zone_name: zone },
     });
     return summaryDetailSchema.parse(data);
   },

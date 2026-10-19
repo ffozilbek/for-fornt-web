@@ -46,7 +46,9 @@ export default function SystemResources() {
         <Card>
           <CardHeader>
             <CardTitle className="text-sm text-muted-foreground flex items-center justify-between">
-              <HardDrive size={18} />
+              <div className="bg-sidebar-accent-foreground text-sidebar-accent h-8 w-8 rounded-md flex items-center justify-center relative">
+                <HardDrive size={20} />
+              </div>
               <span>DISK</span>
             </CardTitle>
           </CardHeader>
@@ -71,7 +73,9 @@ export default function SystemResources() {
         <Card>
           <CardHeader>
             <CardTitle className="text-sm text-muted-foreground flex items-center justify-between">
-              <MemoryStick size={18} />
+              <div className="bg-sidebar-accent-foreground text-sidebar-accent h-8 w-8 rounded-md flex items-center justify-center relative">
+                <MemoryStick size={20} />
+              </div>
               <span>RAM</span>
             </CardTitle>
           </CardHeader>
@@ -95,7 +99,9 @@ export default function SystemResources() {
         <Card>
           <CardHeader>
             <CardTitle className="text-sm text-muted-foreground flex items-center justify-between">
-              <Cpu size={18} />
+              <div className="bg-sidebar-accent-foreground text-sidebar-accent h-8 w-8 rounded-md flex items-center justify-center relative">
+                <Cpu size={20} />
+              </div>
               <span>CPU AVG</span>
             </CardTitle>
           </CardHeader>

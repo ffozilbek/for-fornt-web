@@ -1,7 +1,7 @@
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { queryKeys } from "@/lib/query-keys";
 import { dashboardService } from "@/service/dashboard.service";
-import { AttackFilters, SummaryKey } from "@/types/dashboard";
+import { AttackFilters, DetailTarget, SummaryKey } from "@/types/dashboard";
 
 export const useSystemResources = () =>
   useQuery({
@@ -18,10 +18,10 @@ export const useAttackSummary = (filters: AttackFilters) =>
     placeholderData: keepPreviousData,
   });
 
-export const useSummaryDetail = (key: SummaryKey, filters: AttackFilters) =>
+export const useDetail = (target: DetailTarget, filters: AttackFilters) =>
   useQuery({
-    queryKey: queryKeys.dashboard.summaryDetail(key, filters),
-    queryFn: () => dashboardService.getSummaryDetail(key, filters),
+    queryKey: queryKeys.dashboard.detail(target, filters),
+    queryFn: () => dashboardService.getDetail(target, filters),
     refetchInterval: 10_000,
     placeholderData: keepPreviousData,
   });

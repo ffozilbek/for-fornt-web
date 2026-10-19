@@ -18,7 +18,9 @@ export default function StatCard({
     <Card className="h-full cursor-pointer transition-colors hover:bg-accent/40">
       <CardHeader>
         <CardTitle className="text-sm text-muted-foreground flex items-center justify-between">
-          {icon}
+          <div className="bg-sidebar-accent-foreground text-sidebar-accent h-8 w-8 rounded-md flex items-center justify-center relative">
+            {icon}
+          </div>
           <span>{hour}</span>
         </CardTitle>
       </CardHeader>
