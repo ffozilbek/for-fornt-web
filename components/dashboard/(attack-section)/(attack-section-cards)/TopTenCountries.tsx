@@ -23,7 +23,7 @@ import {
 } from "@/components/ui/chart";
 import { Pie, PieChart } from "recharts";
 import { countryName } from "@/lib/country";
-import { formatBytes, formatNumber } from "@/lib/format";
+import { formatNumber } from "@/lib/format";
 import EmptySheet from "@/components/shared/EmptySheet";
 import { useRouter } from "next/navigation";
 
@@ -160,7 +160,6 @@ export default function TopTenCounrty({ hours }: { hours: number }) {
                         formatter={(value, name, item) => {
                           const row = item.payload as {
                             id: string;
-                            bytes: number;
                           };
                           const cfg = chartConfig[row.id];
 
@@ -179,9 +178,6 @@ export default function TopTenCounrty({ hours }: { hours: number }) {
                                 <span>
                                   {formatNumber(Number(value))}{" "}
                                   {t("misc.packets")}
-                                </span>
-                                <span className="text-muted-foreground">
-                                  {formatBytes(row.bytes)}
                                 </span>
                               </div>
                             </div>

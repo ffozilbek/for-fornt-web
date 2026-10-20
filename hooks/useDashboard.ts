@@ -25,3 +25,18 @@ export const useDetail = (target: DetailTarget, filters: AttackFilters) =>
     refetchInterval: 10_000,
     placeholderData: keepPreviousData,
   });
+
+export const useZones = () =>
+  useQuery({
+    queryKey: queryKeys.dashboard.zones,
+    queryFn: dashboardService.getZones,
+  });
+
+export const useServices = (zone: string) =>
+  useQuery({
+    queryKey: queryKeys.dashboard.services(zone),
+    queryFn: () => dashboardService.getServices(zone),
+    enabled: zone !== "" && zone !== "all",
+    refetchInterval: 10_000,
+    placeholderData: keepPreviousData,
+  });

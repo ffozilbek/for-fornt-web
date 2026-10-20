@@ -55,6 +55,13 @@ export default function SummaryDetailView({
 
   console.log(data);
 
+  const findBreakdown = (label: string) =>
+    data.breakdowns.find((b) => b.label === label);
+
+  const attackTypes = findBreakdown("Hujum turlari");
+  const targetZones = findBreakdown("Nishondagi zonalar");
+  const attackerIP = findBreakdown("Hujumchi IP'lar");
+
   return (
     <>
       <Card>
@@ -135,10 +142,10 @@ export default function SummaryDetailView({
           </div>
         )}
 
-      {data.breakdowns[0].label === "Hujum turlari" &&
-        data.breakdowns[1].label === "Nishondagi zonalar" && (
-          <div className="grid grid-cols-2 gap-5">
-            {/* ATTACK TYPES */}
+      {(attackTypes || targetZones) && (
+        <div className="grid grid-cols-2 gap-5">
+          {/* ATTACK TYPES */}
+          {attackTypes && (
             <Card>
               <CardHeader>
                 <CardTitle className="text-muted-foreground">
@@ -146,7 +153,7 @@ export default function SummaryDetailView({
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                {data.breakdowns[0].items.length == 0 ? (
+                {attackTypes.items.length == 0 ? (
                   <EmptySheet />
                 ) : (
                   <Table>
@@ -161,7 +168,7 @@ export default function SummaryDetailView({
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                      {data.breakdowns[0].items.map((attack, i) => (
+                      {attackTypes.items.map((attack, i) => (
                         <TableRow key={i}>
                           <TableCell className="font-medium">{i + 1}</TableCell>
                           <TableCell>{attack.name}</TableCell>
@@ -176,8 +183,10 @@ export default function SummaryDetailView({
                 )}
               </CardContent>
             </Card>
+          )}
 
-            {/* TARGET ZONES */}
+          {/* TARGET ZONES */}
+          {targetZones && (
             <Card>
               <CardHeader>
                 <CardTitle className="text-muted-foreground">
@@ -185,7 +194,7 @@ export default function SummaryDetailView({
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                {data.breakdowns[1].items.length == 0 ? (
+                {targetZones.items.length == 0 ? (
                   <EmptySheet />
                 ) : (
                   <Table>
@@ -200,7 +209,7 @@ export default function SummaryDetailView({
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                      {data.breakdowns[1].items.map((zone, i) => (
+                      {targetZones.items.map((zone, i) => (
                         <TableRow key={i}>
                           <TableCell className="font-medium">{i + 1}</TableCell>
                           <TableCell>{zone.name}</TableCell>
@@ -215,8 +224,49 @@ export default function SummaryDetailView({
                 )}
               </CardContent>
             </Card>
-          </div>
-        )}
+          )}
+
+          {attackerIP && (
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-muted-foreground">
+                  {t("breakdowns.attackerIps")}
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                {attackerIP.items.length == 0 ? (
+                  <EmptySheet />
+                ) : (
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>№</TableHead>
+                        <TableHead>{t("misc.attacker")}</TableHead>
+                        <TableHead>{t("navigation.incidents")}</TableHead>
+                        <TableHead className="text-right">
+                          {t("misc.packets")}
+                        </TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {attackerIP.items.map((zone, i) => (
+                        <TableRow key={i}>
+                          <TableCell className="font-medium">{i + 1}</TableCell>
+                          <TableCell>{zone.name}</TableCell>
+                          <TableCell>{zone.incidents}</TableCell>
+                          <TableCell className="text-right">
+                            {formatNumber(zone.packets)}
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                )}
+              </CardContent>
+            </Card>
+          )}
+        </div>
+      )}
 
       {data.incidents.length > 0 && (
         <Card>

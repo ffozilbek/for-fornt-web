@@ -10,5 +10,7 @@ export const queryKeys = {
     filterRatio: ["dashboard", "filter-ratio"] as const,
     detail: (t: DetailTarget, f: AttackFilters) =>
       ["dashboard", "detail", t.kind, t.key, f] as const,
+    zones: ["dashboard", "zones"] as const,
+    services: (zone: string) => ["dashboard", "services", zone] as const,
   },
 };

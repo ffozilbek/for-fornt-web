@@ -149,7 +149,7 @@ export const summaryDetailSchema = z.object({
     kind: z.string(),
     title: z.string(),
     country_code: z.string().optional(),
-    subtitle: z.string(),
+    subtitle: z.string().optional(),
   }),
   totals: z.object({
     incidents: z.number(),
@@ -230,3 +230,36 @@ export type DetailKind = (typeof DETAIL_KINDS)[number];
 export type DetailTarget =
   | { kind: "summary"; key: SummaryKey }
   | { kind: Exclude<DetailKind, "summary">; key: string };
+
+export const zoneSchema = z.object({
+  zoneName: z.string(),
+  ipSubnet: z.string(),
+  ips: z.array(z.string()),
+  createDate: z.string(),
+  updatedAt: z.string(),
+});
+
+export const zonesResponseSchema = z.object({
+  zones: z.array(zoneSchema),
+});
+
+export type Zone = z.infer<typeof zoneSchema>;
+export type ZonesResponse = z.infer<typeof zonesResponseSchema>;
+
+export const serviceSchema = z.object({
+  serviceName: z.string(),
+  zoneName: z.string(),
+  protocol: z.string(),
+  protocolNumber: z.number(),
+  ports: z.string(),
+  action: z.string(),
+  protectionProfile: z.string(),
+  createdAt: z.string(),
+  updatedAt: z.string(),
+});
+
+export const servicesResponseSchema = z.object({
+  services: z.array(serviceSchema),
+});
+
+export type Service = z.infer<typeof serviceSchema>;
