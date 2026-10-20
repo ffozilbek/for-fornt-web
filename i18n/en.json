@@ -218,8 +218,8 @@
     "allProtocols": "All Protocols",
     "all": "🌐 All",
     "all2": "All",
-    "noMatchingServiceACL": "🚫 No matching service (ACL)",
-    "responseTraffic": "↩️ Response Traffic",
+    "noMatchingServiceACL": "No matching service (ACL)",
+    "responseTraffic": "Response Traffic",
     "noMatchingServiceACL2": "No matching service (ACL)",
     "responseTraffic2": "Response traffic",
     "packetsSPps": "Packets/s (pps)",
@@ -793,7 +793,8 @@
     "bytes": "Bytes",
     "useProtocols": "By protocol",
     "blockedPacketsbyTime": "Blocked packets - by time",
-    "shareOfIndicators": "Share of indicators"
+    "shareOfIndicators": "Share of indicators",
+    "other": "Other"
   },
   "headers": {
     "incidents": {

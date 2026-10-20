@@ -218,8 +218,8 @@
     "allProtocols": "Все протоколы",
     "all": "🌐 Все",
     "all2": "Все",
-    "noMatchingServiceACL": "🚫 Сервис не найден (ACL)",
-    "responseTraffic": "↩️ Ответный трафик",
+    "noMatchingServiceACL": "Сервис не найден (ACL)",
+    "responseTraffic": "Ответный трафик",
     "noMatchingServiceACL2": "Сервис не найден (ACL)",
     "responseTraffic2": "Ответный трафик",
     "packetsSPps": "Пакет/с (pps)",
@@ -793,7 +793,8 @@
     "bytes": "Байты",
     "useProtocols": "Согласно протоколу",
     "blockedPacketsbyTime": "Заблокированные пакеты — по времени",
-    "shareOfIndicators": "Доля показателей"
+    "shareOfIndicators": "Доля показателей",
+    "other": "Другой"
   },
   "headers": {
     "incidents": {

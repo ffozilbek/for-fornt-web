@@ -218,8 +218,8 @@
     "allProtocols": "Hamma protokollar",
     "all": "🌐 Barchasi",
     "all2": "Barchasi",
-    "noMatchingServiceACL": "🚫 Mavjud bo'lmagan service",
-    "responseTraffic": "↩️ Qaytuvchi traffik",
+    "noMatchingServiceACL": "Mavjud bo'lmagan service",
+    "responseTraffic": "Qaytuvchi traffik",
     "noMatchingServiceACL2": "Mavjud bo'lmagan service",
     "responseTraffic2": "Qaytuvchi traffik",
     "packetsSPps": "Paket/s (pps)",
@@ -793,7 +793,8 @@
     "bytes": "Baytlar",
     "useProtocols": "Protokollar kesimida",
     "blockedPacketsbyTime": "Bloklangan paketlar - vaqt bo'yicha",
-    "shareOfIndicators": "Indikatorlar ulushi"
+    "shareOfIndicators": "Indikatorlar ulushi",
+    "other": "Boshqalar"
   },
   "headers": {
     "incidents": {

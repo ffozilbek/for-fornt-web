@@ -1,8 +1,5 @@
 "use client";
 import { useTranslation } from "react-i18next";
-import { useZones } from "@/hooks/useDashboard";
-import CustomSkeleton from "../shared/CustomSkeleton";
-import { Alert, AlertDescription } from "../ui/alert";
 import {
   Select,
   SelectContent,
@@ -11,33 +8,23 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import { useState } from "react";
+import { Zone } from "@/types/dashboard";
 
-export default function SelectZones(z(zone,setZone): {}) {
+type Props = { zones: Zone[]; value: string; onChange: (zone: string) => void };
+
+export default function SelectZones({ zones, value, onChange }: Props) {
   const { t } = useTranslation();
-  const { data, isPending, isError, error } = useZones();
-  
-
-  if (isPending) {
-    return <CustomSkeleton />;
-  }
-  if (isError)
-    return (
-      <Alert variant="destructive">
-        <AlertDescription>{error.message}</AlertDescription>
-      </Alert>
-    );
 
   const items = [
     { label: t("navigation.allZones"), value: "all" },
-    ...data.map((z) => ({ label: z.zoneName, value: z.zoneName })),
+    ...zones.map((z) => ({ label: z.zoneName, value: z.zoneName })),
   ];
 
   return (
     <Select
       items={items}
-      value={zone}
-      onValueChange={(v) => v !== null && setZone(v)}
+      value={value}
+      onValueChange={(v) => v !== null && onChange(v)}
     >
       <SelectTrigger className="w-full max-w-48">
         <SelectValue />
