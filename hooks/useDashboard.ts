@@ -1,7 +1,11 @@
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { queryKeys } from "@/lib/query-keys";
 import { dashboardService } from "@/service/dashboard.service";
-import { AttackFilters, DetailTarget } from "@/types/dashboard";
+import {
+  AttackFilters,
+  DetailTarget,
+  FilterRatioParams,
+} from "@/types/dashboard";
 
 export const useSystemResources = () =>
   useQuery({
@@ -46,4 +50,13 @@ export const useStats = () =>
     queryKey: queryKeys.dashboard.stats,
     queryFn: dashboardService.getStats,
     refetchInterval: 1000,
+  });
+
+export const useFilterRatio = (p: FilterRatioParams, enabled = true) =>
+  useQuery({
+    queryKey: queryKeys.dashboard.filterRatio(p),
+    queryFn: () => dashboardService.getFilterRatio(p),
+    refetchInterval: 30_000,
+    placeholderData: keepPreviousData,
+    enabled,
   });

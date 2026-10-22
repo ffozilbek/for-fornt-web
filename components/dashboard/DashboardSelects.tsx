@@ -10,6 +10,7 @@ import { Alert, AlertDescription } from "../ui/alert";
 import SelectProtocols from "../shared/SelectProtocols";
 import SelectDisplayType from "../shared/SelectDisplayType";
 import TrafficChart from "../charts/TrafficChart";
+import FilteringRatioChart from "../charts/FilteringRatioChart";
 
 export default function DashboardSelects() {
   const { t } = useTranslation();
@@ -62,6 +63,7 @@ export default function DashboardSelects() {
         protocol={protocol}
         type={type}
       />
+      <FilteringRatioChart zone={zone} service={service} />
     </>
   );
 }

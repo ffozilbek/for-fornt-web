@@ -141,10 +141,10 @@ export default function DetailPieChart({ data }: { data: SummaryDetail }) {
                                       {cfg?.label}
                                     </span>
                                   </div>
-                                  <div className="grid text-right font-mono font-medium">
+                                  <div className="grid gap-1 text-right font-mono text-[10px]">
                                     <span>
-                                      {formatNumber(Number(value))}{" "}
-                                      {t("misc.packets")}
+                                      {formatNumber(Number(value))}
+                                      {/* {t("misc.packets")} */}
                                     </span>
                                     <span className="text-muted-foreground">
                                       {formatBytes(row.bytes)}

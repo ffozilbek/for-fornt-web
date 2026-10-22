@@ -306,3 +306,18 @@ export const statsResponseSchema = z.object({
 
 export type StatsZone = z.infer<typeof statsZoneSchema>;
 export type StatsService = z.infer<typeof statsServiceSchema>;
+
+export const filterRatioSchema = z.object({
+  status: z.literal("success"),
+  passed_packets: z.number(),
+  dropped_packets: z.number(),
+  passed_bytes: z.number(),
+  dropped_bytes: z.number(),
+});
+
+export type FilterRatio = z.infer<typeof filterRatioSchema>;
+export type FilterRatioParams = {
+  hours: number;
+  zone: string;
+  service: string;
+};

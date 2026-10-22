@@ -159,10 +159,10 @@ export default function TopTenAttackTypes({ hours }: { hours: number }) {
                                   {cfg?.label}
                                 </span>
                               </div>
-                              <div className="grid text-right font-mono font-medium">
+                              <div className="grid gap-1 text-right font-mono text-[10px]">
                                 <span>
                                   {formatNumber(Number(value))}{" "}
-                                  {t("misc.packets")}
+                                  {/* {t("misc.packets")} */}
                                 </span>
                               </div>
                             </div>

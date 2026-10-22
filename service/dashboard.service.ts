@@ -7,6 +7,8 @@ import {
   zonesResponseSchema,
   servicesResponseSchema,
   statsResponseSchema,
+  FilterRatioParams,
+  filterRatioSchema,
 } from "@/types/dashboard";
 import { api } from "@/lib/api";
 
@@ -46,5 +48,12 @@ export const dashboardService = {
   getStats: async () => {
     const { data } = await api.get("/api/stats");
     return statsResponseSchema.parse(data).zones;
+  },
+
+  getFilterRatio: async ({ hours, zone, service }: FilterRatioParams) => {
+    const { data } = await api.get("/api/dashboard/filter-ratio", {
+      params: { hours, zone_name: zone, service_name: service },
+    });
+    return filterRatioSchema.parse(data);
   },
 };
