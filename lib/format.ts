@@ -15,6 +15,16 @@ export function formatBytes(bytes: number) {
   return `${v.toFixed(i === 0 ? 0 : 2)} ${units[i]}`;
 }
 
+export function formatBitrate(v: number) {
+  const units = ["bps", "Kbps", "Mbps", "Gbps", "Tbps"];
+  let i = 0;
+  while (v >= 1000 && i < units.length - 1) {
+    v /= 1000;
+    i++;
+  }
+  return `${v.toFixed(i === 0 ? 0 : 2)} ${units[i]}`;
+}
+
 // const durationFormatter = new Intl.DurationFormat("en", { style: "short" });
 
 // export function formatDuration(seconds: number) {

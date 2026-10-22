@@ -9,6 +9,7 @@ import CustomSkeleton from "../shared/CustomSkeleton";
 import { Alert, AlertDescription } from "../ui/alert";
 import SelectProtocols from "../shared/SelectProtocols";
 import SelectDisplayType from "../shared/SelectDisplayType";
+import TrafficChart from "../charts/TrafficChart";
 
 export default function DashboardSelects() {
   const { t } = useTranslation();
@@ -27,32 +28,40 @@ export default function DashboardSelects() {
     );
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>
-          <h1 className="text-xl text-accent-foreground">
-            {t("navigation.monitoringByZone")}
-          </h1>
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="flex items-center justify-between">
-        <div>
-          {t("navigation.configuredZones")} {data.length}
-        </div>
-        <div className="flex gap-4">
-          <SelectZones
-            zones={data}
-            value={zone}
-            onChange={(z) => {
-              setZone(z);
-              setService("all");
-            }}
-          />
-          <SelectServices zone={zone} value={service} onChange={setService} />
-          <SelectProtocols value={protocol} onChange={setProtocol} />
-          <SelectDisplayType value={type} onChange={setType} />
-        </div>
-      </CardContent>
-    </Card>
+    <>
+      <Card>
+        <CardHeader>
+          <CardTitle>
+            <h1 className="text-xl text-accent-foreground">
+              {t("navigation.monitoringByZone")}
+            </h1>
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="flex items-center justify-between">
+          <div>
+            {t("navigation.configuredZones")} {data.length}
+          </div>
+          <div className="flex gap-4">
+            <SelectZones
+              zones={data}
+              value={zone}
+              onChange={(z) => {
+                setZone(z);
+                setService("all");
+              }}
+            />
+            <SelectServices zone={zone} value={service} onChange={setService} />
+            <SelectProtocols value={protocol} onChange={setProtocol} />
+            <SelectDisplayType value={type} onChange={setType} />
+          </div>
+        </CardContent>
+      </Card>
+      <TrafficChart
+        zone={zone}
+        service={service}
+        protocol={protocol}
+        type={type}
+      />
+    </>
   );
 }

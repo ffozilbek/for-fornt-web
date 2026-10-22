@@ -263,3 +263,46 @@ export const servicesResponseSchema = z.object({
 });
 
 export type Service = z.infer<typeof serviceSchema>;
+
+const protoCounter = z.object({ count: z.number(), bytes: z.number() });
+const protoMap = z.object({
+  TCP: protoCounter,
+  UDP: protoCounter,
+  ICMP: protoCounter,
+  OTHER: protoCounter,
+});
+
+export const statsServiceSchema = z.looseObject({
+  incoming_count: z.number(),
+  incoming_bytes: z.number(),
+  passed_count: z.number(),
+  passed_bytes: z.number(),
+  dropped_count: z.number(),
+  dropped_bytes: z.number(),
+  protocol: z.string().optional(),
+  incoming_proto: protoMap.optional(),
+  passed_proto: protoMap.optional(),
+  dropped_proto: protoMap.optional(),
+});
+
+export const statsZoneSchema = z.looseObject({
+  zone_name: z.string(),
+  ip_address: z.string().optional(),
+  worker_id: z.number().optional(),
+  timestamp: z.number().optional(),
+  total_incoming_packets: z.number(),
+  total_incoming_bytes: z.number(),
+  total_passed_packets: z.number(),
+  total_passed_bytes: z.number(),
+  total_dropped_packets: z.number(),
+  total_dropped_bytes: z.number(),
+  services: z.array(statsServiceSchema),
+});
+
+export const statsResponseSchema = z.object({
+  status: z.literal("success"),
+  zones: z.array(statsZoneSchema),
+});
+
+export type StatsZone = z.infer<typeof statsZoneSchema>;
+export type StatsService = z.infer<typeof statsServiceSchema>;

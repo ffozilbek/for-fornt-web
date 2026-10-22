@@ -10,7 +10,7 @@ import {
 } from "../ui/select";
 import { useTranslation } from "react-i18next";
 import { Service } from "@/types/dashboard";
-import { SERVICE_NONE, SERVICE_RESPONSE } from "@/lib/contants";
+import { SERVICE_NONE, SERVICE_RESPONSE } from "@/lib/constants";
 
 const serviceLabel = (s: Service) =>
   s.ports === "any" ? s.protocol : `${s.protocol} ${s.ports}`;

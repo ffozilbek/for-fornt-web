@@ -40,3 +40,10 @@ export const useServices = (zone: string) =>
     refetchInterval: 10_000,
     placeholderData: keepPreviousData,
   });
+
+export const useStats = () =>
+  useQuery({
+    queryKey: queryKeys.dashboard.stats,
+    queryFn: dashboardService.getStats,
+    refetchInterval: 1000,
+  });

@@ -6,6 +6,7 @@ import {
   DetailTarget,
   zonesResponseSchema,
   servicesResponseSchema,
+  statsResponseSchema,
 } from "@/types/dashboard";
 import { api } from "@/lib/api";
 
@@ -40,5 +41,10 @@ export const dashboardService = {
   getServices: async (zone: string) => {
     const { data } = await api.get("/api/services", { params: { zone } });
     return servicesResponseSchema.parse(data).services;
+  },
+
+  getStats: async () => {
+    const { data } = await api.get("/api/stats");
+    return statsResponseSchema.parse(data).zones;
   },
 };
