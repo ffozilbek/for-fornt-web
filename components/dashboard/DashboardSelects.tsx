@@ -2,9 +2,10 @@
 import { useTranslation } from "react-i18next";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import SelectZones from "../shared/SelectZones";
-import { useState } from "react";
 import SelectServices from "../shared/SelectServices";
-import { useZones } from "@/hooks/useDashboard";
+import { useServices, useZones } from "@/hooks/useDashboard";
+import { usePersistedState } from "@/hooks/usePersistedState";
+import { SERVICE_NONE, SERVICE_RESPONSE } from "@/lib/constants";
 import CustomSkeleton from "../shared/CustomSkeleton";
 import { Alert, AlertDescription } from "../ui/alert";
 import SelectProtocols from "../shared/SelectProtocols";
@@ -12,13 +13,47 @@ import SelectDisplayType from "../shared/SelectDisplayType";
 import TrafficChart from "../charts/TrafficChart";
 import FilteringRatioChart from "../charts/FilteringRatioChart";
 
+const PROTOCOLS = ["all", "tcp", "udp", "icmp", "other"];
+const DISPLAY_TYPES = ["pps", "bits"];
+
 export default function DashboardSelects() {
   const { t } = useTranslation();
-  const [zone, setZone] = useState("all");
-  const [service, setService] = useState("all");
-  const [protocol, setProtocol] = useState("all");
-  const [type, setType] = useState("pps");
+  const [storedZone, setZone] = usePersistedState("dashboard.zone", "all");
+  const [storedService, setService] = usePersistedState(
+    "dashboard.service",
+    "all",
+  );
+  const [protocol, setProtocol] = usePersistedState(
+    "dashboard.protocol",
+    "all",
+    PROTOCOLS,
+  );
+  const [type, setType] = usePersistedState(
+    "dashboard.displayType",
+    "pps",
+    DISPLAY_TYPES,
+  );
   const { data, isPending, isError, error } = useZones();
+
+  // saqlangan zona o'chirilgan bo'lsa -> "all"
+  const zone =
+    storedZone === "all" || data?.some((z) => z.zoneName === storedZone)
+      ? storedZone
+      : "all";
+
+  // saqlangan servis shu zonada yo'q bo'lsa -> "all"
+  const services = useServices(zone);
+  const service =
+    zone === "all"
+      ? "all"
+      : storedService === "all" ||
+          storedService === SERVICE_NONE ||
+          storedService === SERVICE_RESPONSE ||
+          !services.data ||
+          services.isPlaceholderData ||
+          services.data.some((s) => s.serviceName === storedService)
+        ? storedService
+        : "all";
 
   if (isPending) return <CustomSkeleton />;
   if (isError)

@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { usePersistedState } from "@/hooks/usePersistedState";
+import { PERIOD_HOURS } from "@/lib/constants";
 import {
   Select,
   SelectContent,
@@ -26,7 +27,11 @@ export default function AttackStatsSection() {
     { value: 168, label: t("misc.last7Days") },
   ];
 
-  const [hours, setHours] = useState(PERIODS[0].value);
+  const [hours, setHours] = usePersistedState(
+    "dashboard.attackHours",
+    PERIODS[0].value,
+    PERIOD_HOURS,
+  );
 
   return (
     <section className="space-y-5">

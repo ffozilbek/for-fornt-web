@@ -1,5 +1,4 @@
 "use client";
-import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ShieldCheck } from "lucide-react";
 import { Pie, PieChart } from "recharts";
@@ -29,13 +28,22 @@ import CustomSkeleton from "@/components/shared/CustomSkeleton";
 import EmptySheet from "@/components/shared/EmptySheet";
 import { useFilterRatio, useServices } from "@/hooks/useDashboard";
 import { formatBytes, formatNumber } from "@/lib/format";
-import { SERVICE_NONE, SERVICE_RESPONSE } from "@/lib/constants";
+import {
+  PERIOD_HOURS,
+  SERVICE_NONE,
+  SERVICE_RESPONSE,
+} from "@/lib/constants";
+import { usePersistedState } from "@/hooks/usePersistedState";
 
 type Props = { zone: string; service: string };
 
 export default function FilteringRatioChart({ zone, service }: Props) {
   const { t } = useTranslation();
-  const [hours, setHours] = useState(1);
+  const [hours, setHours] = usePersistedState(
+    "dashboard.filterRatioHours",
+    1,
+    PERIOD_HOURS,
+  );
 
   const PERIODS = [
     { value: 1, label: t("misc.last1Hour") },
