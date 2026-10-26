@@ -174,7 +174,7 @@ export default function TopTenCounrty({ hours }: { hours: number }) {
                                   {cfg?.label}
                                 </span>
                               </div>
-                              <div className="grid gap-1 text-right font-mono text-[10px]">
+                              <div className="grid gap-1 text-right font-mono">
                                 <span>
                                   {formatNumber(Number(value))}{" "}
                                   {/* {t("misc.packets")} */}

@@ -12,6 +12,7 @@ import SelectProtocols from "../shared/SelectProtocols";
 import SelectDisplayType from "../shared/SelectDisplayType";
 import TrafficChart from "../charts/TrafficChart";
 import FilteringRatioChart from "../charts/FilteringRatioChart";
+import LiveMap from "./LiveMap";
 
 const PROTOCOLS = ["all", "tcp", "udp", "icmp", "other"];
 const DISPLAY_TYPES = ["pps", "bits"];
@@ -98,7 +99,10 @@ export default function DashboardSelects() {
         protocol={protocol}
         type={type}
       />
-      <FilteringRatioChart zone={zone} service={service} />
+      <div className="grid grid-cols-3 gap-5">
+        <LiveMap />
+        <FilteringRatioChart zone={zone} service={service} />
+      </div>
     </>
   );
 }

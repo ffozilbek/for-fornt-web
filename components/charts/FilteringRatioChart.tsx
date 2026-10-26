@@ -28,11 +28,7 @@ import CustomSkeleton from "@/components/shared/CustomSkeleton";
 import EmptySheet from "@/components/shared/EmptySheet";
 import { useFilterRatio, useServices } from "@/hooks/useDashboard";
 import { formatBytes, formatNumber } from "@/lib/format";
-import {
-  PERIOD_HOURS,
-  SERVICE_NONE,
-  SERVICE_RESPONSE,
-} from "@/lib/constants";
+import { PERIOD_HOURS, SERVICE_NONE, SERVICE_RESPONSE } from "@/lib/constants";
 import { usePersistedState } from "@/hooks/usePersistedState";
 
 type Props = { zone: string; service: string };
@@ -170,7 +166,7 @@ export default function FilteringRatioChart({ zone, service }: Props) {
                                 {cfg.label}
                               </span>
                             </div>
-                            <div className="grid gap-1 text-right font-mono text-[10px]">
+                            <div className="grid gap-1 text-right font-mono">
                               <span>
                                 {formatNumber(Number(value))}
                                 {/* {t("misc.packets")} */}

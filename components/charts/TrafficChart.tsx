@@ -91,7 +91,7 @@ export default function TrafficChart(filter: StatsFilter) {
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig} className="h-80 w-full">
-          <AreaChart data={points} margin={{ left: 0, right: 8 }}>
+          <AreaChart data={points} margin={{ top: 20, left: 0, right: 8 }}>
             <defs>
               {KEYS.map((k) => (
                 <linearGradient

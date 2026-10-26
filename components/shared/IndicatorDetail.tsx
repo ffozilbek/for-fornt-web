@@ -86,10 +86,10 @@ export default function IndicatorDetail({ data }: { data: SummaryDetail }) {
                                     {cfg?.label}
                                   </span>
                                 </div>
-                                <div className="grid text-right font-mono font-medium">
+                                <div className="grid text-right font-mono">
                                   <span>
                                     {formatNumber(Number(value))}{" "}
-                                    {t("misc.packets")}
+                                    {/* {t("misc.packets")} */}
                                   </span>
                                   <span className="text-muted-foreground">
                                     {formatBytes(row.bytes)}
@@ -182,10 +182,8 @@ export default function IndicatorDetail({ data }: { data: SummaryDetail }) {
                               {cfg?.label}
                             </span>
                           </div>
-                          <div className="grid text-right font-mono font-medium">
-                            <span>
-                              {formatNumber(Number(value))} {t("misc.packets")}
-                            </span>
+                          <div className="grid text-right font-mono ">
+                            <span>{formatNumber(Number(value))}</span>
                             <span className="text-muted-foreground">
                               {formatBytes(row.bytes)}
                             </span>
