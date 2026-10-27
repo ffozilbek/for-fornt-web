@@ -25,6 +25,12 @@ export function formatBitrate(v: number) {
   return `${v.toFixed(i === 0 ? 0 : 2)} ${units[i]}`;
 }
 
+// "YYYY-MM-DD HH:MM:SS" -> "DD/MM/YYYY HH:MM:SS"
+export function formatDateTime(s: string) {
+  const m = /^(\d{4})-(\d{2})-(\d{2})[ T](\d{2}:\d{2}:\d{2})/.exec(s);
+  return m ? `${m[3]}/${m[2]}/${m[1]} ${m[4]}` : s;
+}
+
 // const durationFormatter = new Intl.DurationFormat("en", { style: "short" });
 
 // export function formatDuration(seconds: number) {

@@ -246,6 +246,19 @@ export const zonesResponseSchema = z.object({
 export type Zone = z.infer<typeof zoneSchema>;
 export type ZonesResponse = z.infer<typeof zonesResponseSchema>;
 
+// POST /zones javobi (add / edit / delete)
+export const zoneMutationResponseSchema = z.object({
+  status: z.enum(["success", "error"]),
+  message: z.string(),
+});
+
+export type ZoneSaveAction = "add" | "edit";
+export type ZoneSavePayload = {
+  action: ZoneSaveAction;
+  zoneName: string;
+  ips: string[];
+};
+
 export const serviceSchema = z.object({
   serviceName: z.string(),
   zoneName: z.string(),
@@ -263,6 +276,30 @@ export const servicesResponseSchema = z.object({
 });
 
 export type Service = z.infer<typeof serviceSchema>;
+
+// POST /api/services body (add / edit / delete)
+export type ServiceSavePayload = {
+  action: "add" | "edit";
+  zoneName: string;
+  serviceName: string;
+  oldServiceName?: string;
+  protocol: string;
+  ports: string;
+  protocolNumber: number;
+  protectionProfile: string;
+};
+
+// GET /api/mitigation-templates — servisga biriktiriladigan himoya shablonlari
+export const mitigationTemplateSchema = z.looseObject({
+  templateName: z.string(),
+  templateType: z.string(),
+});
+
+export const mitigationTemplatesResponseSchema = z.object({
+  templates: z.array(mitigationTemplateSchema),
+});
+
+export type MitigationTemplate = z.infer<typeof mitigationTemplateSchema>;
 
 const protoCounter = z.object({ count: z.number(), bytes: z.number() });
 const protoMap = z.object({
