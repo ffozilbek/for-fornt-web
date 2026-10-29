@@ -580,3 +580,6 @@ export const securityLogsResponseSchema = z.object({
 });
 
 export type SecurityLog = z.infer<typeof securityLogSchema>;
+
+// GET /api/audit-logs — antiddos_config_logs; ustunlari attacker-logs bilan bir xil
+export const auditLogsResponseSchema = securityLogsResponseSchema;

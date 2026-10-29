@@ -31,6 +31,7 @@ export const queryKeys = {
     history: (q: IncidentHistoryQuery) => ["incidents", "history", q] as const,
   },
   securityLogs: (q: LogQuery) => ["security-logs", q] as const,
+  auditLogs: (q: LogQuery) => ["audit-logs", q] as const,
   httpsFlood: {
     status: ["https-flood", "status"] as const,
     history: (q: HttpsFloodHistoryQuery) =>
