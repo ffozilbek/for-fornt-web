@@ -289,10 +289,18 @@ export type ServiceSavePayload = {
   protectionProfile: string;
 };
 
-// GET /api/mitigation-templates — servisga biriktiriladigan himoya shablonlari
+// GET /api/mitigation-templates — servisga biriktiriladigan himoya shablonlari.
+// Himoya parametrlari (TEMPLATE_DEFAULTS dagi maydonlar) looseObject orqali
+// o'tadi va formada valuesFromTemplate bilan o'qiladi.
 export const mitigationTemplateSchema = z.looseObject({
   templateName: z.string(),
   templateType: z.string(),
+  createdAt: z.string().nullish(),
+  updatedAt: z.string().nullish(),
+  // to'g'ridan-to'g'ri + boshqa shablon ichida biriktirilgan zonalar
+  attachedZones: z.array(z.string()).optional(),
+  // ClickHouse UInt8 ustunlari 0/1 bo'lib kelishi mumkin
+  basicTemplateEnable: z.union([z.boolean(), z.number()]).optional(),
 });
 
 export const mitigationTemplatesResponseSchema = z.object({
@@ -300,6 +308,67 @@ export const mitigationTemplatesResponseSchema = z.object({
 });
 
 export type MitigationTemplate = z.infer<typeof mitigationTemplateSchema>;
+
+// /api/{whitelist,blacklist,ja4t,ja4,sni}/tpl/files — shablonga yuklangan
+// fayllar. Son maydoni ro'yxat turiga qarab har xil nomlanadi.
+export const templateListFileSchema = z.looseObject({
+  filename: z.string(),
+  upload_date: z.string().optional(),
+  ip_count: z.number().optional(),
+  subnet_count: z.number().optional(),
+  ja4t_count: z.number().optional(),
+  ja4_count: z.number().optional(),
+  sni_count: z.number().optional(),
+});
+
+export const templateListFilesResponseSchema = z.object({
+  files: z.array(templateListFileSchema),
+});
+
+// /tpl/ips (whitelist, blacklist) va /tpl/entries (ja4t, ja4, sni)
+export const templateListCountResponseSchema = z.looseObject({
+  count: z.number(),
+});
+
+export type TemplateListFile = z.infer<typeof templateListFileSchema>;
+
+// GET /api/geo/countries
+export const geoCountrySchema = z.object({
+  code: z.string(),
+  name: z.string().nullish(),
+  ip_count: z.number().optional(),
+});
+
+export const geoCountriesResponseSchema = z.object({
+  countries: z.array(geoCountrySchema),
+});
+
+export type GeoCountry = z.infer<typeof geoCountrySchema>;
+
+const geoModeSchema = z.enum(["block", "allow"]).catch("block");
+
+// GET /api/geo/tpl/config
+export const templateGeoSchema = z.object({
+  enabled: z.boolean(),
+  mode: geoModeSchema,
+  countries: z.array(z.string()),
+});
+
+// GET /api/geo/tpl/smart/config — vaqt oynali geo qoida (DB ustuni yo'q, json)
+export const templateSmartGeoSchema = templateGeoSchema.extend({
+  start: z.string(),
+  end: z.string(),
+});
+
+export type TemplateGeo = z.infer<typeof templateGeoSchema>;
+export type TemplateSmartGeo = z.infer<typeof templateSmartGeoSchema>;
+
+// POST /api/mitigation-templates, PUT /api/mitigation-templates/<name> body.
+// Backend faqat shu turga tegishli maydonlarni oladi, qolganini default qiladi.
+export type MitigationTemplatePayload = {
+  templateName: string;
+  templateType: string;
+} & Record<string, string | number | boolean>;
 
 const protoCounter = z.object({ count: z.number(), bytes: z.number() });
 const protoMap = z.object({

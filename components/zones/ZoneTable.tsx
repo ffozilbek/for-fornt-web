@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState, type ReactNode } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import {
@@ -49,11 +49,6 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import {
   Pagination,
   PaginationContent,
   PaginationItem,
@@ -70,6 +65,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import CustomSkeleton from "@/components/shared/CustomSkeleton";
 import EmptySheet from "@/components/shared/EmptySheet";
+import Truncated from "@/components/shared/Truncated";
 import { useZones } from "@/hooks/useDashboard";
 import { useDeleteZone, useZonesServices } from "@/hooks/useZones";
 import { usePersistedState } from "@/hooks/usePersistedState";
@@ -89,29 +85,6 @@ const serviceLabel = (s: Service) => {
   if (NO_PORT_PROTOCOLS.includes(s.protocol) || !s.ports) return s.protocol;
   return `${s.protocol} ${s.ports}`;
 };
-
-// birinchi N ta element + qolganlari "..." popover ichida
-function Truncated({ items, max }: { items: ReactNode[]; max: number }) {
-  if (items.length === 0) return <span className="text-muted-foreground">—</span>;
-  return (
-    <div className="flex flex-wrap items-center gap-1">
-      {items.slice(0, max)}
-      {items.length > max && (
-        <Popover>
-          <PopoverTrigger
-            openOnHover
-            render={<Button variant="ghost" size="xs" />}
-          >
-            +{items.length - max}
-          </PopoverTrigger>
-          <PopoverContent className="w-auto max-w-80">
-            <div className="flex flex-wrap gap-1">{items}</div>
-          </PopoverContent>
-        </Popover>
-      )}
-    </div>
-  );
-}
 
 type DialogState = { mode: ZoneDialogMode; zone?: Zone } | null;
 

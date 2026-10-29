@@ -18,7 +18,15 @@ export const queryKeys = {
     zones: ["dashboard", "zones"] as const,
     services: (zone: string) => ["dashboard", "services", zone] as const,
     templates: ["dashboard", "mitigation-templates"] as const,
+    templateList: (kind: string, template: string) =>
+      ["dashboard", "mitigation-templates", "list", kind, template] as const,
     stats: ["dashboard", "stats"] as const,
     statsHistory: ["dashboard", "stats-history"] as const,
+  },
+  geo: {
+    countries: ["geo", "countries"] as const,
+    template: (template: string) => ["geo", "template", template] as const,
+    templateSmart: (template: string) =>
+      ["geo", "template-smart", template] as const,
   },
 };

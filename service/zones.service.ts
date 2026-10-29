@@ -1,6 +1,5 @@
 import { api, ApiError } from "@/lib/api";
 import {
-  mitigationTemplatesResponseSchema,
   ServiceSavePayload,
   zoneMutationResponseSchema,
   ZoneSavePayload,
@@ -31,9 +30,4 @@ export const zonesService = {
 
   deleteService: (zoneName: string, serviceName: string) =>
     postService({ action: "delete", zoneName, serviceName }),
-
-  getTemplates: async () => {
-    const { data } = await api.get("/api/mitigation-templates");
-    return mitigationTemplatesResponseSchema.parse(data).templates;
-  },
 };

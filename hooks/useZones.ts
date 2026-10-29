@@ -127,13 +127,6 @@ export const useZoneServices = (zone: string, enabled: boolean) =>
     enabled: enabled && zone !== "",
   });
 
-export const useMitigationTemplates = () =>
-  useQuery({
-    queryKey: queryKeys.dashboard.templates,
-    queryFn: zonesService.getTemplates,
-    staleTime: 5 * 60 * 1000,
-  });
-
 // har bir zona uchun servislar (backendda umumiy endpoint yo'q)
 export const useZonesServices = (zoneNames: string[]) =>
   useQueries({

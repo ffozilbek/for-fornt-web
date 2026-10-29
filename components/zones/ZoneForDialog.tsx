@@ -22,11 +22,8 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import {
-  useMitigationTemplates,
-  useSaveZoneWithServices,
-  useZoneServices,
-} from "@/hooks/useZones";
+import { useSaveZoneWithServices, useZoneServices } from "@/hooks/useZones";
+import { useMitigationTemplates } from "@/hooks/useMitigationTemplates";
 import {
   rowFromService,
   ServiceRow,
