@@ -583,3 +583,27 @@ export type SecurityLog = z.infer<typeof securityLogSchema>;
 
 // GET /api/audit-logs — antiddos_config_logs; ustunlari attacker-logs bilan bir xil
 export const auditLogsResponseSchema = securityLogsResponseSchema;
+
+// /api/statistics summary'dagi "Other" protokolli servis trafigi
+const protoTrafficSchema = z.looseObject({
+  incoming_packets: z.number(),
+  passed_packets: z.number(),
+  dropped_packets: z.number(),
+  incoming_bytes: z.number(),
+  passed_bytes: z.number(),
+  dropped_bytes: z.number(),
+});
+
+// GET /api/statistics — vaqt bo'yicha qatorlar (bucket_minutes oralig'ida)
+// va butun davr yig'indisi. Qatorda tcp/udp/icmp paketlar `tcp_incoming`,
+// summary'da esa `tcp_incoming_packets` nomida keladi (lib/statistics.ts)
+export const statisticsResponseSchema = z.object({
+  stats: z.array(z.looseObject({ event_time: z.string() })),
+  summary: z.looseObject({
+    other_service_traffic: protoTrafficSchema.nullish(),
+  }),
+  bucket_minutes: z.number(),
+});
+
+export type ProtoTraffic = z.infer<typeof protoTrafficSchema>;
+export type StatisticsResponse = z.infer<typeof statisticsResponseSchema>;

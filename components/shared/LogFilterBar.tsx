@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { ReactNode, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FileDown, FileText, Filter, RefreshCw } from "lucide-react";
 import {
@@ -17,6 +17,8 @@ import { Input } from "@/components/ui/input";
 import SelectZones from "@/components/shared/SelectZones";
 import { useServices, useZones } from "@/hooks/useDashboard";
 import { formatServiceProto } from "@/lib/service-label";
+import { toLocalInput } from "@/lib/format";
+import { SERVICE_NONE, SERVICE_RESPONSE } from "@/lib/constants";
 import { LogQuery } from "@/types/dashboard";
 
 const CUSTOM = "custom";
@@ -29,18 +31,16 @@ export const DEFAULT_LOG_QUERY: LogQuery = {
   hours: DEFAULT_HOURS,
 };
 
-// datetime-local uchun lokal vaqt: YYYY-MM-DDTHH:MM
-const toLocalInput = (d: Date) => {
-  const p = (n: number) => String(n).padStart(2, "0");
-  return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}T${p(d.getHours())}:${p(d.getMinutes())}`;
-};
-
 type Props = {
   query: LogQuery;
   onChange: (query: LogQuery) => void;
   onRefresh: () => void;
   refreshing: boolean;
   onExport: (kind: "csv" | "pdf") => void;
+  // "mos servis yo'q (ACL)" va "qaytuvchi traffik" ham tanlansin (statistika)
+  virtualServices?: boolean;
+  // yangilash tugmasidan oldin qo'shimcha boshqaruvlar
+  extra?: ReactNode;
 };
 
 // Incident tarixi va Xavfsizlik loglari uchun umumiy filtr paneli:
@@ -51,6 +51,8 @@ export default function LogFilterBar({
   onRefresh,
   refreshing,
   onExport,
+  virtualServices,
+  extra,
 }: Props) {
   const { t } = useTranslation();
   const zones = useZones();
@@ -92,6 +94,12 @@ export default function LogFilterBar({
         s.protocolNumber,
       ),
     })),
+    ...(virtualServices
+      ? [
+          { value: SERVICE_NONE, label: t("misc.noMatchingServiceACL") },
+          { value: SERVICE_RESPONSE, label: t("misc.responseTraffic") },
+        ]
+      : []),
   ];
 
   // custom tanlanganda so'rov faqat "Apply" bosilganda o'zgaradi
@@ -163,6 +171,7 @@ export default function LogFilterBar({
             </SelectGroup>
           </SelectContent>
         </Select>
+        {extra}
         <Button variant="outline" onClick={onRefresh} disabled={refreshing}>
           <RefreshCw className={refreshing ? "animate-spin" : ""} />
           {t("misc.refresh")}

@@ -49,3 +49,20 @@ export function formatDuration(s: number) {
   if (s < 3600) return `${Math.floor(s / 60)}m ${s % 60}s`;
   return `${Math.floor(s / 3600)}h ${Math.floor((s % 3600) / 60)}m`;
 }
+
+// jami hajm (tezlik emas): 1234567 -> "1.23 Mbit"
+export function formatBits(v: number) {
+  const units = ["bit", "Kbit", "Mbit", "Gbit", "Tbit", "Pbit"];
+  let i = 0;
+  while (v >= 1000 && i < units.length - 1) {
+    v /= 1000;
+    i++;
+  }
+  return `${v.toFixed(i === 0 ? 0 : 2)} ${units[i]}`;
+}
+
+// datetime-local uchun lokal vaqt: YYYY-MM-DDTHH:MM
+export const toLocalInput = (d: Date) => {
+  const p = (n: number) => String(n).padStart(2, "0");
+  return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}T${p(d.getHours())}:${p(d.getMinutes())}`;
+};
