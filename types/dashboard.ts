@@ -427,3 +427,82 @@ export type FilterRatioParams = {
   zone: string;
   service: string;
 };
+
+// GET /api/https-flood — TLS/443 flood detektori holati (C data plane shm,
+// har soniyada yangilanadi). available=false bo'lsa l2fwd ishlamayapti.
+export const HTTPS_FLOOD_STATES = { learning: 0, detecting: 1, attack: 2 } as const;
+
+export const httpsFloodServiceSchema = z.looseObject({
+  zone_name: z.string(),
+  zone_ip: z.string(),
+  service_name: z.string(),
+  // 0 = Learning, 1 = Learn&Detect, 2 = Mitigation
+  state: z.number(),
+  state_name: z.string(),
+  stale: z.boolean(),
+  age_sec: z.number(),
+  learn_reqs: z.number(),
+  learn_target: z.number(),
+  learn_progress: z.number(),
+  rps: z.number(),
+  u_long: z.number(),
+  u_short: z.number(),
+  threshold: z.number(),
+  bl_long: z.number(),
+  bl_short: z.number(),
+  rv_now: z.number(),
+  rv_base: z.number(),
+  rv_trigger: z.number(),
+  rate_anom: z.boolean(),
+  rv_anom: z.boolean(),
+  consec_anom: z.number(),
+  sustain_target: z.number(),
+  consec_quiet: z.number(),
+  quiet_target: z.number(),
+  suspects: z.number(),
+  suspect_list: z.array(z.object({ ip: z.string(), rps: z.number() })),
+  attack_duration: z.number(),
+});
+
+export const httpsFloodStatusSchema = z.looseObject({
+  available: z.boolean(),
+  reason: z.string().optional(),
+  services: z.array(httpsFloodServiceSchema),
+  summary: z.object({
+    total: z.number(),
+    learning: z.number(),
+    detecting: z.number(),
+    under_attack: z.number(),
+    suspects: z.number(),
+  }),
+});
+
+export type HttpsFloodService = z.infer<typeof httpsFloodServiceSchema>;
+export type HttpsFloodStatus = z.infer<typeof httpsFloodStatusSchema>;
+
+// GET /api/https-flood/history — attackers_report dagi HTTPS_FLOOD_SUSPECT
+export const httpsFloodAttackSchema = z.looseObject({
+  src_ip: z.string(),
+  zone_name: z.string(),
+  service_name: z.string(),
+  suspect_requests: z.number(),
+  avg_rps: z.number(),
+  started: z.string(),
+  finished: z.string(),
+  duration: z.number(),
+});
+
+export const httpsFloodHistorySchema = z.looseObject({
+  available: z.boolean(),
+  reason: z.string().optional(),
+  count: z.number(),
+  distinct_ips: z.number(),
+  attacks: z.array(httpsFloodAttackSchema),
+});
+
+export type HttpsFloodAttack = z.infer<typeof httpsFloodAttackSchema>;
+
+// oxirgi N soat yoki maxsus oraliq (datetime-local qiymatlari)
+export type HttpsFloodHistoryQuery =
+  | { hours: number }
+  | { start_date: string; end_date: string };

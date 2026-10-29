@@ -2,6 +2,7 @@ import {
   AttackFilters,
   DetailTarget,
   FilterRatioParams,
+  HttpsFloodHistoryQuery,
 } from "@/types/dashboard";
 
 export const queryKeys = {
@@ -22,6 +23,11 @@ export const queryKeys = {
       ["dashboard", "mitigation-templates", "list", kind, template] as const,
     stats: ["dashboard", "stats"] as const,
     statsHistory: ["dashboard", "stats-history"] as const,
+  },
+  httpsFlood: {
+    status: ["https-flood", "status"] as const,
+    history: (q: HttpsFloodHistoryQuery) =>
+      ["https-flood", "history", q] as const,
   },
   geo: {
     countries: ["geo", "countries"] as const,
