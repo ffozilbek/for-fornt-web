@@ -42,3 +42,10 @@ export function formatDateTime(s: string) {
 //     seconds: remainingSeconds,
 //   });
 // }
+
+// soniyalar -> "45s", "5m 12s", "2h 3m"
+export function formatDuration(s: number) {
+  if (s < 60) return `${s}s`;
+  if (s < 3600) return `${Math.floor(s / 60)}m ${s % 60}s`;
+  return `${Math.floor(s / 3600)}h ${Math.floor((s % 3600) / 60)}m`;
+}

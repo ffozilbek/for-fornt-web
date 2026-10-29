@@ -12,31 +12,14 @@ import {
 import { useTranslation } from "react-i18next";
 import { formatBytes, formatNumber } from "@/lib/format";
 import { SummaryDetail } from "@/types/dashboard";
-import { Field, FieldLabel } from "@/components/ui/field";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import EmptySheet from "./EmptySheet";
+import ListPagination, { DEFAULT_PAGE_SIZE } from "./ListPagination";
 
 export function DataTable({ data }: { data: SummaryDetail }) {
   const { incidents } = data;
   const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(25);
+  const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
   const { t } = useTranslation();
-
-  const totalPages = Math.max(1, Math.ceil(incidents.length / pageSize));
 
   const start = (page - 1) * pageSize;
   const pageRows = incidents.slice(start, start + pageSize);
@@ -77,68 +60,16 @@ export function DataTable({ data }: { data: SummaryDetail }) {
               ))}
             </TableBody>
           </Table>
-          <div className="flex items-center justify-between gap-4">
-            <Field orientation="horizontal" className="w-fit">
-              <FieldLabel htmlFor="select-rows-per-page">
-                {t("misc.rows")}
-              </FieldLabel>
-              <Select
-                value={String(pageSize)}
-                onValueChange={(value) => {
-                  setPageSize(Number(value));
-                  setPage(1);
-                }}
-              >
-                <SelectTrigger className="w-20" id="select-rows-per-page">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent align="start">
-                  <SelectGroup>
-                    <SelectItem value="10">10</SelectItem>
-                    <SelectItem value="25">25</SelectItem>
-                    <SelectItem value="50">50</SelectItem>
-                    <SelectItem value="100">100</SelectItem>
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-              <div>
-                {t("misc.totalRows")} {incidents.length}
-              </div>
-            </Field>
-
-            <Pagination className="mx-0 w-auto">
-              <PaginationContent>
-                <PaginationItem>
-                  <PaginationPrevious
-                    href="#"
-                    aria-disabled={page === 1}
-                    className={
-                      page === 1 ? "pointer-events-none opacity-50" : ""
-                    }
-                    onClick={(e) => {
-                      e.preventDefault();
-                      setPage((p) => Math.max(1, p - 1));
-                    }}
-                  />
-                </PaginationItem>
-                <PaginationItem>
-                  <PaginationNext
-                    href="#"
-                    aria-disabled={page === totalPages}
-                    className={
-                      page === totalPages
-                        ? "pointer-events-none opacity-50"
-                        : ""
-                    }
-                    onClick={(e) => {
-                      e.preventDefault();
-                      setPage((p) => Math.min(totalPages, p + 1));
-                    }}
-                  />
-                </PaginationItem>
-              </PaginationContent>
-            </Pagination>
-          </div>
+          <ListPagination
+            page={page}
+            pageSize={pageSize}
+            total={incidents.length}
+            onPage={setPage}
+            onPageSize={(n) => {
+              setPageSize(n);
+              setPage(1);
+            }}
+          />
         </div>
       )}
     </>

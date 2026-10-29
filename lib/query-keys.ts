@@ -3,6 +3,8 @@ import {
   DetailTarget,
   FilterRatioParams,
   HttpsFloodHistoryQuery,
+  IncidentHistoryQuery,
+  LogQuery,
 } from "@/types/dashboard";
 
 export const queryKeys = {
@@ -24,6 +26,11 @@ export const queryKeys = {
     stats: ["dashboard", "stats"] as const,
     statsHistory: ["dashboard", "stats-history"] as const,
   },
+  incidents: {
+    active: ["incidents", "active"] as const,
+    history: (q: IncidentHistoryQuery) => ["incidents", "history", q] as const,
+  },
+  securityLogs: (q: LogQuery) => ["security-logs", q] as const,
   httpsFlood: {
     status: ["https-flood", "status"] as const,
     history: (q: HttpsFloodHistoryQuery) =>

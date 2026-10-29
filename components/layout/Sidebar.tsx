@@ -47,12 +47,15 @@ import { Avatar, AvatarFallback } from "../ui/avatar";
 import { useTranslation } from "react-i18next";
 import { usePathname } from "next/navigation";
 import { useLogout, useMe } from "@/hooks/useAuth";
+import { useActiveIncidents } from "@/hooks/useIncidents";
 
 export function AppSidebar() {
   const { t } = useTranslation();
   const { data: user } = useMe();
   const logout = useLogout();
   const pathname = usePathname();
+  // faol hujumlar soni "Loglar" yonida ko'rsatiladi (0 bo'lsa yashiriladi)
+  const activeIncidents = useActiveIncidents().data?.length ?? 0;
 
   const navItems = [
     {
@@ -79,7 +82,7 @@ export function AppSidebar() {
     {
       title: t("navigation.logs"),
       icon: ClipboardList,
-      badge: 3,
+      badge: activeIncidents || undefined,
       items: [
         { title: t("navigation.incidentLogs"), url: "/logs/incident-logs" },
         { title: t("navigation.securityLogs"), url: "/logs/security-logs" },

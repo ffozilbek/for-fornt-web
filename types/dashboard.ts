@@ -506,3 +506,77 @@ export type HttpsFloodAttack = z.infer<typeof httpsFloodAttackSchema>;
 export type HttpsFloodHistoryQuery =
   | { hours: number }
   | { start_date: string; end_date: string };
+
+// /api/incidents/* — servis protokoli/porti chiroyli ko'rsatish uchun keladi
+const incidentServiceFields = {
+  service_name: z.string().nullish(),
+  service_protocol: z.string().nullish(),
+  service_ports: z.string().nullish(),
+  service_protocol_number: z.number().nullish(),
+};
+
+// GET /api/incidents/active — oxirgi 8 soniyada yangilangan hujumlar
+export const activeIncidentSchema = z.looseObject({
+  src_ip: z.string(),
+  dst_ip: z.string(),
+  attack_type: z.string(),
+  zona_name: z.string(),
+  ...incidentServiceFields,
+  dropped_count: z.number(),
+  dropped_bytes: z.number(),
+  start_time: z.string(),
+  duration: z.number(),
+  avg_pps: z.number(),
+  avg_bps: z.number(),
+});
+
+export const activeIncidentsResponseSchema = z.object({
+  incidents: z.array(activeIncidentSchema),
+});
+
+// GET /api/incidents/history — attackers_report (ko'pi bilan 1000 ta)
+export const historyIncidentSchema = z.looseObject({
+  zona_name: z.string(),
+  zona_ip: z.string(),
+  ...incidentServiceFields,
+  attacker_ip: z.string(),
+  attacker_type: z.string(),
+  dropped_count: z.number(),
+  dropped_byte: z.number(),
+  avg_pps: z.number(),
+  avg_bps: z.number(),
+  start_time: z.string(),
+  finish_time: z.string(),
+  duration: z.number(),
+});
+
+export const historyIncidentsResponseSchema = z.object({
+  incidents: z.array(historyIncidentSchema),
+});
+
+export type ActiveIncident = z.infer<typeof activeIncidentSchema>;
+export type HistoryIncident = z.infer<typeof historyIncidentSchema>;
+
+// log sahifalari filtri: zona/servis + oxirgi N soat (kasr bo'lishi mumkin)
+// yoki maxsus oraliq (datetime-local qiymatlari)
+export type LogQuery = {
+  zone_name: string;
+  service_name: string;
+} & ({ hours: number } | { start_date: string; end_date: string });
+
+export type IncidentHistoryQuery = LogQuery;
+
+// GET /api/attacker-logs — antiddos_rate_limit_logs (ko'pi bilan 1000 ta)
+export const securityLogSchema = z.looseObject({
+  time: z.string(),
+  zona_name: z.string(),
+  service_name: z.string(),
+  zona_ip: z.string(),
+  log_message: z.string().nullish(),
+});
+
+export const securityLogsResponseSchema = z.object({
+  logs: z.array(securityLogSchema),
+});
+
+export type SecurityLog = z.infer<typeof securityLogSchema>;

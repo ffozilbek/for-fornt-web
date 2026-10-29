@@ -114,16 +114,25 @@ export default function HttpsFloodHistory() {
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <History className="size-5" />
+          <div className="bg-sidebar-accent-foreground text-sidebar-accent h-8 w-8 rounded-md flex items-center justify-center">
+            <History size={20} />
+          </div>
           <span>{t("misc.attackHistory")}</span>
           {available && (
             <Badge variant="secondary">
-              {t("misc.nEventsIpsIPs", { n: data.count, ips: data.distinct_ips })}
+              {t("misc.nEventsIpsIPs", {
+                n: data.count,
+                ips: data.distinct_ips,
+              })}
             </Badge>
           )}
         </CardTitle>
         <CardAction>
-          <Select items={rangeItems} value={range} onValueChange={(v) => v && changeRange(v)}>
+          <Select
+            items={rangeItems}
+            value={range}
+            onValueChange={(v) => v && changeRange(v)}
+          >
             <SelectTrigger className="w-44">
               <SelectValue />
             </SelectTrigger>
@@ -169,7 +178,9 @@ export default function HttpsFloodHistory() {
               <Filter />
               {t("misc.apply")}
             </Button>
-            {rangeError && <FieldError className="w-full">{rangeError}</FieldError>}
+            {rangeError && (
+              <FieldError className="w-full">{rangeError}</FieldError>
+            )}
           </div>
         )}
 
@@ -188,7 +199,10 @@ export default function HttpsFloodHistory() {
           <TableBody>
             {pageRows.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={7} className="text-muted-foreground py-8 text-center">
+                <TableCell
+                  colSpan={7}
+                  className="text-muted-foreground py-8 text-center"
+                >
                   {isPending
                     ? t("misc.loading")
                     : !available
@@ -198,7 +212,9 @@ export default function HttpsFloodHistory() {
               </TableRow>
             ) : (
               pageRows.map((a) => (
-                <TableRow key={`${a.src_ip}-${a.zone_name}-${a.service_name}-${a.started}`}>
+                <TableRow
+                  key={`${a.src_ip}-${a.zone_name}-${a.service_name}-${a.started}`}
+                >
                   <TableCell className="text-muted-foreground">
                     {formatDateTime(a.started)}
                   </TableCell>
@@ -237,7 +253,9 @@ export default function HttpsFloodHistory() {
                   <PaginationPrevious
                     href="#"
                     aria-disabled={currentPage === 1}
-                    className={currentPage === 1 ? "pointer-events-none opacity-50" : ""}
+                    className={
+                      currentPage === 1 ? "pointer-events-none opacity-50" : ""
+                    }
                     onClick={(e) => {
                       e.preventDefault();
                       setPage(Math.max(1, currentPage - 1));
@@ -249,7 +267,9 @@ export default function HttpsFloodHistory() {
                     href="#"
                     aria-disabled={currentPage === totalPages}
                     className={
-                      currentPage === totalPages ? "pointer-events-none opacity-50" : ""
+                      currentPage === totalPages
+                        ? "pointer-events-none opacity-50"
+                        : ""
                     }
                     onClick={(e) => {
                       e.preventDefault();

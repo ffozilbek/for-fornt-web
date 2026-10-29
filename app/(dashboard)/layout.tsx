@@ -8,7 +8,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     <TooltipProvider delay={0}>
       <SidebarProvider>
         <AppSidebar />
-        <SidebarInset>
+        {/* min-w-0: keng jadvallar sahifani emas, o'z konteynerini scroll qilsin */}
+        <SidebarInset className="min-w-0">
           <Topbar />
           <main>{children}</main>
         </SidebarInset>
