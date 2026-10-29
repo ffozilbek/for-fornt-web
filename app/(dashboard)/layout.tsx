@@ -2,10 +2,12 @@ import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/layout/Sidebar";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import Topbar from "@/components/layout/Topbar";
+import IdleLogout from "@/components/layout/IdleLogout";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <TooltipProvider delay={0}>
+      <IdleLogout />
       <SidebarProvider>
         <AppSidebar />
         {/* min-w-0: keng jadvallar sahifani emas, o'z konteynerini scroll qilsin */}
