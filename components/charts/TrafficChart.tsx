@@ -14,13 +14,12 @@ import {
   type ChartConfig,
 } from "@/components/ui/chart";
 import CustomSkeleton from "@/components/shared/CustomSkeleton";
-import { pickPoint, type StatsFilter } from "@/lib/stats";
+import { pickPoint, type Point, type StatsFilter } from "@/lib/stats";
 import { formatBitrate } from "@/lib/format";
 import { useStatsHistory } from "@/hooks/useStatsHistory";
 
 const WINDOW = 60;
 const KEYS = ["incoming", "passed", "dropped"] as const;
-type ChartPoint = { t: number } & Record<(typeof KEYS)[number], number | null>;
 const fmtTime = (v: number) => new Date(v).toLocaleTimeString("en-GB");
 
 // Y o'q: 3.00M, 1.00M ... (2 ta kasr), 0 va 1000 dan kichiklar oddiy
@@ -39,24 +38,16 @@ export default function TrafficChart(filter: StatsFilter) {
   const { data: history, isPending, isError, error } = useStatsHistory();
   const { zone, service, protocol, type } = filter;
 
-  const points = useMemo<ChartPoint[]>(() => {
-    const real: ChartPoint[] = (history ?? []).slice(-WINDOW).map((h) => ({
-      ...pickPoint(h.zones, { zone, service, protocol, type }, h.t),
-    }));
-    if (real.length === 0) return []; // tarix hali yo'q, grafik skeleton bilan almashadi
-
-    // 60 slotni doim to'ldirib turamiz: oyna "cho'zilib" ketmasin
-    const t0 = real[0].t;
-    const missing = WINDOW - real.length;
-    const first = real[0];
-    const pad: ChartPoint[] = Array.from({ length: missing }, (_, i) => ({
-      t: t0 - (missing - i) * 1000,
-      incoming: first.incoming,
-      passed: first.passed,
-      dropped: first.dropped,
-    }));
-    return [...pad, ...real];
-  }, [history, zone, service, protocol, type]);
+  // eski dashboarddagidek faqat haqiqiy nuqtalar: grafik butun kenglikka
+  // cho'ziladi va 60 tagacha o'sib boradi (bo'sh slotlar soxta tekis chiziq
+  // bilan to'ldirilmaydi)
+  const points = useMemo<Point[]>(
+    () =>
+      (history ?? [])
+        .slice(-WINDOW)
+        .map((h) => pickPoint(h.zones, { zone, service, protocol, type }, h.t)),
+    [history, zone, service, protocol, type],
+  );
 
   if (isPending) return <CustomSkeleton />;
   if (isError)
