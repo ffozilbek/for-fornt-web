@@ -637,3 +637,35 @@ export const protectionStatsResponseSchema = z.object({
 
 export type IndicatorDrops = z.infer<typeof indicatorDropsSchema>;
 export type ProtectionStatsResponse = z.infer<typeof protectionStatsResponseSchema>;
+
+// /api/tcp-indicators* — TCP servis indikatorlari (soniyalik hisoblagichlar).
+// Maydonlar: c_* — mijoz -> servis, s_* — servis -> mijoz flaglari,
+// c_bytes/s_bytes, unique_src_ips/flows, dropped, zero_window (lib/tcp-indicators.ts)
+const tcpRecordSchema = z.record(z.string(), z.number());
+
+// GET /api/tcp-indicators — oxirgi yakunlangan soniya (tanlov bo'yicha yig'indi)
+export const tcpLiveResponseSchema = z.object({
+  time: z.number(),
+  data: tcpRecordSchema,
+});
+
+// GET /api/tcp-indicators/history — ClickHouse'dan, bucket_sec oralig'ida
+// o'rtacha (pps) qiymatlar; series[field][i] — times[i] (epoch sek) uchun
+export const tcpHistoryResponseSchema = z.object({
+  bucket_sec: z.number(),
+  times: z.array(z.number()),
+  series: z.record(z.string(), z.array(z.number())),
+});
+
+const meanStdSchema = z.object({ mean: z.number(), std: z.number() });
+
+// GET /api/tcp-indicators/baseline — o'rganilgan flag taqsimoti (ulushlar,
+// [SYN, SYN-ACK, ACK, Data, RST, FIN-ACK]) va mijoz ko'rsatkichlari statistikasi
+export const tcpBaselineResponseSchema = z.object({
+  samples: z.number(),
+  vectors: z.object({ client: z.array(z.number()), server: z.array(z.number()) }),
+  client_stats: z.record(z.string(), meanStdSchema),
+});
+
+export type TcpRecord = z.infer<typeof tcpRecordSchema>;
+export type TcpBaselineResponse = z.infer<typeof tcpBaselineResponseSchema>;

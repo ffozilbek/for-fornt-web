@@ -742,6 +742,7 @@
     "low": "low",
     "lowData2": "Low data",
     "dragScrollToZoom": "drag/scroll to zoom",
+    "domWindow": "window",
     "hTTPSProtection": "HTTPS Protection",
     "tLS443FloodDetectionLearningStateBaselin": "TLS/443 flood detection — learning state, baselines and suspect IPs",
     "loadingDetectorStatus": "Loading detector status…",

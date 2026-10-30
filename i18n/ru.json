@@ -742,6 +742,7 @@
     "low": "мало",
     "lowData2": "Мало данных",
     "dragScrollToZoom": "тяните/прокрутите для масштаба",
+    "domWindow": "окно",
     "hTTPSProtection": "Защита HTTPS",
     "tLS443FloodDetectionLearningStateBaselin": "Обнаружение TLS/443 flood — состояние обучения, базовые значения и подозрительные IP",
     "loadingDetectorStatus": "Загрузка состояния детектора…",

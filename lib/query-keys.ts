@@ -6,6 +6,7 @@ import {
   IncidentHistoryQuery,
   LogQuery,
 } from "@/types/dashboard";
+import type { TcpHistoryRange } from "@/lib/tcp-indicators";
 
 export const queryKeys = {
   auth: { me: ["auth", "me"] as const },
@@ -34,6 +35,14 @@ export const queryKeys = {
   auditLogs: (q: LogQuery) => ["audit-logs", q] as const,
   statistics: (q: LogQuery) => ["statistics", q] as const,
   protectionStats: (q: LogQuery) => ["protection-stats", q] as const,
+  tcpIndicators: {
+    live: (zone: string, service: string) =>
+      ["tcp-indicators", "live", zone, service] as const,
+    history: (zone: string, service: string, range: TcpHistoryRange | null) =>
+      ["tcp-indicators", "history", zone, service, range] as const,
+    baseline: (zone: string, service: string, mode: string) =>
+      ["tcp-indicators", "baseline", zone, service, mode] as const,
+  },
   httpsFlood: {
     status: ["https-flood", "status"] as const,
     history: (q: HttpsFloodHistoryQuery) =>
