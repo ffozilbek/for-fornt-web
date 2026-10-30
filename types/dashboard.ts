@@ -211,7 +211,17 @@ export const summaryDetailSchema = z.object({
           }),
         )
         .optional(),
-      indicators: z.array(z.any()).optional(),
+      // eng ko'p tashlagan 10 ta indikator; raw — DB'dagi protection_name
+      indicators: z
+        .array(
+          z.object({
+            name: z.string(),
+            raw: z.string(),
+            packets: z.number(),
+            bytes: z.number(),
+          }),
+        )
+        .optional(),
     })
     .optional(),
 });
@@ -607,3 +617,23 @@ export const statisticsResponseSchema = z.object({
 
 export type ProtoTraffic = z.infer<typeof protoTrafficSchema>;
 export type StatisticsResponse = z.infer<typeof statisticsResponseSchema>;
+
+// GET /api/protection-statistics — himoya indikatorlari bo'yicha drop'lar.
+// by_attack kaliti — DB'dagi protection_name (lib/protection-stats.ts)
+const indicatorDropsSchema = z.object({
+  dropped_count: z.number(),
+  dropped_byte: z.number(),
+});
+
+export const protectionStatsResponseSchema = z.object({
+  bucket_minutes: z.number(),
+  range_minutes: z.number(),
+  summary: z.object({
+    total_dropped_count: z.number(),
+    total_dropped_byte: z.number(),
+    by_attack: z.record(z.string(), indicatorDropsSchema),
+  }),
+});
+
+export type IndicatorDrops = z.infer<typeof indicatorDropsSchema>;
+export type ProtectionStatsResponse = z.infer<typeof protectionStatsResponseSchema>;

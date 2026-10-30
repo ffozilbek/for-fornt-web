@@ -14,6 +14,7 @@ import StatisticsTrendChart from "@/components/statistics/StatisticsTrendChart";
 import ProtocolBreakdownCard from "@/components/statistics/ProtocolBreakdownCard";
 import DroppedByProtocolChart from "@/components/statistics/DroppedByProtocolChart";
 import { useServices } from "@/hooks/useDashboard";
+import { SERVICE_NONE, SERVICE_RESPONSE } from "@/lib/constants";
 import { useStatistics } from "@/hooks/useStatistics";
 import {
   bucketLabel,
@@ -111,7 +112,7 @@ export default function GeneralStatistics() {
             onExport={(k) => {
               window.location.href = statisticsService.exportUrl(k, query, svcProto, i18n.language);
             }}
-            virtualServices
+            virtualServices={[SERVICE_NONE, SERVICE_RESPONSE]}
             extra={<SelectDisplayType value={type} onChange={setType} />}
           />
         </CardContent>
