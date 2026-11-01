@@ -19,7 +19,7 @@ export function CountryCell({ code }: { code: string }) {
           width={20}
           height={15}
           unoptimized
-          className="h-[15px] w-5 rounded-none object-cover"
+          className="h-3.75 w-5 rounded-none object-cover"
           onError={() => setFailed(code)}
         />
       )}
@@ -38,15 +38,27 @@ export function MetaGrid({ items }: { items: [string, ReactNode][] }) {
     <div className="grid grid-cols-[repeat(auto-fit,minmax(10rem,1fr))] gap-x-5 gap-y-3">
       {items.map(([label, value]) => (
         <div key={label} className="flex min-w-0 flex-col gap-0.5">
-          <span className="text-muted-foreground text-[10px] tracking-wide uppercase">{label}</span>
-          <span className="text-sm [overflow-wrap:anywhere]">{value}</span>
+          <span className="text-muted-foreground text-[10px] tracking-wide uppercase">
+            {label}
+          </span>
+          <span className="text-sm wrap:anywhere">{value}</span>
         </div>
       ))}
     </div>
   );
 }
 
-function BarColumn({ title, spec, row, color }: { title: string; spec: FlagSpec; row: object; color: string }) {
+function BarColumn({
+  title,
+  spec,
+  row,
+  color,
+}: {
+  title: string;
+  spec: FlagSpec;
+  row: object;
+  color: string;
+}) {
   const vals = spec.map(([label, k]) => [label, num(row, k)] as const);
   const total = vals.reduce((a, [, v]) => a + v, 0);
   const max = Math.max(1, ...vals.map(([, v]) => v));
@@ -54,19 +66,30 @@ function BarColumn({ title, spec, row, color }: { title: string; spec: FlagSpec;
     <div className="bg-muted/30 rounded-lg border p-4">
       <div className="mb-3 flex justify-between text-sm font-semibold">
         <span>{title}</span>
-        <span className="text-muted-foreground font-normal">Σ {fmtInt(total)}</span>
+        <span className="text-muted-foreground font-normal">
+          Σ {fmtInt(total)}
+        </span>
       </div>
       {vals.map(([label, v]) => (
-        <div key={label} className="my-2 grid grid-cols-[6rem_1fr_auto] items-center gap-2.5 text-xs">
+        <div
+          key={label}
+          className="my-2 grid grid-cols-[6rem_1fr_auto] items-center gap-2.5 text-xs"
+        >
           <span className="font-mono opacity-80">{label}</span>
           <span className="bg-muted h-3.5 overflow-hidden rounded-full">
             <span
               className="block h-full rounded-full"
-              style={{ width: `${v ? Math.max(2, (v / max) * 100) : 0}%`, background: color }}
+              style={{
+                width: `${v ? Math.max(2, (v / max) * 100) : 0}%`,
+                background: color,
+              }}
             />
           </span>
           <span className="min-w-20 text-right tabular-nums">
-            {fmtInt(v)} <span className="text-muted-foreground">{total ? Math.round((v / total) * 100) : 0}%</span>
+            {fmtInt(v)}{" "}
+            <span className="text-muted-foreground">
+              {total ? Math.round((v / total) * 100) : 0}%
+            </span>
           </span>
         </div>
       ))}
@@ -83,8 +106,17 @@ type BarsProps = {
 };
 
 // ikki yo'nalishning TCP flag / TLS record taqsimoti (gorizontal ustunlar)
-export function DirectionBars({ row, client, server, empty, className }: BarsProps) {
-  const sum = [...client.spec, ...server.spec].reduce((a, [, k]) => a + num(row, k), 0);
+export function DirectionBars({
+  row,
+  client,
+  server,
+  empty,
+  className,
+}: BarsProps) {
+  const sum = [...client.spec, ...server.spec].reduce(
+    (a, [, k]) => a + num(row, k),
+    0,
+  );
   if (!sum) return <p className="text-muted-foreground text-xs">{empty}</p>;
   return (
     <div className={cn("grid gap-5 md:grid-cols-2", className)}>
@@ -100,7 +132,11 @@ export const VERDICT_CLS = {
   normal: "text-green-600 dark:text-green-400",
 } as const;
 
-export function VerdictText({ verdict }: { verdict: keyof typeof VERDICT_CLS }) {
+export function VerdictText({
+  verdict,
+}: {
+  verdict: keyof typeof VERDICT_CLS;
+}) {
   const { t } = useTranslation();
   return (
     <span className={cn("text-xs font-bold uppercase", VERDICT_CLS[verdict])}>

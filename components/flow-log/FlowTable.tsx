@@ -7,11 +7,15 @@ import ListPagination, { DEFAULT_PAGE_SIZE } from "@/components/shared/ListPagin
 import Truncated from "@/components/shared/Truncated";
 import { CountryCell, VerdictText } from "@/components/flow-log/FlowBits";
 import { GROUP_LABEL } from "@/components/flow-log/FlowFilters";
+import { cn } from "@/lib/utils";
 import { fmtB, fmtInt, fmtTs, isFpGroup, isTlsGroup, type GroupBy } from "@/lib/flow-log";
 import type { FlowGroupRow, FlowMitigationRow, FlowRow } from "@/types/dashboard";
 
 // right — sonli ustunlar dashboard jadvallaridagidek o'ngga tekislanadi
-export type Column<R> = { head: string; cell: (r: R) => ReactNode; right?: boolean };
+// (oxirgi ustun doim o'ngda); muted — vaqt ustunlari xira rangda
+export type Column<R> = { head: string; cell: (r: R) => ReactNode; right?: boolean; muted?: boolean };
+
+const isRight = <R,>(columns: Column<R>[], i: number) => columns[i].right || i === columns.length - 1;
 
 const bytesPkts = (b: number, p: number) => `${fmtB(b)}/${fmtInt(p)}`;
 
@@ -31,7 +35,7 @@ const keyCell = (by: GroupBy, key: string, country: string) =>
   );
 
 export const flowColumns = (t: TFunction, showTls: boolean): Column<FlowRow>[] => [
-  { head: t("misc.time"), cell: (r) => fmtTs(r.ts) },
+  { head: t("misc.time"), cell: (r) => fmtTs(r.ts), muted: true },
   { head: t("navigation.zone").replace(":", ""), cell: (r) => r.zone_name },
   { head: t("misc.service").replace(":", ""), cell: (r) => r.service_name },
   { head: t("misc.country"), cell: (r) => <CountryCell code={r.country} /> },
@@ -65,7 +69,7 @@ export const groupColumns = (t: TFunction, by: GroupBy): Column<FlowGroupRow>[] 
     : []),
   { head: t("misc.fwdBPkts"), cell: (r) => bytesPkts(r.fwd_bytes, r.fwd_pkts), right: true },
   { head: t("misc.bwdBPkts"), cell: (r) => bytesPkts(r.bwd_bytes, r.bwd_pkts), right: true },
-  { head: t("misc.lastSeen"), cell: (r) => fmtTs(r.last_ts) },
+  { head: t("misc.lastSeen"), cell: (r) => fmtTs(r.last_ts), muted: true },
 ];
 
 export const driversText = (r: FlowMitigationRow) =>
@@ -106,8 +110,8 @@ export default function FlowTable<R>({ columns, rows, rowKey, onRow, empty }: Pr
         <TableHeader>
           <TableRow>
             <TableHead>№</TableHead>
-            {columns.map((c) => (
-              <TableHead key={c.head} className={c.right ? "text-right" : undefined}>
+            {columns.map((c, ci) => (
+              <TableHead key={c.head} className={isRight(columns, ci) ? "text-right" : undefined}>
                 {c.head}
               </TableHead>
             ))}
@@ -130,8 +134,11 @@ export default function FlowTable<R>({ columns, rows, rowKey, onRow, empty }: Pr
                 onKeyDown={(e) => e.key === "Enter" && onRow(r)}
               >
                 <TableCell className="font-medium">{(page - 1) * pageSize + i + 1}</TableCell>
-                {columns.map((c) => (
-                  <TableCell key={c.head} className={c.right ? "text-right" : undefined}>
+                {columns.map((c, ci) => (
+                  <TableCell
+                    key={c.head}
+                    className={cn(isRight(columns, ci) && "text-right", c.muted && "text-muted-foreground")}
+                  >
                     {c.cell(r)}
                   </TableCell>
                 ))}
