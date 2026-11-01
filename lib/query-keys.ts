@@ -52,6 +52,11 @@ export const queryKeys = {
     mitigation: (p: FlowParams, by: GroupBy) => ["flow-log", "mitigation", by, p] as const,
     series: (p: FlowParams, by: GroupBy, key: string) => ["flow-log", "series", by, key, p] as const,
   },
+  pcap: {
+    all: ["pcap"] as const,
+    status: ["pcap", "status"] as const,
+    files: (p: Record<string, string>) => ["pcap", "files", p] as const,
+  },
   httpsFlood: {
     status: ["https-flood", "status"] as const,
     history: (q: HttpsFloodHistoryQuery) =>

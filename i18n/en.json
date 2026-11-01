@@ -908,5 +908,21 @@
     "zeroWindow": "Zero window",
     "attackAnalysis": "Attack analysis (Degree of Membership)",
     "selectZoneToCapture": "Select a zone to start capture"
+  },
+  "pcap": {
+    "zoneInOut": "Zone (in + out)",
+    "zoneInOutHint": "Incoming + outgoing packets in one file (IN / OUT comment)",
+    "zoneInOutTitle": "All packets entering the zone (any service) and all packets leaving it (nic-1 → nic-0) go into one pcap file. Direction is in the packet comment (IN / OUT).",
+    "start": "Start",
+    "captureStarted": "{kind} capture started for \"{zone}\"",
+    "captureStopped": "{kind} capture stopped",
+    "selectZoneFirst": "Select a zone first",
+    "filesProgress": "file {n}/{max}",
+    "part": "part {n}",
+    "lowDiskDetail": "Low disk! Free space: {free} (minimum 1 GB). Active captures were stopped and new ones will not start.",
+    "deleteTitle": "Delete file?",
+    "deleteDesc": "\"{name}\" will be deleted permanently.",
+    "fileDeleted": "File deleted",
+    "noFiles": "No pcap files found"
   }
 }

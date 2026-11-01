@@ -908,5 +908,21 @@
     "zeroWindow": "Nol oyna",
     "attackAnalysis": "Hujum tahlili (tegishlilik darajasi)",
     "selectZoneToCapture": "Yozish uchun zonani tanlang"
+  },
+  "pcap": {
+    "zoneInOut": "Zona (kirish + chiqish)",
+    "zoneInOutHint": "Kiruvchi + chiquvchi paketlar bitta faylga (IN / OUT comment'i bilan)",
+    "zoneInOutTitle": "Zonaga kiruvchi barcha paketlar (servis ahamiyatsiz) va zonadan chiquvchi (nic-1 → nic-0) barcha paketlar bitta pcap faylga yoziladi. Yo'nalish paket comment'ida (IN / OUT).",
+    "start": "Boshlash",
+    "captureStarted": "\"{zone}\" uchun {kind} yozish boshlandi",
+    "captureStopped": "{kind} yozish to'xtatildi",
+    "selectZoneFirst": "Avval zona tanlang",
+    "filesProgress": "fayl {n}/{max}",
+    "part": "part {n}",
+    "lowDiskDetail": "Xotira kam! Bo'sh joy: {free} (minimum 1 GB). Yozilayotgan pcap'lar to'xtatildi va yangi yozish boshlanmaydi.",
+    "deleteTitle": "Fayl o'chirilsinmi?",
+    "deleteDesc": "\"{name}\" butunlay o'chiriladi.",
+    "fileDeleted": "Fayl o'chirildi",
+    "noFiles": "Pcap fayl topilmadi"
   }
 }

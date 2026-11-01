@@ -781,3 +781,62 @@ export type FlowLogSlot = z.infer<typeof flowLogSlotSchema>;
 export type FlowRow = z.infer<typeof flowRowSchema>;
 export type FlowGroupRow = z.infer<typeof flowGroupRowSchema>;
 export type FlowMitigationRow = z.infer<typeof flowMitigationRowSchema>;
+
+// /api/pcap/* — zona/servis bo'yicha paketlarni pcapng faylga yozish.
+// kind (C pcap_kind_t): 0 dropped, 1 incoming, 2 passed, 3 zoneall
+export const pcapCaptureSchema = z.looseObject({
+  zone_idx: z.number(),
+  service_idx: z.number(),
+  kind: z.number(),
+  kind_name: z.string().optional(),
+  current_size: int,
+  max_size: int,
+  max_files: int,
+  file_count: int,
+  part_idx: int,
+  auto_stop: int,
+  filename: str,
+});
+
+// GET /api/pcap/status — faol yozuvlar (zones) va disk holati; disk 1 GB'dan
+// kam bo'lsa backend barcha yozuvlarni o'zi to'xtatadi (low_disk)
+export const pcapStatusSchema = z.looseObject({
+  status: z.string(),
+  msg: z.string().optional(),
+  zones: z.array(pcapCaptureSchema).catch([]),
+  low_disk: z.boolean().catch(false),
+  free_human: z.string().catch(""),
+});
+
+// GET /api/pcap/files — fayllar (eng yangisi boshida). Yozilayotgan faylda
+// zone_idx/service_idx/kind_id bo'lsa — uni shu yerdan to'xtatish mumkin
+export const pcapFileSchema = z.looseObject({
+  filename: z.string(),
+  zone_name: str,
+  kind: str,
+  service: str,
+  size: int,
+  size_human: str,
+  recording: z.boolean().catch(false),
+  modified: str,
+  zone_idx: z.number().optional(),
+  service_idx: z.number().optional(),
+  kind_id: z.number().optional(),
+});
+
+export const pcapFilesResponseSchema = z.looseObject({
+  status: z.string(),
+  msg: z.string().optional(),
+  files: z.array(pcapFileSchema).catch([]),
+});
+
+// start / stop / delete javobi
+export const pcapActionSchema = z.looseObject({
+  status: z.string(),
+  msg: z.string().optional(),
+  filename: z.string().optional(),
+});
+
+export type PcapCapture = z.infer<typeof pcapCaptureSchema>;
+export type PcapStatus = z.infer<typeof pcapStatusSchema>;
+export type PcapFile = z.infer<typeof pcapFileSchema>;
