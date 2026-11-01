@@ -12,8 +12,14 @@ import { fmtB, fmtInt, fmtTs, isFpGroup, isTlsGroup, type GroupBy } from "@/lib/
 import type { FlowGroupRow, FlowMitigationRow, FlowRow } from "@/types/dashboard";
 
 // right — sonli ustunlar dashboard jadvallaridagidek o'ngga tekislanadi
-// (oxirgi ustun doim o'ngda); muted — vaqt ustunlari xira rangda
-export type Column<R> = { head: string; cell: (r: R) => ReactNode; right?: boolean; muted?: boolean };
+// (oxirgi ustun doim o'ngda); className — audit loglaridagi uslub (vaqt, nom, IP)
+export type Column<R> = { head: string; cell: (r: R) => ReactNode; right?: boolean; className?: string };
+
+// audit loglari jadvalidagi uslublar
+const TIME = "text-muted-foreground font-mono text-xs";
+const ZONE = "font-semibold";
+const SERVICE = "font-semibold text-amber-500";
+const MONO = "font-mono";
 
 const isRight = <R,>(columns: Column<R>[], i: number) => columns[i].right || i === columns.length - 1;
 
@@ -34,15 +40,17 @@ const keyCell = (by: GroupBy, key: string, country: string) =>
     key || "—"
   );
 
+const keyCls = (by: GroupBy) => (by === "country" ? undefined : MONO);
+
 export const flowColumns = (t: TFunction, showTls: boolean): Column<FlowRow>[] => [
-  { head: t("misc.time"), cell: (r) => fmtTs(r.ts), muted: true },
-  { head: t("navigation.zone").replace(":", ""), cell: (r) => r.zone_name },
-  { head: t("misc.service").replace(":", ""), cell: (r) => r.service_name },
+  { head: t("misc.time"), cell: (r) => fmtTs(r.ts), className: TIME },
+  { head: t("navigation.zone").replace(":", ""), cell: (r) => r.zone_name, className: ZONE },
+  { head: t("misc.service").replace(":", ""), cell: (r) => r.service_name, className: SERVICE },
   { head: t("misc.country"), cell: (r) => <CountryCell code={r.country} /> },
-  { head: t("misc.src"), cell: (r) => `${r.src_ip}:${r.src_port}` },
-  { head: t("misc.dst"), cell: (r) => `${r.dst_ip}:${r.dst_port}` },
-  ...(showTls ? [{ head: "JA4", cell: (r: FlowRow) => r.ja4 || "—" }] : []),
-  { head: "JA4T", cell: (r) => r.ja4t || "—" },
+  { head: t("misc.src"), cell: (r) => `${r.src_ip}:${r.src_port}`, className: MONO },
+  { head: t("misc.dst"), cell: (r) => `${r.dst_ip}:${r.dst_port}`, className: MONO },
+  ...(showTls ? [{ head: "JA4", cell: (r: FlowRow) => r.ja4 || "—", className: MONO }] : []),
+  { head: "JA4T", cell: (r) => r.ja4t || "—", className: MONO },
   ...(showTls ? [{ head: "SNI", cell: (r: FlowRow) => r.sni || "—" }] : []),
   { head: t("misc.durMs"), cell: (r) => fmtInt(r.duration_ms), right: true },
   { head: t("misc.fwdBPkts"), cell: (r) => bytesPkts(r.fwd_bytes, r.fwd_pkts), right: true },
@@ -52,7 +60,7 @@ export const flowColumns = (t: TFunction, showTls: boolean): Column<FlowRow>[] =
 
 // ip / country / ja4t — TLS flowlar va SNI ro'yxati; ja4 / ja4t — davlatlar soni
 export const groupColumns = (t: TFunction, by: GroupBy): Column<FlowGroupRow>[] => [
-  { head: keyHead(by, t), cell: (r) => keyCell(by, r.key, r.country) },
+  { head: keyHead(by, t), cell: (r) => keyCell(by, r.key, r.country), className: keyCls(by) },
   { head: t("misc.flows"), cell: (r) => fmtInt(r.flows), right: true },
   { head: t("misc.srcIPs"), cell: (r) => fmtInt(r.src_ips), right: true },
   ...(isFpGroup(by) ? [{ head: t("misc.countries"), cell: (r: FlowGroupRow) => fmtInt(r.countries), right: true }] : []),
@@ -69,14 +77,14 @@ export const groupColumns = (t: TFunction, by: GroupBy): Column<FlowGroupRow>[] 
     : []),
   { head: t("misc.fwdBPkts"), cell: (r) => bytesPkts(r.fwd_bytes, r.fwd_pkts), right: true },
   { head: t("misc.bwdBPkts"), cell: (r) => bytesPkts(r.bwd_bytes, r.bwd_pkts), right: true },
-  { head: t("misc.lastSeen"), cell: (r) => fmtTs(r.last_ts), muted: true },
+  { head: t("misc.lastSeen"), cell: (r) => fmtTs(r.last_ts), className: TIME },
 ];
 
 export const driversText = (r: FlowMitigationRow) =>
   r.drivers.map((d) => `${d.feature} (${d.val})`).join(", ") || "—";
 
 export const mitigationColumns = (t: TFunction, by: GroupBy): Column<FlowMitigationRow>[] => [
-  { head: keyHead(by, t), cell: (r) => keyCell(by, r.key, r.country) },
+  { head: keyHead(by, t), cell: (r) => keyCell(by, r.key, r.country), className: keyCls(by) },
   ...(by !== "country" ? [{ head: t("misc.country"), cell: (r: FlowMitigationRow) => <CountryCell code={r.country} /> }] : []),
   ...(by !== "ip" ? [{ head: t("misc.srcIPs"), cell: (r: FlowMitigationRow) => fmtInt(r.uips), right: true }] : []),
   // DoA — hujum darajasi (yuqori = yomonroq)
@@ -137,7 +145,7 @@ export default function FlowTable<R>({ columns, rows, rowKey, onRow, empty }: Pr
                 {columns.map((c, ci) => (
                   <TableCell
                     key={c.head}
-                    className={cn(isRight(columns, ci) && "text-right", c.muted && "text-muted-foreground")}
+                    className={cn(isRight(columns, ci) && "text-right", c.className)}
                   >
                     {c.cell(r)}
                   </TableCell>

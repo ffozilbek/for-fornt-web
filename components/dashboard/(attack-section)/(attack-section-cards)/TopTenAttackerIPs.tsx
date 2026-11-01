@@ -127,7 +127,7 @@ export default function TopTenAttackerIPs({ hours }: { hours: number }) {
                         unoptimized
                       />
                     </TableCell>
-                    <TableCell className="text-right">{attacker.ip}</TableCell>
+                    <TableCell className="text-right font-mono">{attacker.ip}</TableCell>
                     <TableCell className="text-right">
                       {formatNumber(attacker.packets)}
                     </TableCell>

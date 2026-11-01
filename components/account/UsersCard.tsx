@@ -139,17 +139,17 @@ export default function UsersCard() {
                       <TableCell className="font-medium">
                         {start + i + 1}
                       </TableCell>
-                      <TableCell className="font-medium">
-                        {u.username}
+                      <TableCell className="font-semibold">
+{u.username}
                       </TableCell>
                       <TableCell>
                         <RoleBadge role={u.role} />
                       </TableCell>
-                      <TableCell className="text-muted-foreground">
-                        {formatDateTime(u.created_at)}
+                      <TableCell className="text-muted-foreground font-mono text-xs">
+{formatDateTime(u.created_at)}
                       </TableCell>
-                      <TableCell className="text-muted-foreground">
-                        {u.updated_at && u.updated_at !== u.created_at
+                      <TableCell className="text-muted-foreground font-mono text-xs">
+{u.updated_at && u.updated_at !== u.created_at
                           ? formatDateTime(u.updated_at)
                           : "—"}
                       </TableCell>

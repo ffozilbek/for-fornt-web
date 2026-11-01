@@ -76,10 +76,10 @@ export default function PcapFilesTable({ files, stopping, deleting, onStop, onDe
               return (
                 <TableRow key={f.filename}>
                   <TableCell className="font-medium">{start + i + 1}</TableCell>
-                  <TableCell className="max-w-md truncate" title={f.filename}>
+                  <TableCell className="max-w-md truncate font-mono" title={f.filename}>
                     {f.filename}
                   </TableCell>
-                  <TableCell>{f.zone_name}</TableCell>
+                  <TableCell className="font-semibold">{f.zone_name}</TableCell>
                   <TableCell className="text-right">{f.size_human}</TableCell>
                   <TableCell>
                     {f.recording ? (
@@ -91,7 +91,8 @@ export default function PcapFilesTable({ files, stopping, deleting, onStop, onDe
                       <Badge className="bg-green-500/15 text-green-700 dark:text-green-400">{t("misc.ready")}</Badge>
                     )}
                   </TableCell>
-                  <TableCell className="text-muted-foreground">{formatDateTime(f.modified)}</TableCell>
+                  <TableCell className="text-muted-foreground font-mono text-xs">
+{formatDateTime(f.modified)}</TableCell>
                   <TableCell>
                     <div className="flex justify-end gap-1.5">
                       {target && (

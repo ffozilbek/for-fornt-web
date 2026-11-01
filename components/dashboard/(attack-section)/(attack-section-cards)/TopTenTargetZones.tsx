@@ -109,7 +109,7 @@ export default function TopTenTargetZones({ hours }: { hours: number }) {
                     key={i}
                   >
                     <TableCell className="font-medium">{i + 1}</TableCell>
-                    <TableCell>{zone.zone}</TableCell>
+                    <TableCell className="font-semibold">{zone.zone}</TableCell>
                     <TableCell>{zone.incidents}</TableCell>
 
                     <TableCell className="text-right">

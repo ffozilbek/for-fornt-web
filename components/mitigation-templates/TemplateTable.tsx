@@ -243,7 +243,7 @@ export default function TemplateTable() {
                     <TableCell>
                       <button
                         type="button"
-                        className="cursor-pointer font-medium hover:underline"
+                        className="cursor-pointer font-semibold hover:underline"
                         onClick={() => setDialog({ template: tpl })}
                       >
                         {tpl.templateName}
@@ -264,11 +264,11 @@ export default function TemplateTable() {
                         ))}
                       />
                     </TableCell>
-                    <TableCell className="text-muted-foreground">
-                      {tpl.createdAt ? formatDateTime(tpl.createdAt) : "—"}
+                    <TableCell className="text-muted-foreground font-mono text-xs">
+{tpl.createdAt ? formatDateTime(tpl.createdAt) : "—"}
                     </TableCell>
-                    <TableCell className="text-muted-foreground">
-                      {tpl.updatedAt ? formatDateTime(tpl.updatedAt) : "—"}
+                    <TableCell className="text-muted-foreground font-mono text-xs">
+{tpl.updatedAt ? formatDateTime(tpl.updatedAt) : "—"}
                     </TableCell>
                     <TableCell>
                       <div className="flex justify-end gap-1">

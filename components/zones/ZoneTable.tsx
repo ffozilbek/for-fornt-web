@@ -259,7 +259,7 @@ export default function ZoneTable() {
                       <TableCell>
                         <button
                           type="button"
-                          className="cursor-pointer font-medium hover:underline"
+                          className="cursor-pointer font-semibold hover:underline"
                           onClick={() => setDialog({ mode: "edit", zone })}
                         >
                           {zone.zoneName}
@@ -269,7 +269,7 @@ export default function ZoneTable() {
                         <Truncated
                           max={MAX_IPS_SHOWN}
                           items={zone.ips.map((ip) => (
-                            <span key={ip} className="font-mono text-xs">
+                            <span key={ip} className="font-mono">
                               {displayIp(ip)}
                             </span>
                           ))}
@@ -285,11 +285,11 @@ export default function ZoneTable() {
                           ))}
                         />
                       </TableCell>
-                      <TableCell className="text-muted-foreground">
-                        {formatDateTime(zone.createDate)}
+                      <TableCell className="text-muted-foreground font-mono text-xs">
+{formatDateTime(zone.createDate)}
                       </TableCell>
-                      <TableCell className="text-muted-foreground">
-                        {/* hech tahrirlanmagan zonada updatedAt bo'sh yoki createDate bilan bir xil */}
+                      <TableCell className="text-muted-foreground font-mono text-xs">
+{/* hech tahrirlanmagan zonada updatedAt bo'sh yoki createDate bilan bir xil */}
                         {zone.updatedAt && zone.updatedAt !== zone.createDate
                           ? formatDateTime(zone.updatedAt)
                           : "—"}

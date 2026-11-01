@@ -103,7 +103,8 @@ function ServiceRow({ s }: { s: HttpsFloodService }) {
       className={cn(attack && "bg-destructive/5", s.stale && "opacity-60")}
     >
       <TableCell>
-        <b>{s.zone_name}</b> / {s.service_name}
+        <span className="font-semibold">{s.zone_name}</span> /{" "}
+<span className="font-semibold text-amber-500">{s.service_name}</span>
         <Sub>
           {s.zone_ip}:443
           {s.stale && ` · ${t("misc.noTrafficForSecs", { sec: s.age_sec })}`}

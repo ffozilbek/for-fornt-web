@@ -212,7 +212,7 @@ export default function SummaryDetailView({
                       {targetZones.items.map((zone, i) => (
                         <TableRow key={i}>
                           <TableCell className="font-medium">{i + 1}</TableCell>
-                          <TableCell>{zone.name}</TableCell>
+                          <TableCell className="font-semibold">{zone.name}</TableCell>
                           <TableCell>{zone.incidents}</TableCell>
                           <TableCell className="text-right">
                             {formatNumber(zone.packets)}
@@ -252,7 +252,7 @@ export default function SummaryDetailView({
                       {attackerIP.items.map((zone, i) => (
                         <TableRow key={i}>
                           <TableCell className="font-medium">{i + 1}</TableCell>
-                          <TableCell>{zone.name}</TableCell>
+                          <TableCell className="font-mono">{zone.name}</TableCell>
                           <TableCell>{zone.incidents}</TableCell>
                           <TableCell className="text-right">
                             {formatNumber(zone.packets)}
