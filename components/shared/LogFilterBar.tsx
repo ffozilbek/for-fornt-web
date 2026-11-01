@@ -31,6 +31,10 @@ export const DEFAULT_LOG_QUERY: LogQuery = {
   hours: DEFAULT_HOURS,
 };
 
+// ?zone=<nom> bilan ochilganda (zona jadvali amallari) filtr shu zonadan boshlanadi
+export const initialLogQuery = (zone?: string): LogQuery =>
+  zone ? { ...DEFAULT_LOG_QUERY, zone_name: zone } : DEFAULT_LOG_QUERY;
+
 type Props = {
   query: LogQuery;
   onChange: (query: LogQuery) => void;

@@ -6,7 +6,7 @@ import { ShieldAlert, ShieldCheck, ShieldX } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import CustomSkeleton from "@/components/shared/CustomSkeleton";
-import LogFilterBar, { DEFAULT_LOG_QUERY } from "@/components/shared/LogFilterBar";
+import LogFilterBar, { initialLogQuery } from "@/components/shared/LogFilterBar";
 import SelectDisplayType from "@/components/shared/SelectDisplayType";
 import StatCard from "@/components/shared/StatCard";
 import IndicatorPieChart from "@/components/protection-stats/IndicatorPieChart";
@@ -18,9 +18,9 @@ import { formatValue } from "@/lib/statistics";
 import { indicatorLabel, indicatorList, topIndicators } from "@/lib/protection-stats";
 import { protectionStatsService } from "@/service/protection-stats.service";
 
-export default function ProtectionStatistics() {
+export default function ProtectionStatistics({ zone }: { zone?: string }) {
   const { t, i18n } = useTranslation();
-  const [query, setQuery] = useState(DEFAULT_LOG_QUERY);
+  const [query, setQuery] = useState(() => initialLogQuery(zone));
   // kartochkalar birligi; grafiklarda o'z tanlovi bor
   const [type, setType] = useState("pps");
   const { data, isPending, isError, error, refetch, isFetching } = useProtectionStats(query);

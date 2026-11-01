@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import CustomSkeleton from "@/components/shared/CustomSkeleton";
-import LogFilterBar, { DEFAULT_LOG_QUERY } from "@/components/shared/LogFilterBar";
+import LogFilterBar, { initialLogQuery } from "@/components/shared/LogFilterBar";
 import SelectDisplayType from "@/components/shared/SelectDisplayType";
 import StatCard from "@/components/shared/StatCard";
 import StatisticsTrendChart from "@/components/statistics/StatisticsTrendChart";
@@ -27,9 +27,9 @@ import {
 } from "@/lib/statistics";
 import { statisticsService } from "@/service/statistics.service";
 
-export default function GeneralStatistics() {
+export default function GeneralStatistics({ zone }: { zone?: string }) {
   const { t, i18n } = useTranslation();
-  const [query, setQuery] = useState(DEFAULT_LOG_QUERY);
+  const [query, setQuery] = useState(() => initialLogQuery(zone));
   // jami kartochkalar birligi; grafiklarda o'z tanlovi bor
   const [type, setType] = useState("pps");
   const [protocol, setProtocol] = useState("all");

@@ -14,7 +14,7 @@ import {
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import ListPagination, { DEFAULT_PAGE_SIZE } from "@/components/shared/ListPagination";
-import LogFilterBar, { DEFAULT_LOG_QUERY } from "@/components/shared/LogFilterBar";
+import LogFilterBar, { initialLogQuery } from "@/components/shared/LogFilterBar";
 import { useIncidentHistory } from "@/hooks/useIncidents";
 import {
   formatBitrate,
@@ -26,9 +26,9 @@ import {
 import { incidentServiceLabel } from "@/lib/service-label";
 import { incidentsService } from "@/service/incidents.service";
 
-export default function IncidentHistory() {
+export default function IncidentHistory({ zone }: { zone?: string }) {
   const { t, i18n } = useTranslation();
-  const [query, setQuery] = useState(DEFAULT_LOG_QUERY);
+  const [query, setQuery] = useState(() => initialLogQuery(zone));
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
   const { data, isPending, isError, error, refetch, isFetching } =

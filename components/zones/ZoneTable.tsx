@@ -6,7 +6,12 @@ import { useTranslation } from "react-i18next";
 import {
   Activity,
   BarChart3,
+  ClipboardList,
   Copy,
+  LineChart,
+  ShieldHalf,
+  TriangleAlert,
+  VenetianMask,
   Layers3,
   MoreVertical,
   Pencil,
@@ -150,6 +155,10 @@ export default function ZoneTable() {
     });
   };
 
+  // tegishli sahifa shu zona filtri bilan ochiladi (?zone=)
+  const openWithZone = (path: string, zone: Zone) =>
+    router.push(`${path}?zone=${encodeURIComponent(zone.zoneName)}`);
+
   const openRealtime = (zone: Zone) => {
     setDashboardZone(zone.zoneName);
     router.push("/");
@@ -280,7 +289,10 @@ export default function ZoneTable() {
                         {formatDateTime(zone.createDate)}
                       </TableCell>
                       <TableCell className="text-muted-foreground">
-                        {formatDateTime(zone.updatedAt)}
+                        {/* hech tahrirlanmagan zonada updatedAt bo'sh yoki createDate bilan bir xil */}
+                        {zone.updatedAt && zone.updatedAt !== zone.createDate
+                          ? formatDateTime(zone.updatedAt)
+                          : "—"}
                       </TableCell>
                       <TableCell className="text-right">
                         <DropdownMenu>
@@ -310,6 +322,44 @@ export default function ZoneTable() {
                             >
                               <Activity />
                               {t("misc.realTimeStats")}
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                              onClick={() =>
+                                openWithZone("/stats/general-statistics", zone)
+                              }
+                            >
+                              <LineChart />
+                              {t("navigation.generalStatistics")}
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                              onClick={() =>
+                                openWithZone("/logs/incident-logs", zone)
+                              }
+                            >
+                              <TriangleAlert />
+                              {t("navigation.incidentLogs")}
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                              onClick={() =>
+                                openWithZone("/stats/protection-statistics", zone)
+                              }
+                            >
+                              <ShieldHalf />
+                              {t("navigation.protectionStatistics")}
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                              onClick={() =>
+                                openWithZone("/logs/security-logs", zone)
+                              }
+                            >
+                              <VenetianMask />
+                              {t("navigation.securityLogs")}
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                              onClick={() => openWithZone("/logs/audit-logs", zone)}
+                            >
+                              <ClipboardList />
+                              {t("navigation.auditLogs")}
                             </DropdownMenuItem>
                             <DropdownMenuItem
                               onClick={() =>
