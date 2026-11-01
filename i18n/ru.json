@@ -924,5 +924,27 @@
     "deleteDesc": "«{name}» будет удалён безвозвратно.",
     "fileDeleted": "Файл удалён",
     "noFiles": "Pcap-файлы не найдены"
+  },
+  "account": {
+    "account": "Аккаунт",
+    "accountDesc": "Профиль, пароль и пользователи",
+    "oldPassword": "Текущий пароль",
+    "newPassword": "Новый пароль",
+    "confirmPassword": "Подтвердите новый пароль",
+    "allFieldsRequired": "Все поля обязательны",
+    "passwordsDoNotMatch": "Пароли не совпадают",
+    "passwordChanged": "Пароль изменён",
+    "onlySuperAdminCanChangePassword": "Пароль может изменить только Super Admin.",
+    "userCreated": "Пользователь «{name}» создан",
+    "userUpdated": "Пользователь «{name}» обновлён",
+    "userDeleted": "Пользователь «{name}» удалён",
+    "deleteUserTitle": "Удалить пользователя?",
+    "deleteUserDesc": "«{name}» будет удалён и больше не сможет войти.",
+    "add": "Добавить",
+    "changePhoto": "Сменить фото",
+    "uploadPhoto": "Загрузить фото",
+    "removePhoto": "Удалить фото",
+    "photoHint": "JPG, PNG или WebP, до 5 МБ. Хранится только в этом браузере.",
+    "photoInvalid": "Выберите изображение до 5 МБ"
   }
 }

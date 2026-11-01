@@ -924,5 +924,27 @@
     "deleteDesc": "\"{name}\" will be deleted permanently.",
     "fileDeleted": "File deleted",
     "noFiles": "No pcap files found"
+  },
+  "account": {
+    "account": "Account",
+    "accountDesc": "Profile, password and users",
+    "oldPassword": "Current password",
+    "newPassword": "New password",
+    "confirmPassword": "Confirm new password",
+    "allFieldsRequired": "All fields are required",
+    "passwordsDoNotMatch": "Passwords do not match",
+    "passwordChanged": "Password changed",
+    "onlySuperAdminCanChangePassword": "Only the Super Admin can change the password.",
+    "userCreated": "User \"{name}\" created",
+    "userUpdated": "User \"{name}\" updated",
+    "userDeleted": "User \"{name}\" deleted",
+    "deleteUserTitle": "Delete user?",
+    "deleteUserDesc": "\"{name}\" will be deleted and will no longer be able to sign in.",
+    "add": "Add",
+    "changePhoto": "Change photo",
+    "uploadPhoto": "Upload photo",
+    "removePhoto": "Remove photo",
+    "photoHint": "JPG, PNG or WebP, up to 5 MB. Saved only in this browser.",
+    "photoInvalid": "Choose an image file up to 5 MB"
   }
 }

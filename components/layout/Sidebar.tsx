@@ -9,11 +9,10 @@ import {
   BarChart3,
   Zap,
   FileText,
-  Users,
   ChevronRight,
+  UserCog,
   User2,
   ChevronsUpDown,
-  KeySquare,
   LogOut,
 } from "lucide-react";
 import {
@@ -41,18 +40,21 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import { Avatar, AvatarFallback } from "../ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { useTranslation } from "react-i18next";
 import { usePathname } from "next/navigation";
 import { useLogout, useMe } from "@/hooks/useAuth";
+import { useAvatar } from "@/hooks/useAvatar";
 import { useActiveIncidents } from "@/hooks/useIncidents";
 
 export function AppSidebar() {
   const { t } = useTranslation();
   const { data: user } = useMe();
   const logout = useLogout();
+  const [avatar] = useAvatar(user?.username);
   const pathname = usePathname();
   // faol hujumlar soni "Loglar" yonida ko'rsatiladi (0 bo'lsa yashiriladi)
   const activeIncidents = useActiveIncidents().data?.length ?? 0;
@@ -115,7 +117,6 @@ export function AppSidebar() {
       ],
     },
     { title: t("misc.pcapManagement"), url: "/pcap", icon: FileText },
-    { title: t("misc.userManagement"), url: "/user-management", icon: Users },
   ];
 
   return (
@@ -208,7 +209,9 @@ export function AppSidebar() {
                     className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
                   >
                     <Avatar className="h-8 w-8 overflow-hidden">
-                      {/* <AvatarImage src={user.avatar} alt={user.name} /> */}
+                      {avatar && (
+                        <AvatarImage src={avatar} alt={user?.username} className="object-cover" />
+                      )}
                       <AvatarFallback>
                         {user?.username.charAt(0).toUpperCase() ?? "U"}
                       </AvatarFallback>
@@ -243,12 +246,17 @@ export function AppSidebar() {
                 </div>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" side="top" className="w-56">
-                <DropdownMenuItem className="flex items-center justify-between">
-                  <span>{t("auth.changePassword")}</span>
+                {/* akkaunt: profil, parol va (superadmin) foydalanuvchilar boshqaruvi */}
+                <DropdownMenuItem
+                  className="flex items-center justify-between"
+                  render={<Link href="/account" />}
+                >
+                  <span>{t("account.account")}</span>
                   <span>
-                    <KeySquare />
+                    <UserCog />
                   </span>
                 </DropdownMenuItem>
+                <DropdownMenuSeparator />
                 <DropdownMenuItem
                   variant="destructive"
                   className="flex items-center justify-between"

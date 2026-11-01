@@ -924,5 +924,27 @@
     "deleteDesc": "\"{name}\" butunlay o'chiriladi.",
     "fileDeleted": "Fayl o'chirildi",
     "noFiles": "Pcap fayl topilmadi"
+  },
+  "account": {
+    "account": "Akkaunt",
+    "accountDesc": "Profil, parol va foydalanuvchilar",
+    "oldPassword": "Joriy parol",
+    "newPassword": "Yangi parol",
+    "confirmPassword": "Yangi parolni tasdiqlang",
+    "allFieldsRequired": "Barcha maydonlar to'ldirilishi shart",
+    "passwordsDoNotMatch": "Parollar mos kelmadi",
+    "passwordChanged": "Parol o'zgartirildi",
+    "onlySuperAdminCanChangePassword": "Parolni faqat Super Admin o'zgartira oladi.",
+    "userCreated": "\"{name}\" foydalanuvchisi yaratildi",
+    "userUpdated": "\"{name}\" foydalanuvchisi yangilandi",
+    "userDeleted": "\"{name}\" foydalanuvchisi o'chirildi",
+    "deleteUserTitle": "Foydalanuvchi o'chirilsinmi?",
+    "deleteUserDesc": "\"{name}\" o'chiriladi va tizimga kira olmaydi.",
+    "add": "Qo'shish",
+    "changePhoto": "Rasmni almashtirish",
+    "uploadPhoto": "Rasm yuklash",
+    "removePhoto": "Rasmni o'chirish",
+    "photoHint": "JPG, PNG yoki WebP, 5 MB gacha. Faqat shu brauzerda saqlanadi.",
+    "photoInvalid": "5 MB gacha bo'lgan rasm faylini tanlang"
   }
 }

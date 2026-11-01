@@ -1,5 +1,5 @@
 import { api } from "@/lib/api";
-import { AuthResponse, User } from "@/types/auth";
+import { AuthResponse, ChangePasswordPayload, meResponseSchema } from "@/types/auth";
 
 export const authService = {
   // LOGIN
@@ -19,10 +19,14 @@ export const authService = {
   },
 
   // CHECK CURRENT SESSION
-  getCurrentUser: async (): Promise<{ status: string; user: User }> => {
-    const { data } = await api.get<{ status: string; user: User }>(
-      "/api/auth/me",
-    );
+  getCurrentUser: async () => {
+    const { data } = await api.get("/api/auth/me");
+    return meResponseSchema.parse(data);
+  },
+
+  // faqat superadmin; boshqalarga backend 403 qaytaradi
+  changePassword: async (body: ChangePasswordPayload) => {
+    const { data } = await api.post<{ message?: string }>("/api/auth/change-password", body);
     return data;
   },
 };
