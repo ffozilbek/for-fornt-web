@@ -7,6 +7,7 @@ import {
   LogQuery,
 } from "@/types/dashboard";
 import type { TcpHistoryRange } from "@/lib/tcp-indicators";
+import type { FlowParams, GroupBy } from "@/lib/flow-log";
 
 export const queryKeys = {
   auth: { me: ["auth", "me"] as const },
@@ -42,6 +43,14 @@ export const queryKeys = {
       ["tcp-indicators", "history", zone, service, range] as const,
     baseline: (zone: string, service: string, mode: string) =>
       ["tcp-indicators", "baseline", zone, service, mode] as const,
+  },
+  flowLog: {
+    status: ["flow-log", "status"] as const,
+    retention: ["flow-log", "retention"] as const,
+    flows: (p: FlowParams) => ["flow-log", "flows", p] as const,
+    groups: (p: FlowParams, by: GroupBy | "") => ["flow-log", "groups", by, p] as const,
+    mitigation: (p: FlowParams, by: GroupBy) => ["flow-log", "mitigation", by, p] as const,
+    series: (p: FlowParams, by: GroupBy, key: string) => ["flow-log", "series", by, key, p] as const,
   },
   httpsFlood: {
     status: ["https-flood", "status"] as const,

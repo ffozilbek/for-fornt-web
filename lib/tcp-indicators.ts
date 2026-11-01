@@ -149,8 +149,10 @@ export type DomPart = { label: PartKey; val: string; mu: number; w: number };
 type Parts = { dom: number; parts: DomPart[] };
 
 // Mijoz DoM va har belgi hissasi (tushuntirish uchun). winSec flow tezligini
-// normallaydi — 1s/5s/10s/15s oynalar solishtiriladigan bo'ladi
-function clientParts(d: TcpRecord, winSec: number, b: Baseline): Parts {
+// normallaydi — 1s/5s/10s/15s oynalar solishtiriladigan bo'ladi.
+// perIp — yozuv bitta IP'niki (flow log, src IP bo'yicha guruh): Flows/IP
+// flowlar sonining o'zi bo'lib qoladi, shuning uchun xulosadan chiqariladi
+function clientParts(d: TcpRecord, winSec: number, b: Baseline, perIp = false): Parts {
   winSec = Math.max(1, winSec || 1);
   const total = csum(d);
   const ackdata =
@@ -165,13 +167,14 @@ function clientParts(d: TcpRecord, winSec: number, b: Baseline): Parts {
     { label: "flagDistribution", val: `fit ${Math.round(distMu * 100)}%`, mu: distMu, w: WEIGHTS.dist },
     { label: "zeroWindowACK", val: `${(xZw * 100).toFixed(1)}%`, mu: mfZ(xZw, b.zw.theta), w: WEIGHTS.zw },
     { label: "dropRatio", val: `${(xDr * 100).toFixed(1)}%`, mu: mfZ(xDr, b.drop.theta), w: WEIGHTS.drop },
-    {
+  ];
+  if (!perIp)
+    parts.push({
       label: "flowsIP",
       val: xFi.toFixed(1),
       mu: b.learned ? mfGauss(xFi, b.fi.mean, b.fi.std) : mfZ(xFi, STATIC_THRESH.fi),
       w: WEIGHTS.fi,
-    },
-  ];
+    });
   if (b.learned) {
     const xFr = flows / winSec;
     parts.push({ label: "flowRate", val: `${Math.round(xFr)}/s`, mu: mfZ(xFr, b.flowrate.theta), w: WEIGHTS.flowrate });
@@ -229,7 +232,13 @@ function pick(wins: Win[], partsFn: (a: TcpRecord, w: number) => Parts): DomSide
 
 // Taqsimot grafiklari va DoM oyna bo'yicha (faqat oxirgi soniya emas).
 // live — rolling buferdan 1/5/10/15s oynalar; tarix — butun yuklangan oraliq
-export function computeDoM(points: TcpPoint[], live: boolean, histWinSec: number, b: Baseline): DomView | null {
+export function computeDoM(
+  points: TcpPoint[],
+  live: boolean,
+  histWinSec: number,
+  b: Baseline,
+  perIp = false,
+): DomView | null {
   if (!points.length) return null;
 
   // taqsimot: live — oxirgi 10s, tarix — butun oraliq
@@ -241,7 +250,7 @@ export function computeDoM(points: TcpPoint[], live: boolean, histWinSec: number
     : [{ label: "window", w: Math.max(1, histWinSec || points.length), a: distAgg }];
   const cWins = wins.map((x) => ({ ...x, n: csum(x.a) }));
   const sWins = wins.map((x) => ({ ...x, n: ssum(x.a) }));
-  const cFn = (a: TcpRecord, w: number) => clientParts(a, w, b);
+  const cFn = (a: TcpRecord, w: number) => clientParts(a, w, b, perIp);
   const sFn = (a: TcpRecord) => serverParts(a, b);
 
   return {

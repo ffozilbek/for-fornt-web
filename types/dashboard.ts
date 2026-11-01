@@ -669,3 +669,115 @@ export const tcpBaselineResponseSchema = z.object({
 
 export type TcpRecord = z.infer<typeof tcpRecordSchema>;
 export type TcpBaselineResponse = z.infer<typeof tcpBaselineResponseSchema>;
+
+// /api/flowlog/* — har bir TCP/TLS flow yozuvi (JA4 / JA4T / SNI, flag va TLS
+// record hisoblagichlari). Hisoblagichlar (c_*, s_*, zero_window, dropped ...)
+// looseObject ichida keladi va lib/flow-log.ts dagi num() bilan o'qiladi
+const str = z.string().catch("");
+const int = z.number().catch(0);
+
+// GET /api/flowlog/status — C dasturidagi faol yozuv slotlari.
+// service_idx < 0 — zonadagi barcha servislar; mode: 0 full, 1 sample, 2 new
+export const flowLogSlotSchema = z.looseObject({
+  zone_idx: z.number(),
+  service_idx: z.number(),
+  mode: int,
+  sample_rate: int,
+});
+
+export const flowLogStatusSchema = z.looseObject({
+  status: z.string().optional(),
+  msg: z.string().optional(),
+  slots: z.array(flowLogSlotSchema).catch([]),
+});
+
+// start / stop / retention / baseline javoblari: status + ixtiyoriy msg
+export const flowLogActionSchema = z.looseObject({
+  status: z.string(),
+  msg: z.string().optional(),
+  days: z.number().optional(),
+  baseline: z.looseObject({ samples: z.number().catch(0) }).optional(),
+});
+
+export const flowRowSchema = z.looseObject({
+  ts: int,
+  zone_name: str,
+  service_name: str,
+  src_ip: str,
+  src_port: int,
+  dst_ip: str,
+  dst_port: int,
+  ja4: str,
+  ja4t: str,
+  sni: str,
+  duration_ms: int,
+  fwd_bytes: int,
+  fwd_pkts: int,
+  bwd_bytes: int,
+  bwd_pkts: int,
+  end_reason: str,
+  country: str,
+});
+
+// GET /api/flowlog/query — total: LIMIT'siz umumiy son
+export const flowQueryResponseSchema = z.object({
+  total: int,
+  rows: z.array(flowRowSchema),
+});
+
+// GET /api/flowlog/group — key bo'yicha yig'indilar (by: ip | ja4 | ja4t | country)
+export const flowGroupRowSchema = z.looseObject({
+  key: str,
+  flows: int,
+  src_ips: int,
+  ja4s: int,
+  ja4ts: int,
+  tls_flows: int,
+  countries: int,
+  snis: z.array(z.string()).catch([]),
+  fwd_bytes: int,
+  bwd_bytes: int,
+  fwd_pkts: int,
+  bwd_pkts: int,
+  country: str,
+  last_ts: int,
+});
+
+export const flowGroupResponseSchema = z.object({
+  total: int,
+  rows: z.array(flowGroupRowSchema),
+});
+
+// GET /api/flowlog/group/series — bitta key uchun vaqt bo'yicha (bts — epoch sek)
+export const flowSeriesResponseSchema = z.object({
+  bucket_sec: z.number().catch(1),
+  rows: z.array(z.record(z.string(), z.number())).catch([]),
+});
+
+// GET /api/flowlog/mitigation — saqlangan "normal" baseline'ga nisbatan
+// 1/5/10/15/60s oynalarda FIS (DoA) bahosi; faqat suspect/attack qaytadi
+export const flowMitigationRowSchema = z.object({
+  key: str,
+  country: str,
+  uips: int,
+  score: int,
+  verdict: z.enum(["attack", "suspect", "normal"]).catch("suspect"),
+  attack_type: str,
+  window: str,
+  peak_ts: int,
+  peak_flows: int,
+  flow_rate: int,
+  drivers: z.array(z.object({ feature: str, val: str, mu: int })).catch([]),
+  dofs: z.array(z.object({ attack: str, dof: int })).catch([]),
+});
+
+export const flowMitigationResponseSchema = z.object({
+  baseline_loaded: z.boolean().catch(true),
+  count: int,
+  candidates: z.array(flowMitigationRowSchema),
+});
+
+export type FlowLogSlot = z.infer<typeof flowLogSlotSchema>;
+export type FlowRow = z.infer<typeof flowRowSchema>;
+export type FlowGroupRow = z.infer<typeof flowGroupRowSchema>;
+export type FlowMitigationRow = z.infer<typeof flowMitigationRowSchema>;
