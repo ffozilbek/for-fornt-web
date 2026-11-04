@@ -46,7 +46,7 @@ export default function TopTenAttackerIPs({ hours }: { hours: number }) {
       </Alert>
     );
 
-  const topAttackers = data.top_attackers.slice(0, 9);
+  const topAttackers = data.top_attackers.slice(0, 10);
   let totalPackets = 0;
 
   const chartConfig = Object.fromEntries(
@@ -127,7 +127,9 @@ export default function TopTenAttackerIPs({ hours }: { hours: number }) {
                         unoptimized
                       />
                     </TableCell>
-                    <TableCell className="text-right font-mono">{attacker.ip}</TableCell>
+                    <TableCell className="text-right font-mono">
+                      {attacker.ip}
+                    </TableCell>
                     <TableCell className="text-right">
                       {formatNumber(attacker.packets)}
                     </TableCell>

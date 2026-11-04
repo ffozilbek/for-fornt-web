@@ -46,7 +46,7 @@ export default function TopTenCounrty({ hours }: { hours: number }) {
       </Alert>
     );
 
-  const topCountries = data.top_countries.slice(0, 9);
+  const topCountries = data.top_countries.slice(0, 10);
   let totalPackets = 0;
 
   // console.log(topCountries);

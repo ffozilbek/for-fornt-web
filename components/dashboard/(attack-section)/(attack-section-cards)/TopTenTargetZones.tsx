@@ -45,7 +45,7 @@ export default function TopTenTargetZones({ hours }: { hours: number }) {
       </Alert>
     );
 
-  const topTenTargetZones = data.top_zones.slice(0, 9);
+  const topTenTargetZones = data.top_zones.slice(0, 10);
   let totalPackets = 0;
 
   const chartConfig = Object.fromEntries(
