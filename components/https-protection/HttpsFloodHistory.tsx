@@ -215,11 +215,12 @@ export default function HttpsFloodHistory() {
                 <TableRow
                   key={`${a.src_ip}-${a.zone_name}-${a.service_name}-${a.started}`}
                 >
-                  <TableCell className="text-muted-foreground">
-                    {formatDateTime(a.started)}
+                  <TableCell className="text-muted-foreground font-mono text-xs">
+{formatDateTime(a.started)}
                   </TableCell>
                   <TableCell>
-                    <b>{a.zone_name}</b> / {a.service_name}
+                    <span className="font-semibold">{a.zone_name}</span> /{" "}
+<span className="font-semibold text-amber-500">{a.service_name}</span>
                   </TableCell>
                   <TableCell>
                     <Badge variant="outline" className="font-mono">
@@ -229,8 +230,8 @@ export default function HttpsFloodHistory() {
                   <TableCell>{a.suspect_requests.toLocaleString()}</TableCell>
                   <TableCell>{a.avg_rps}</TableCell>
                   <TableCell>{fmtDuration(a.duration)}</TableCell>
-                  <TableCell className="text-muted-foreground">
-                    {formatDateTime(a.finished)}
+                  <TableCell className="text-muted-foreground font-mono text-xs">
+{formatDateTime(a.finished)}
                   </TableCell>
                 </TableRow>
               ))

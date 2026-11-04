@@ -7,13 +7,14 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import CustomSkeleton from "@/components/shared/CustomSkeleton";
-import LogFilterBar, { DEFAULT_LOG_QUERY } from "@/components/shared/LogFilterBar";
+import LogFilterBar, { initialLogQuery } from "@/components/shared/LogFilterBar";
 import SelectDisplayType from "@/components/shared/SelectDisplayType";
 import StatCard from "@/components/shared/StatCard";
 import StatisticsTrendChart from "@/components/statistics/StatisticsTrendChart";
 import ProtocolBreakdownCard from "@/components/statistics/ProtocolBreakdownCard";
 import DroppedByProtocolChart from "@/components/statistics/DroppedByProtocolChart";
 import { useServices } from "@/hooks/useDashboard";
+import { SERVICE_NONE, SERVICE_RESPONSE } from "@/lib/constants";
 import { useStatistics } from "@/hooks/useStatistics";
 import {
   bucketLabel,
@@ -26,9 +27,9 @@ import {
 } from "@/lib/statistics";
 import { statisticsService } from "@/service/statistics.service";
 
-export default function GeneralStatistics() {
+export default function GeneralStatistics({ zone }: { zone?: string }) {
   const { t, i18n } = useTranslation();
-  const [query, setQuery] = useState(DEFAULT_LOG_QUERY);
+  const [query, setQuery] = useState(() => initialLogQuery(zone));
   // jami kartochkalar birligi; grafiklarda o'z tanlovi bor
   const [type, setType] = useState("pps");
   const [protocol, setProtocol] = useState("all");
@@ -111,7 +112,7 @@ export default function GeneralStatistics() {
             onExport={(k) => {
               window.location.href = statisticsService.exportUrl(k, query, svcProto, i18n.language);
             }}
-            virtualServices
+            virtualServices={[SERVICE_NONE, SERVICE_RESPONSE]}
             extra={<SelectDisplayType value={type} onChange={setType} />}
           />
         </CardContent>

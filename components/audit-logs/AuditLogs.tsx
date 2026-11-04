@@ -6,11 +6,12 @@ import LogsCard from "@/components/shared/LogsCard";
 import { useAuditLogs } from "@/hooks/useAuditLogs";
 import { auditLogsService } from "@/service/audit-logs.service";
 
-export default function AuditLogs() {
+export default function AuditLogs({ zone }: { zone?: string }) {
   const { t } = useTranslation();
 
   return (
     <LogsCard
+      zone={zone}
       title={t("navigation.auditLogs")}
       description={t("navigation.auditLogsHistoryForZonesAndServices")}
       icon={FileClock}

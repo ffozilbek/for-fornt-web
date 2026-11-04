@@ -7,7 +7,6 @@ export const useMe = () =>
   useQuery({
     queryKey: queryKeys.auth.me,
     queryFn: authService.getCurrentUser,
-    select: (res) => res.user,
     retry: false,
     staleTime: 5 * 60_000,
   });
@@ -32,3 +31,6 @@ export const useLogout = () => {
     },
   });
 };
+
+export const useChangePassword = () =>
+  useMutation({ mutationFn: authService.changePassword });

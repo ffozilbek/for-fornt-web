@@ -6,7 +6,12 @@ import { useTranslation } from "react-i18next";
 import {
   Activity,
   BarChart3,
+  ClipboardList,
   Copy,
+  LineChart,
+  ShieldHalf,
+  TriangleAlert,
+  VenetianMask,
   Layers3,
   MoreVertical,
   Pencil,
@@ -150,6 +155,10 @@ export default function ZoneTable() {
     });
   };
 
+  // tegishli sahifa shu zona filtri bilan ochiladi (?zone=)
+  const openWithZone = (path: string, zone: Zone) =>
+    router.push(`${path}?zone=${encodeURIComponent(zone.zoneName)}`);
+
   const openRealtime = (zone: Zone) => {
     setDashboardZone(zone.zoneName);
     router.push("/");
@@ -250,7 +259,7 @@ export default function ZoneTable() {
                       <TableCell>
                         <button
                           type="button"
-                          className="cursor-pointer font-medium hover:underline"
+                          className="cursor-pointer font-semibold hover:underline"
                           onClick={() => setDialog({ mode: "edit", zone })}
                         >
                           {zone.zoneName}
@@ -260,7 +269,7 @@ export default function ZoneTable() {
                         <Truncated
                           max={MAX_IPS_SHOWN}
                           items={zone.ips.map((ip) => (
-                            <span key={ip} className="font-mono text-xs">
+                            <span key={ip} className="font-mono">
                               {displayIp(ip)}
                             </span>
                           ))}
@@ -276,11 +285,14 @@ export default function ZoneTable() {
                           ))}
                         />
                       </TableCell>
-                      <TableCell className="text-muted-foreground">
-                        {formatDateTime(zone.createDate)}
+                      <TableCell className="text-muted-foreground font-mono text-xs">
+{formatDateTime(zone.createDate)}
                       </TableCell>
-                      <TableCell className="text-muted-foreground">
-                        {formatDateTime(zone.updatedAt)}
+                      <TableCell className="text-muted-foreground font-mono text-xs">
+{/* hech tahrirlanmagan zonada updatedAt bo'sh yoki createDate bilan bir xil */}
+                        {zone.updatedAt && zone.updatedAt !== zone.createDate
+                          ? formatDateTime(zone.updatedAt)
+                          : "—"}
                       </TableCell>
                       <TableCell className="text-right">
                         <DropdownMenu>
@@ -310,6 +322,44 @@ export default function ZoneTable() {
                             >
                               <Activity />
                               {t("misc.realTimeStats")}
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                              onClick={() =>
+                                openWithZone("/stats/general-statistics", zone)
+                              }
+                            >
+                              <LineChart />
+                              {t("navigation.generalStatistics")}
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                              onClick={() =>
+                                openWithZone("/logs/incident-logs", zone)
+                              }
+                            >
+                              <TriangleAlert />
+                              {t("navigation.incidentLogs")}
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                              onClick={() =>
+                                openWithZone("/stats/protection-statistics", zone)
+                              }
+                            >
+                              <ShieldHalf />
+                              {t("navigation.protectionStatistics")}
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                              onClick={() =>
+                                openWithZone("/logs/security-logs", zone)
+                              }
+                            >
+                              <VenetianMask />
+                              {t("navigation.securityLogs")}
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                              onClick={() => openWithZone("/logs/audit-logs", zone)}
+                            >
+                              <ClipboardList />
+                              {t("navigation.auditLogs")}
                             </DropdownMenuItem>
                             <DropdownMenuItem
                               onClick={() =>

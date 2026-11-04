@@ -72,8 +72,14 @@ type DialogState = { template?: MitigationTemplate } | null;
 
 export default function TemplateTable() {
   const { t } = useTranslation();
-  const { data: templates, isPending, isError, error, refetch, isFetching } =
-    useMitigationTemplates();
+  const {
+    data: templates,
+    isPending,
+    isError,
+    error,
+    refetch,
+    isFetching,
+  } = useMitigationTemplates();
   const deleteTemplate = useDeleteTemplate();
 
   const [search, setSearch] = useState("");
@@ -243,7 +249,7 @@ export default function TemplateTable() {
                     <TableCell>
                       <button
                         type="button"
-                        className="cursor-pointer font-medium hover:underline"
+                        className="cursor-pointer font-semibold hover:underline"
                         onClick={() => setDialog({ template: tpl })}
                       >
                         {tpl.templateName}
@@ -264,10 +270,10 @@ export default function TemplateTable() {
                         ))}
                       />
                     </TableCell>
-                    <TableCell className="text-muted-foreground">
+                    <TableCell className="text-muted-foreground font-mono text-xs">
                       {tpl.createdAt ? formatDateTime(tpl.createdAt) : "—"}
                     </TableCell>
-                    <TableCell className="text-muted-foreground">
+                    <TableCell className="text-muted-foreground font-mono text-xs">
                       {tpl.updatedAt ? formatDateTime(tpl.updatedAt) : "—"}
                     </TableCell>
                     <TableCell>

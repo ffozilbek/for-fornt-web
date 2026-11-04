@@ -45,7 +45,7 @@ export default function TopTenAttackTypes({ hours }: { hours: number }) {
       </Alert>
     );
 
-  const topTenAttackTypes = data.attack_types.slice(0, 9);
+  const topTenAttackTypes = data.attack_types.slice(0, 10);
   let totalPackets = 0;
 
   //   console.log(topTenAttackTypes);

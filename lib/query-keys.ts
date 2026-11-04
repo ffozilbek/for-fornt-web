@@ -6,6 +6,8 @@ import {
   IncidentHistoryQuery,
   LogQuery,
 } from "@/types/dashboard";
+import type { TcpHistoryRange } from "@/lib/tcp-indicators";
+import type { FlowParams, GroupBy } from "@/lib/flow-log";
 
 export const queryKeys = {
   auth: { me: ["auth", "me"] as const },
@@ -33,6 +35,29 @@ export const queryKeys = {
   securityLogs: (q: LogQuery) => ["security-logs", q] as const,
   auditLogs: (q: LogQuery) => ["audit-logs", q] as const,
   statistics: (q: LogQuery) => ["statistics", q] as const,
+  protectionStats: (q: LogQuery) => ["protection-stats", q] as const,
+  tcpIndicators: {
+    live: (zone: string, service: string) =>
+      ["tcp-indicators", "live", zone, service] as const,
+    history: (zone: string, service: string, range: TcpHistoryRange | null) =>
+      ["tcp-indicators", "history", zone, service, range] as const,
+    baseline: (zone: string, service: string, mode: string) =>
+      ["tcp-indicators", "baseline", zone, service, mode] as const,
+  },
+  flowLog: {
+    status: ["flow-log", "status"] as const,
+    retention: ["flow-log", "retention"] as const,
+    flows: (p: FlowParams) => ["flow-log", "flows", p] as const,
+    groups: (p: FlowParams, by: GroupBy | "") => ["flow-log", "groups", by, p] as const,
+    mitigation: (p: FlowParams, by: GroupBy) => ["flow-log", "mitigation", by, p] as const,
+    series: (p: FlowParams, by: GroupBy, key: string) => ["flow-log", "series", by, key, p] as const,
+  },
+  users: ["users"] as const,
+  pcap: {
+    all: ["pcap"] as const,
+    status: ["pcap", "status"] as const,
+    files: (p: Record<string, string>) => ["pcap", "files", p] as const,
+  },
   httpsFlood: {
     status: ["https-flood", "status"] as const,
     history: (q: HttpsFloodHistoryQuery) =>

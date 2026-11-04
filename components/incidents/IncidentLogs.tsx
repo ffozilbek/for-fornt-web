@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { History, Siren } from "lucide-react";
 import {
@@ -17,10 +18,14 @@ import IncidentHistory from "./IncidentHistory";
 
 const TABS = ["active", "history"] as const;
 
-export default function IncidentLogs() {
+export default function IncidentLogs({ zone }: { zone?: string }) {
   const { t } = useTranslation();
   // tanlangan tab refreshdan keyin ham saqlanadi
   const [tab, setTab] = usePersistedState("incidents.tab", "active", TABS);
+  // zona jadvalidan (?zone=) kelinganda — o'sha zonaning o'tgan hujumlari
+  useEffect(() => {
+    if (zone) setTab("history");
+  }, [zone, setTab]);
   const active = useActiveIncidents();
   const activeCount = active.data?.length ?? 0;
 
@@ -58,7 +63,7 @@ export default function IncidentLogs() {
         </CardAction>
       </CardHeader>
       <CardContent>
-        {tab === "active" ? <ActiveIncidents /> : <IncidentHistory />}
+        {tab === "active" ? <ActiveIncidents /> : <IncidentHistory zone={zone} />}
       </CardContent>
     </Card>
   );

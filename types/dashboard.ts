@@ -211,7 +211,17 @@ export const summaryDetailSchema = z.object({
           }),
         )
         .optional(),
-      indicators: z.array(z.any()).optional(),
+      // eng ko'p tashlagan 10 ta indikator; raw — DB'dagi protection_name
+      indicators: z
+        .array(
+          z.object({
+            name: z.string(),
+            raw: z.string(),
+            packets: z.number(),
+            bytes: z.number(),
+          }),
+        )
+        .optional(),
     })
     .optional(),
 });
@@ -607,3 +617,226 @@ export const statisticsResponseSchema = z.object({
 
 export type ProtoTraffic = z.infer<typeof protoTrafficSchema>;
 export type StatisticsResponse = z.infer<typeof statisticsResponseSchema>;
+
+// GET /api/protection-statistics — himoya indikatorlari bo'yicha drop'lar.
+// by_attack kaliti — DB'dagi protection_name (lib/protection-stats.ts)
+const indicatorDropsSchema = z.object({
+  dropped_count: z.number(),
+  dropped_byte: z.number(),
+});
+
+export const protectionStatsResponseSchema = z.object({
+  bucket_minutes: z.number(),
+  range_minutes: z.number(),
+  summary: z.object({
+    total_dropped_count: z.number(),
+    total_dropped_byte: z.number(),
+    by_attack: z.record(z.string(), indicatorDropsSchema),
+  }),
+});
+
+export type IndicatorDrops = z.infer<typeof indicatorDropsSchema>;
+export type ProtectionStatsResponse = z.infer<typeof protectionStatsResponseSchema>;
+
+// /api/tcp-indicators* — TCP servis indikatorlari (soniyalik hisoblagichlar).
+// Maydonlar: c_* — mijoz -> servis, s_* — servis -> mijoz flaglari,
+// c_bytes/s_bytes, unique_src_ips/flows, dropped, zero_window (lib/tcp-indicators.ts)
+const tcpRecordSchema = z.record(z.string(), z.number());
+
+// GET /api/tcp-indicators — oxirgi yakunlangan soniya (tanlov bo'yicha yig'indi)
+export const tcpLiveResponseSchema = z.object({
+  time: z.number(),
+  data: tcpRecordSchema,
+});
+
+// GET /api/tcp-indicators/history — ClickHouse'dan, bucket_sec oralig'ida
+// o'rtacha (pps) qiymatlar; series[field][i] — times[i] (epoch sek) uchun
+export const tcpHistoryResponseSchema = z.object({
+  bucket_sec: z.number(),
+  times: z.array(z.number()),
+  series: z.record(z.string(), z.array(z.number())),
+});
+
+const meanStdSchema = z.object({ mean: z.number(), std: z.number() });
+
+// GET /api/tcp-indicators/baseline — o'rganilgan flag taqsimoti (ulushlar,
+// [SYN, SYN-ACK, ACK, Data, RST, FIN-ACK]) va mijoz ko'rsatkichlari statistikasi
+export const tcpBaselineResponseSchema = z.object({
+  samples: z.number(),
+  vectors: z.object({ client: z.array(z.number()), server: z.array(z.number()) }),
+  client_stats: z.record(z.string(), meanStdSchema),
+});
+
+export type TcpRecord = z.infer<typeof tcpRecordSchema>;
+export type TcpBaselineResponse = z.infer<typeof tcpBaselineResponseSchema>;
+
+// /api/flowlog/* — har bir TCP/TLS flow yozuvi (JA4 / JA4T / SNI, flag va TLS
+// record hisoblagichlari). Hisoblagichlar (c_*, s_*, zero_window, dropped ...)
+// looseObject ichida keladi va lib/flow-log.ts dagi num() bilan o'qiladi
+const str = z.string().catch("");
+const int = z.number().catch(0);
+
+// GET /api/flowlog/status — C dasturidagi faol yozuv slotlari.
+// service_idx < 0 — zonadagi barcha servislar; mode: 0 full, 1 sample, 2 new
+export const flowLogSlotSchema = z.looseObject({
+  zone_idx: z.number(),
+  service_idx: z.number(),
+  mode: int,
+  sample_rate: int,
+});
+
+export const flowLogStatusSchema = z.looseObject({
+  status: z.string().optional(),
+  msg: z.string().optional(),
+  slots: z.array(flowLogSlotSchema).catch([]),
+});
+
+// start / stop / retention / baseline javoblari: status + ixtiyoriy msg
+export const flowLogActionSchema = z.looseObject({
+  status: z.string(),
+  msg: z.string().optional(),
+  days: z.number().optional(),
+  baseline: z.looseObject({ samples: z.number().catch(0) }).optional(),
+});
+
+export const flowRowSchema = z.looseObject({
+  ts: int,
+  zone_name: str,
+  service_name: str,
+  src_ip: str,
+  src_port: int,
+  dst_ip: str,
+  dst_port: int,
+  ja4: str,
+  ja4t: str,
+  sni: str,
+  duration_ms: int,
+  fwd_bytes: int,
+  fwd_pkts: int,
+  bwd_bytes: int,
+  bwd_pkts: int,
+  end_reason: str,
+  country: str,
+});
+
+// GET /api/flowlog/query — total: LIMIT'siz umumiy son
+export const flowQueryResponseSchema = z.object({
+  total: int,
+  rows: z.array(flowRowSchema),
+});
+
+// GET /api/flowlog/group — key bo'yicha yig'indilar (by: ip | ja4 | ja4t | country)
+export const flowGroupRowSchema = z.looseObject({
+  key: str,
+  flows: int,
+  src_ips: int,
+  ja4s: int,
+  ja4ts: int,
+  tls_flows: int,
+  countries: int,
+  snis: z.array(z.string()).catch([]),
+  fwd_bytes: int,
+  bwd_bytes: int,
+  fwd_pkts: int,
+  bwd_pkts: int,
+  country: str,
+  last_ts: int,
+});
+
+export const flowGroupResponseSchema = z.object({
+  total: int,
+  rows: z.array(flowGroupRowSchema),
+});
+
+// GET /api/flowlog/group/series — bitta key uchun vaqt bo'yicha (bts — epoch sek)
+export const flowSeriesResponseSchema = z.object({
+  bucket_sec: z.number().catch(1),
+  rows: z.array(z.record(z.string(), z.number())).catch([]),
+});
+
+// GET /api/flowlog/mitigation — saqlangan "normal" baseline'ga nisbatan
+// 1/5/10/15/60s oynalarda FIS (DoA) bahosi; faqat suspect/attack qaytadi
+export const flowMitigationRowSchema = z.object({
+  key: str,
+  country: str,
+  uips: int,
+  score: int,
+  verdict: z.enum(["attack", "suspect", "normal"]).catch("suspect"),
+  attack_type: str,
+  window: str,
+  peak_ts: int,
+  peak_flows: int,
+  flow_rate: int,
+  drivers: z.array(z.object({ feature: str, val: str, mu: int })).catch([]),
+  dofs: z.array(z.object({ attack: str, dof: int })).catch([]),
+});
+
+export const flowMitigationResponseSchema = z.object({
+  baseline_loaded: z.boolean().catch(true),
+  count: int,
+  candidates: z.array(flowMitigationRowSchema),
+});
+
+export type FlowLogSlot = z.infer<typeof flowLogSlotSchema>;
+export type FlowRow = z.infer<typeof flowRowSchema>;
+export type FlowGroupRow = z.infer<typeof flowGroupRowSchema>;
+export type FlowMitigationRow = z.infer<typeof flowMitigationRowSchema>;
+
+// /api/pcap/* — zona/servis bo'yicha paketlarni pcapng faylga yozish.
+// kind (C pcap_kind_t): 0 dropped, 1 incoming, 2 passed, 3 zoneall
+export const pcapCaptureSchema = z.looseObject({
+  zone_idx: z.number(),
+  service_idx: z.number(),
+  kind: z.number(),
+  kind_name: z.string().optional(),
+  current_size: int,
+  max_size: int,
+  max_files: int,
+  file_count: int,
+  part_idx: int,
+  auto_stop: int,
+  filename: str,
+});
+
+// GET /api/pcap/status — faol yozuvlar (zones) va disk holati; disk 1 GB'dan
+// kam bo'lsa backend barcha yozuvlarni o'zi to'xtatadi (low_disk)
+export const pcapStatusSchema = z.looseObject({
+  status: z.string(),
+  msg: z.string().optional(),
+  zones: z.array(pcapCaptureSchema).catch([]),
+  low_disk: z.boolean().catch(false),
+  free_human: z.string().catch(""),
+});
+
+// GET /api/pcap/files — fayllar (eng yangisi boshida). Yozilayotgan faylda
+// zone_idx/service_idx/kind_id bo'lsa — uni shu yerdan to'xtatish mumkin
+export const pcapFileSchema = z.looseObject({
+  filename: z.string(),
+  zone_name: str,
+  kind: str,
+  service: str,
+  size: int,
+  size_human: str,
+  recording: z.boolean().catch(false),
+  modified: str,
+  zone_idx: z.number().optional(),
+  service_idx: z.number().optional(),
+  kind_id: z.number().optional(),
+});
+
+export const pcapFilesResponseSchema = z.looseObject({
+  status: z.string(),
+  msg: z.string().optional(),
+  files: z.array(pcapFileSchema).catch([]),
+});
+
+// start / stop / delete javobi
+export const pcapActionSchema = z.looseObject({
+  status: z.string(),
+  msg: z.string().optional(),
+  filename: z.string().optional(),
+});
+
+export type PcapCapture = z.infer<typeof pcapCaptureSchema>;
+export type PcapStatus = z.infer<typeof pcapStatusSchema>;
+export type PcapFile = z.infer<typeof pcapFileSchema>;

@@ -11,6 +11,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import type { TFunction } from "i18next";
 import { useTranslation } from "react-i18next";
 
 // Segment -> chiroyli nom (ixtiyoriy)
@@ -20,7 +21,8 @@ const labels: Record<string, string> = {
   users: "Foydalanuvchilar",
 };
 
-function formatSegment(segment: string) {
+function formatSegment(segment: string, t: TFunction) {
+  if (segment === "account") return t("account.account");
   if (labels[segment]) return labels[segment];
   const text = decodeURIComponent(segment).replace(/-/g, " ");
   return text.charAt(0).toUpperCase() + text.slice(1);
@@ -50,13 +52,13 @@ export function DynamicBreadcrumb() {
               <BreadcrumbItem>
                 {isLast ? (
                   <BreadcrumbPage className="cursor-pointer">
-                    {formatSegment(segment)}
+                    {formatSegment(segment, t)}
                   </BreadcrumbPage>
                 ) : (
                   <BreadcrumbLink
                     render={
                       <div className="cursor-pointer">
-                        {formatSegment(segment)}
+                        {formatSegment(segment, t)}
                       </div>
                     }
                   ></BreadcrumbLink>

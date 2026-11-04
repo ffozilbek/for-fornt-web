@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/table";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import ListPagination, { DEFAULT_PAGE_SIZE } from "@/components/shared/ListPagination";
-import LogFilterBar, { DEFAULT_LOG_QUERY } from "@/components/shared/LogFilterBar";
+import LogFilterBar, { initialLogQuery } from "@/components/shared/LogFilterBar";
 import { formatDateTime } from "@/lib/format";
 import { formatServiceName } from "@/lib/service-label";
 import { LogQuery, SecurityLog } from "@/types/dashboard";
@@ -35,6 +35,8 @@ type Props = {
   exportUrl: (kind: "csv" | "pdf", query: LogQuery, lang: string) => string;
   loadingText: string;
   empty: { icon: LucideIcon; iconClassName: string; title: string; hint: string };
+  // boshlang'ich zona filtri (?zone=)
+  zone?: string;
 };
 
 // Xavfsizlik va audit loglari uchun umumiy karta: filtr paneli,
@@ -47,9 +49,10 @@ export default function LogsCard({
   exportUrl,
   loadingText,
   empty,
+  zone,
 }: Props) {
   const { t, i18n } = useTranslation();
-  const [query, setQuery] = useState(DEFAULT_LOG_QUERY);
+  const [query, setQuery] = useState(() => initialLogQuery(zone));
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
   const { data, isPending, isError, error, refetch, isFetching } = useLogs(query);

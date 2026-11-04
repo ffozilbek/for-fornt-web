@@ -46,12 +46,12 @@ export function DataTable({ data }: { data: SummaryDetail }) {
             <TableBody>
               {pageRows?.map((item, i) => (
                 <TableRow key={i}>
-                  <TableCell>{item.start}</TableCell>
+                  <TableCell className="text-muted-foreground font-mono text-xs">{item.start}</TableCell>
                   <TableCell>{item.duration} s</TableCell>
-                  <TableCell>{item.ip}</TableCell>
+                  <TableCell className="font-mono">{item.ip}</TableCell>
                   <TableCell>{item.type}</TableCell>
-                  <TableCell>{item.zone}</TableCell>
-                  <TableCell>{item.service}</TableCell>
+                  <TableCell className="font-semibold">{item.zone}</TableCell>
+                  <TableCell className="font-semibold text-amber-500">{item.service}</TableCell>
                   <TableCell>{formatNumber(item.packets)}</TableCell>
                   <TableCell className="text-right">
                     {formatBytes(item.bytes)}

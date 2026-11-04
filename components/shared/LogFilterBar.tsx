@@ -31,14 +31,19 @@ export const DEFAULT_LOG_QUERY: LogQuery = {
   hours: DEFAULT_HOURS,
 };
 
+// ?zone=<nom> bilan ochilganda (zona jadvali amallari) filtr shu zonadan boshlanadi
+export const initialLogQuery = (zone?: string): LogQuery =>
+  zone ? { ...DEFAULT_LOG_QUERY, zone_name: zone } : DEFAULT_LOG_QUERY;
+
 type Props = {
   query: LogQuery;
   onChange: (query: LogQuery) => void;
   onRefresh: () => void;
   refreshing: boolean;
   onExport: (kind: "csv" | "pdf") => void;
-  // "mos servis yo'q (ACL)" va "qaytuvchi traffik" ham tanlansin (statistika)
-  virtualServices?: boolean;
+  // qo'shimcha tanlovlar (statistika): "mos servis yo'q (ACL)" va/yoki
+  // "qaytuvchi traffik"
+  virtualServices?: (typeof SERVICE_NONE | typeof SERVICE_RESPONSE)[];
   // yangilash tugmasidan oldin qo'shimcha boshqaruvlar
   extra?: ReactNode;
 };
@@ -94,12 +99,10 @@ export default function LogFilterBar({
         s.protocolNumber,
       ),
     })),
-    ...(virtualServices
-      ? [
-          { value: SERVICE_NONE, label: t("misc.noMatchingServiceACL") },
-          { value: SERVICE_RESPONSE, label: t("misc.responseTraffic") },
-        ]
-      : []),
+    ...(virtualServices ?? []).map((v) => ({
+      value: v,
+      label: t(v === SERVICE_NONE ? "misc.noMatchingServiceACL" : "misc.responseTraffic"),
+    })),
   ];
 
   // custom tanlanganda so'rov faqat "Apply" bosilganda o'zgaradi

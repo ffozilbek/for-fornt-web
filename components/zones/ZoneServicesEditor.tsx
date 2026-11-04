@@ -332,7 +332,7 @@ function ServiceRowView({
             </SelectContent>
           </Select>
         </TableCell>
-        <TableCell className="text-muted-foreground text-xs">
+        <TableCell className="text-muted-foreground font-mono text-xs">
           {r.createdAt ? formatDateTime(r.createdAt) : t("misc.new")}
         </TableCell>
         <TableCell>

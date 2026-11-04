@@ -6,11 +6,12 @@ import LogsCard from "@/components/shared/LogsCard";
 import { useSecurityLogs } from "@/hooks/useSecurityLogs";
 import { securityLogsService } from "@/service/security-logs.service";
 
-export default function SecurityLogs() {
+export default function SecurityLogs({ zone }: { zone?: string }) {
   const { t } = useTranslation();
 
   return (
     <LogsCard
+      zone={zone}
       title={t("navigation.securityLogs")}
       icon={ShieldEllipsis}
       useLogs={useSecurityLogs}

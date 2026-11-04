@@ -45,7 +45,7 @@ export default function TopTenTargetZones({ hours }: { hours: number }) {
       </Alert>
     );
 
-  const topTenTargetZones = data.top_zones.slice(0, 9);
+  const topTenTargetZones = data.top_zones.slice(0, 10);
   let totalPackets = 0;
 
   const chartConfig = Object.fromEntries(
@@ -109,7 +109,7 @@ export default function TopTenTargetZones({ hours }: { hours: number }) {
                     key={i}
                   >
                     <TableCell className="font-medium">{i + 1}</TableCell>
-                    <TableCell>{zone.zone}</TableCell>
+                    <TableCell className="font-semibold">{zone.zone}</TableCell>
                     <TableCell>{zone.incidents}</TableCell>
 
                     <TableCell className="text-right">
